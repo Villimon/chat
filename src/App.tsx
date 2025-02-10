@@ -1,9 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
 import './styles/index.scss'
 import { Link } from 'react-router-dom'
-import { MainPage } from './pages/MainPage'
-import { AboutPage } from './pages/AboutPage'
 import { Suspense } from 'react'
+// TODO: не отрабатывает ошибка что нет алиаса
+import { MainPage } from './pages/MainPage'
+import { AboutPage } from '@/pages/AboutPage'
 
 const App = () => {
     return (

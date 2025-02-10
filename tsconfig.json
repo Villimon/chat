@@ -13,7 +13,14 @@
       "noImplicitReturns":true,
       // Параметры функций проверяются более корректно
       "strictFunctionTypes":true,
-      "baseUrl": "."
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"]
+    },
+      // 
+      "sourceMap": true,
+      "isolatedModules": true,
+      "strict": true,
     },
     "ts-node": {
         "compilerOptions": {
