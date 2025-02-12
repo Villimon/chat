@@ -31,7 +31,7 @@ export function buildPlugins({
             new CircularDependencyPlugin({
                 exclude: /node_modules/,
                 failOnError: true,
-            })
+            }),
         )
         // Плагин который проверяет типы ТС, но не во время сборки а после
         plugins.push(
@@ -42,7 +42,7 @@ export function buildPlugins({
                         syntactic: true,
                     },
                 },
-            })
+            }),
         )
     }
 
@@ -51,13 +51,13 @@ export function buildPlugins({
             new MiniCssExtractPlugin({
                 filename: 'css/[name].[contenthash:8].css',
                 chunkFilename: 'css/[name].[contenthash:8].css',
-            })
+            }),
         )
         // для переносов перевод с папку build
         plugins.push(
             new CopyPlugin({
                 patterns: [{ from: paths.locales, to: paths.buildLocales }],
-            })
+            }),
         )
     }
 

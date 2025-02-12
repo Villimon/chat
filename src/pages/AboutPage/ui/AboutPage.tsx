@@ -1,7 +1,5 @@
 import { memo } from 'react'
 
-const AboutPage = memo(() => {
-    return <div>ABOUT PAGE</div>
-})
+const AboutPage = memo(() => <div>ABOUT PAGE</div>)
 
 export default AboutPage

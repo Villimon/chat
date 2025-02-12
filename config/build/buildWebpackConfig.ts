@@ -1,4 +1,3 @@
-import path from 'path'
 import { Configuration } from 'webpack'
 import { BuildOptions } from './types/config'
 import { buildLoaders } from './buildLoaders'
