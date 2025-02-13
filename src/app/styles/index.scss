@@ -1,0 +1,16 @@
+@forward "reset";
+@forward "variables/global";
+@forward "themes/light";
+@forward "themes/dark";
+@forward "palette/index";
+
+.app {
+    background: var(--bg-color);
+    min-height: 100vh;
+    color: var(--text-primary);
+    font: var(--font-m);
+}
+
+.content-page {
+    display: flex;
+}
