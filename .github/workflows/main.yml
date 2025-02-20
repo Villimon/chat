@@ -1,0 +1,36 @@
+name: linting, testing, building
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+jobs:
+    pipeline:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [17.x]
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Staring Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: install modules
+              run: npm install --force
+            - name: build development project
+              run: npm run build:dev
+            - name: linting typescript
+              run: npm run eslint
+            - name: linting css
+              run: npm run eslint:style
+            # - name: unit testing
+            #   run: npm run test:unit
+            # Не работает у меня, можно поменять на docker вместо app, но у меня нет docker
+            # Перейти с loki на другую либо (chromatic) или что-то другое
+            # Пока что стриншот тесты делаем вручную каждый раз сами
+            # - name: build storybook
+            #   run: npm run storybook:build
+            # - name: screenshot testing
+            #   run: npm run test:ui:ci
