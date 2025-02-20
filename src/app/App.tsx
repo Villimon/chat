@@ -28,8 +28,8 @@ const App = () => {
             <PaletteSwitcher />
 
             <div>
-                <Text title="asdasdsa" size="m" variant="secondary" />
-                <Text text="qwewqeqwe" size="s" variant="secondary" />
+                <Text title="asdasdsa" size="xl" variant="secondary" />
+                <Text text="qwewqeqwe" size="xl" variant="secondary" />
                 <Text label="zxczxczxc" size="xl" variant="secondary" />
             </div>
 

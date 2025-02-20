@@ -13,11 +13,6 @@ interface ThemeBoxProps {
     title: string
 }
 
-const mapThemeToStyle: Record<Theme, string> = {
-    app_dark_theme: 'appDarkTheme',
-    app_light_theme: 'appLightTheme',
-}
-
 export const ThemeBox = memo(
     ({ className, theme, onClick, selected, title }: ThemeBoxProps) => {
         return (
@@ -26,7 +21,7 @@ export const ThemeBox = memo(
                 <div
                     className={cn(cls.themeBox, { [cls.selected]: selected }, [
                         className,
-                        cls[mapThemeToStyle[theme]],
+                        cls[theme],
                     ])}
                     onClick={() => onClick(theme)}
                 >

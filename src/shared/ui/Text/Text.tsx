@@ -24,11 +24,10 @@ const mapSizeToHeaderTag: Record<SizeType, HeaderTagType> = {
     xl: 'h3',
 }
 
-// TODO: приходят стили не в том виде в котором ожидается (ож: size_s, факт: sizeS)
 const mapSizeToStyle: Record<SizeType, string> = {
-    s: cls.sizeS,
-    m: cls.sizeM,
-    xl: cls.sizeL,
+    s: cls.size_s,
+    m: cls.size_m,
+    xl: cls.size_l,
 }
 
 export const Text = memo(

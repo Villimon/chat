@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
 import { Palette } from '@/shared/constants/theme'
 import { useTheme } from '@/shared/hooks/useTheme/usetheme'
-import { cn } from '@/shared/lib/classNames/classNames'
-import cls from './PaletteSwitcher.module.scss'
 import { PaletteComponent } from '../../ui/Palette/Palette'
+import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 
 // TODO: Подумать чтобы вынести это в отдельное место
 const paletters = [
@@ -48,7 +47,7 @@ export const PaletteSwitcher = () => {
     )
 
     return (
-        <div className={cn(cls.paletteSwitcher, {}, [])}>
+        <HStack>
             {paletters.map((item) => (
                 <PaletteComponent
                     palette={item}
@@ -56,6 +55,6 @@ export const PaletteSwitcher = () => {
                     selected={palette === item.style}
                 />
             ))}
-        </div>
+        </HStack>
     )
 }
