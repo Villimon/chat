@@ -1,0 +1,65 @@
+.themeBox {
+    width: 150px;
+    height: 90px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.firstMessage {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.secondMessage {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.app_dark_theme {
+    background: #262626;
+
+    .firstMessage {
+        background: #2e2e30;
+    }
+
+    .secondMessage {
+        background: #5c5c5d;
+    }
+}
+
+.app_light_theme {
+    background: #efeff4;
+
+    .firstMessage {
+        background: #fff;
+    }
+
+    .secondMessage {
+        background: #e7fecb;
+    }
+}
+
+.selected {
+    border: 2px dashed var(--hint-primary);
+    // TODO: сделать потом этот как иконку
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 1%;
+        right: 1%;
+        background-color: var(--accent-primary);
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        z-index: 1000;
+    }
+}

@@ -1,0 +1,61 @@
+.palette {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+.container {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    position: relative;
+}
+
+.green {
+    background-color: #1d9158;
+}
+
+.lime {
+    background-color: #2f9c2d;
+}
+
+.tael {
+    background-color: #27b9ea;
+}
+
+.blue {
+    background-color: #007afe;
+}
+
+.indigo {
+    background-color: #5856d6;
+}
+
+.orange {
+    background-color: #ff8a33;
+}
+
+.test {
+    background-color: #576d9ca4;
+}
+
+.selected {
+    border: 2px dashed var(--hint-primary);
+
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 1%;
+        right: 1%;
+        background-color: var(--accent-primary);
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+}

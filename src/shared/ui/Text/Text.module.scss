@@ -1,0 +1,105 @@
+.primary {
+    .title {
+        color: var(--text-primary);
+    }
+
+    .parag {
+        color: var(--text-primary);
+    }
+}
+
+.secondary {
+    .title {
+        color: var(--text-secondary);
+    }
+
+    .parag {
+        color: var(--text-secondary);
+    }
+}
+
+.error {
+    .title {
+        color: var(--cancel-primary);
+    }
+
+    .parag {
+        color: var(--cancel-primary);
+    }
+}
+
+.accent {
+    .title {
+        color: var(--accent-primary);
+    }
+
+    .parag {
+        color: var(--accent-primary);
+    }
+}
+
+.label {
+    color: var(--hint-primary);
+}
+
+.size_s {
+    .title {
+        font: var(--font-m);
+    }
+
+    .parag {
+        font: var(--font-s);
+    }
+
+    .label {
+        font: var(--font-s);
+    }
+}
+
+.size_m {
+    .title {
+        font: var(--font-l);
+    }
+
+    .parag {
+        font: var(--font-m);
+    }
+
+    .label {
+        font: var(--font-s);
+    }
+}
+
+.size_l {
+    .title {
+        font: var(--font-xl);
+    }
+
+    .parag {
+        font: var(--font-l);
+    }
+
+    .label {
+        font: var(--font-m);
+    }
+}
+
+.bold {
+    .title,
+    .parag,
+    .label {
+        font-weight: 700;
+    }
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.center {
+    text-align: center;
+}

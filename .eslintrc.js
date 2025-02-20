@@ -44,7 +44,11 @@ module.exports = {
         // чтобы не ругался на то что мы не используем дефолтный экспорт
         'import/prefer-default-export': 'off',
         // на неиспользование элемента
-        'no-unused-vars': 'warn',
+        'no-unused-vars': 'off',
+        'implicit-arrow-linebreak': 'off',
+        'object-curly-newline': 'off',
+        'jsx-a11y/control-has-associated-label': 'off',
+        'arrow-body-style': 'off',
         // чтобы не ругался на отсутвсвие дефолтного значения у пропса
         'react/require-default-props': 'off',
         // для того чтобы не импортировали реакт в компоненты
@@ -62,7 +66,6 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'linebreak-style': 0,
         semi: 0,
-        'arrow-body-style': 1,
         'i18next/no-literal-string': [
             'error',
             {
