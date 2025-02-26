@@ -1,0 +1,34 @@
+.MainLayout {
+    display: flex;
+    min-height: 100vh;
+    flex: 1;
+}
+
+.sidebar {
+    flex-basis: 450px;
+    min-width: 450px;
+    padding: 32px;
+}
+
+.content {
+    flex: 1 1 430px;
+    padding: 32px;
+    background: var(--dark-bg);
+}
+
+.isMobile {
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.sidebarMobile {
+    flex-grow: 1;
+}
+
+.contentMobile {
+    display: block;
+    min-width: 450px;
+}
