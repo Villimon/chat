@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 export const Sidebar = memo(() => {
     const location = useLocation()
     const navigate = useNavigate()
-    const { hash } = location
     const addHash = (hash: string) => {
         navigate(`${location.pathname}${hash}`)
     }

@@ -53,6 +53,7 @@ module.exports = {
         'react/require-default-props': 'off',
         // для того чтобы не импортировали реакт в компоненты
         'react/react-in-jsx-scope': 'off',
+        'react/destructuring-assignment': 'off',
         // Спред для пропрос
         'react/jsx-props-no-spreading': 'warn',
         // для того чтобы могли использовать стрелочную функцию для компонентов

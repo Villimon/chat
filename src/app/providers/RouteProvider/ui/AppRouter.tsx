@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
 import { Location, Route, Routes } from 'react-router-dom'
 import { AppRouterProps } from '@/shared/types/router'
-// eslint-disable-next-line project-my-plugin/layer-imports
-import { routeAppConfig } from '@/app/providers/RouteProvider/config/routeConfig'
+import { routeAppConfig } from '../config/routeConfig'
 
 export const AppRouter = ({ key }: Location) => {
     const renderWithWrapper = useCallback((route: AppRouterProps) => {
