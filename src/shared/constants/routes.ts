@@ -1,0 +1,24 @@
+export enum AppRouter {
+    MAIN = 'main',
+    CHAT = 'chat',
+    LOGIN = 'login',
+    REGISTRATION = 'registration',
+    NOT_FOUND = 'not_found',
+}
+
+export enum SidebarRouterType {
+    SIDEBAR = '',
+    SETTINGS = '#settings',
+    SETTINGS_PROFILE = '#settings.profile',
+    SETTINGS_GENERAL = '#settings.general',
+    SETTINGS_SECUTITY = '#settings.security',
+    SETTINGS_FOLDERS = '#settings.folders',
+    SETTINGS_NOTIFICATION = '#settings.notification',
+    SETTINGS_APPEARENCE = '#settings.appearence',
+    SETTINGS_ANSWERS = '#settings.answers',
+}
+
+export const getRouteMain = () => '/'
+export const getRouteChat = (id: string) => `/chat/${id}`
+export const getRouteLogin = () => '/login'
+export const getRouteRegistration = () => '/registration'
