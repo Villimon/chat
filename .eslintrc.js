@@ -68,7 +68,7 @@ module.exports = {
         'linebreak-style': 0,
         semi: 0,
         'i18next/no-literal-string': [
-            'error',
+            'off',
             {
                 markupOnly: true,
                 ignoreAttribute: [

@@ -4,5 +4,15 @@
         { "id": 2, "title": "json-server2", "author": "typicode2" }
     ],
     "comments": [{ "id": 1, "body": "some comment", "postId": 1 }],
-    "profile": { "name": "typicode" }
+    "users": [{
+        "id": "1",
+        "firstName": "Admin",
+        "lastName": "Adminov",
+        "username": "admin",
+        "password": "123",
+        "roles": [
+          "ADMIN"
+        ],
+        "avatar": ""
+      }]
 }

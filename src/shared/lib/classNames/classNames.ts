@@ -1,4 +1,4 @@
-type Mode = Record<string, string | boolean | undefined>
+export type Mode = Record<string, string | boolean | undefined>
 
 /**
  *

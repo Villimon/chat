@@ -1,0 +1,47 @@
+.Card {
+    padding: 24px;
+}
+
+.normal {
+    background: var(--dark-bg);
+}
+
+.outline {
+    border: 1px solid var(--accent);
+}
+
+.light {
+    background: var(--light-bg);
+}
+
+.standart {
+    border-radius: 12px;
+}
+
+.round {
+    border-radius: 40px;
+}
+
+.partial {
+    border-radius: 20px;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.gap_0 {
+    padding: 0;
+}
+
+.gap_8 {
+    padding: 8px;
+}
+
+.gap_16 {
+    padding: 16px;
+}
+
+.gap_24 {
+    padding: 24px;
+}

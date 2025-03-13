@@ -2,11 +2,16 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { useLocation, useNavigate } from 'react-router-dom'
 import './styles/index.scss'
+import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
 import { cn } from '@/shared/lib/classNames/classNames'
 import { useTheme } from '@/shared/hooks/useTheme/usetheme'
 import { MainLayout } from '@/shared/layout/MainLayout'
 import { ErrorBoundary } from './providers/ErrorBoundary'
 import { AppRouter, SidebarRouter } from './providers/RouteProvider'
+import { getUserData, getUserInited } from '@/entities/User'
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
+import { initAuthData } from '@/entities/User/model/services/initAuthData'
 
 // Какие роуты у нас будут
 // /chat/:id
@@ -25,16 +30,28 @@ const App = () => {
     const { theme, palette } = useTheme()
     const location = useLocation()
     const navigate = useNavigate()
+    const isAuth = useSelector(getUserData)
+    const inited = useSelector(getUserInited)
+    const dispatch = useAppDispatch()
+
     const addHash = (hash: string) => {
         navigate(`${location.pathname}${hash}`)
     }
 
     // TODO: Поправить цвета темной темы
+    useEffect(() => {
+        dispatch(initAuthData())
+    }, [dispatch])
+
+    if (!inited) {
+        return <div>LOADING </div>
+    }
 
     return (
         <div className={cn('app', {}, [theme, palette])}>
             <ErrorBoundary>
                 <MainLayout
+                    isAuth={Boolean(isAuth)}
                     content={<AppRouter {...location} />}
                     sidebar={
                         <SidebarRouter {...location} />

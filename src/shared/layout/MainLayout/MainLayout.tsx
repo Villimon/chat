@@ -8,11 +8,11 @@ interface MainLayoutProps {
     className?: string
     sidebar: ReactElement
     content: ReactElement
+    isAuth: boolean
 }
 
-// TODO: Сделать по уму алдаптив с навешиванием класса, нужно навешивать класс хиден только на тот блок который скрываем а не все сразу
 export const MainLayout = memo(
-    ({ sidebar, content, className }: MainLayoutProps) => {
+    ({ sidebar, content, className, isAuth }: MainLayoutProps) => {
         const location = useLocation()
         const isHiddenContent = location.pathname === '/'
 
@@ -20,18 +20,20 @@ export const MainLayout = memo(
 
         return (
             <section className={cn(cls.MainLayout, {}, [className])}>
-                <div
-                    className={cn(
-                        cls.sidebar,
-                        {
-                            [cls.hidden]: !isHiddenContent && isMobile,
-                            [cls.sidebarMobile]: isMobile,
-                        },
-                        [],
-                    )}
-                >
-                    {sidebar}
-                </div>
+                {isAuth && (
+                    <div
+                        className={cn(
+                            cls.sidebar,
+                            {
+                                [cls.hidden]: !isHiddenContent && isMobile,
+                                [cls.sidebarMobile]: isMobile,
+                            },
+                            [],
+                        )}
+                    >
+                        {sidebar}
+                    </div>
+                )}
                 <section
                     className={cn(
                         cls.content,

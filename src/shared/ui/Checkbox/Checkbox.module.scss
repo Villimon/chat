@@ -1,0 +1,25 @@
+.InputWrapper {
+    display: flex;
+    align-items: center;
+    border-radius: 48px;
+    padding: 8px 16px;
+    border: 2px solid var(--bg-color);
+    height: 38px;
+    width: 100%;
+}
+
+.readonly {
+    opacity: 0.7;
+}
+
+.input {
+    border: none;
+    outline: none;
+    width: 100%;
+    color: var(--text-redesigned);
+    background: none;
+}
+
+.focused {
+    border: 2px solid var(--accent-primary);
+}

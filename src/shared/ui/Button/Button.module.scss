@@ -1,0 +1,109 @@
+.Button {
+    cursor: pointer;
+    color: var(--text-primary);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+        color: var(--accent-primary);
+
+        .addonLeft svg,
+        .addonRight svg {
+            color: var(--accent-primary);
+        }
+    }
+
+    &[disabled] {
+        pointer-events: none;
+    }
+}
+
+.withAddon {
+    padding: 0 16px;
+}
+
+.outline {
+    background: none;
+    border-radius: 34px;
+
+    &:hover {
+        border: 2px solid var(--accent-primary);
+    }
+
+    &.normal {
+        border: 2px solid var(--icon-primary);
+    }
+
+    &.error {
+        border: 2px solid var(--cancel-primary);
+    }
+
+    &.success {
+        border: 2px solid var(--save-primary);
+    }
+}
+
+.clear {
+    padding: 0;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.addonLeft,
+.addonRight {
+    display: flex;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.addonLeft svg,
+.addonRight svg {
+    color: var(--hint-primary);
+}
+
+.filled {
+    background: var(--light-bg);
+    border: none;
+    outline: none;
+    border-radius: 34px;
+}
+
+.square {
+    padding: 0;
+}
+
+.square.m {
+    width: var(--font-line-m);
+    height: var(--font-line-m);
+}
+
+.square.l {
+    width: var(--font-line-l);
+    height: var(--font-line-l);
+}
+
+.square.xl {
+    width: var(--font-line-xl);
+    height: var(--font-line-xl);
+}
+
+.m {
+    font: var(--font-m);
+}
+
+.l {
+    font: var(--font-l);
+}
+
+.xl {
+    font: var(--font-xl);
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.fullWidth {
+    width: 100%;
+}

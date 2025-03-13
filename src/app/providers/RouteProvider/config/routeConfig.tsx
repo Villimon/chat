@@ -29,10 +29,12 @@ export const routeAppConfig: Record<AppRouter, AppRouterProps> = {
     [AppRouter.MAIN]: {
         path: getRouteMain(),
         element: <MainPage />,
+        authOnly: true,
     },
     [AppRouter.CHAT]: {
         path: getRouteChat(':id'),
         element: <ChatPage />,
+        authOnly: true,
     },
     [AppRouter.LOGIN]: {
         path: getRouteLogin(),

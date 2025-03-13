@@ -2,11 +2,11 @@ import { ReactNode } from 'react'
 import { cn } from '@/shared/lib/classNames/classNames'
 import cls from './Flex.module.scss'
 
-type FlexAlign = 'center' | 'start' | 'end'
-type FlexJustify = 'center' | 'start' | 'end' | 'between'
-type FlexDirection = 'row' | 'column'
-type FlexWrap = 'nowrap' | 'wrap'
-type FlexGap = '4' | '8' | '16' | '24' | '32'
+export type FlexAlign = 'center' | 'start' | 'end'
+export type FlexJustify = 'center' | 'start' | 'end' | 'between'
+export type FlexDirection = 'row' | 'column' | 'row-reverse'
+export type FlexWrap = 'nowrap' | 'wrap'
+export type FlexGap = '4' | '8' | '16' | '24' | '32'
 
 type DivType = React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
@@ -40,6 +40,7 @@ const alignClasses: Record<FlexAlign, string> = {
 const directionClasses: Record<FlexDirection, string> = {
     column: cls.directionColumn,
     row: cls.directionRow,
+    'row-reverse': cls.directionRowReverse,
 }
 
 const gapClasses: Record<FlexGap, string> = {
