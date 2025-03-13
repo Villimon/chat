@@ -1,6 +1,7 @@
-import { FC, memo, useCallback, useState } from 'react'
+import { FC, memo, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { Controller, useForm } from 'react-hook-form'
 import {
     DynamicModuleLoader,
     ReducersList,
@@ -15,11 +16,11 @@ import { getUsername } from '../../model/selectors/getUsername/getUsername'
 import { getPassword } from '../../model/selectors/getPassword/getPassword'
 import { getRemember } from '../../model/selectors/getRemember/getRemember'
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
-import { Checkbox } from '@/shared/ui/Checkbox/Checkbox'
 import { useLoginMutation } from '../../api/authApi'
 import { Text } from '@/shared/ui/Text/Text'
 import { getUserData } from '@/entities/User'
 import { getRouteMain } from '@/shared/constants/routes'
+import { Checkbox } from '@/shared/ui/Checkbox/Checkbox'
 
 const initialReducers: ReducersList = {
     loginForm: loginReducer,
@@ -30,8 +31,6 @@ interface LoginFormProps {
 }
 
 export const LoginForm: FC<LoginFormProps> = memo(({ className }) => {
-    const [usernameValidation, setUsernameValidation] = useState(false)
-    const [passwordValidation, setPasswordValidation] = useState(false)
     const username = useSelector(getUsername)
     const password = useSelector(getPassword)
     const remember = useSelector(getRemember)
@@ -40,6 +39,19 @@ export const LoginForm: FC<LoginFormProps> = memo(({ className }) => {
     const navigate = useNavigate()
 
     const [login, { isError, isLoading }] = useLoginMutation()
+
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            username,
+            password,
+            remember,
+        },
+        mode: 'onChange',
+    })
 
     const onChangeUsername = useCallback(
         (value: string) => {
@@ -62,27 +74,17 @@ export const LoginForm: FC<LoginFormProps> = memo(({ className }) => {
         [dispatch],
     )
 
-    const loginHandler = useCallback(async () => {
-        if (username.length <= 0) {
-            setUsernameValidation(true)
-        }
-        if (password.length <= 0) {
-            setPasswordValidation(true)
-        }
-
-        if (usernameValidation || passwordValidation) {
-            return
-        }
-
-        await login({ password, remember, username })
-    }, [
-        login,
-        password,
-        passwordValidation,
-        remember,
-        username,
-        usernameValidation,
-    ])
+    const loginHandler = useCallback(
+        async (values: {
+            username: string
+            password: string
+            remember: boolean
+        }) => {
+            const { password, remember, username } = values
+            await login({ password, remember, username })
+        },
+        [login],
+    )
 
     const onClickRegistrationButton = useCallback(() => {
         navigate('/registration')
@@ -95,67 +97,111 @@ export const LoginForm: FC<LoginFormProps> = memo(({ className }) => {
     return (
         <DynamicModuleLoader removeAfterUnmount reducers={initialReducers}>
             <Card className={cls.card} padding="16">
-                <VStack gap="16">
-                    <VStack gap="8" max>
-                        {/* TODO заюзать react-hook-form */}
-                        <Input
-                            label="Логин"
-                            value={username}
-                            autoFocus
-                            placeholder="Логин"
-                            onChange={onChangeUsername}
-                            disabled={isLoading}
-                            validation={usernameValidation}
-                            onChangeValidation={setUsernameValidation}
-                        />
-                        <Input
-                            label="Пароль"
-                            type="password"
-                            value={password}
-                            placeholder="Пароль"
-                            onChange={onChangePassword}
-                            disabled={isLoading}
-                            validation={passwordValidation}
-                            onChangeValidation={setPasswordValidation}
-                        />
-                    </VStack>
-                    <VStack gap="8">
-                        {/* TODO понять как это применять */}
-                        <Checkbox
-                            wrapperHidden={false}
-                            label="Сохранить вход"
-                            type="checkbox"
-                            direction="row-reverse"
-                            checked={Boolean(remember)}
-                            onChange={onChangeRemember}
-                            disabled={isLoading}
-                        />
-                    </VStack>
-                    <VStack gap="8" max>
-                        <Button
-                            disabled={isLoading}
-                            onClick={loginHandler}
-                            fullWidth
-                        >
-                            Войти
-                        </Button>
-                        <Button
-                            disabled={isLoading}
-                            onClick={onClickRegistrationButton}
-                            fullWidth
-                        >
-                            Создать аккаунт
-                        </Button>
-                    </VStack>
-                    {isError && (
-                        <VStack>
-                            <Text
-                                variant="error"
-                                text="Неверный логин или пароль"
+                <form
+                    style={{ width: '100%' }}
+                    onSubmit={handleSubmit(loginHandler)}
+                >
+                    <VStack gap="16">
+                        <VStack gap="8" max>
+                            <Controller
+                                name="username"
+                                control={control}
+                                defaultValue=""
+                                disabled={isLoading}
+                                rules={{
+                                    required: 'Это поле обязательно',
+                                }}
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        onChange={(value) => {
+                                            field.onChange(value)
+                                            onChangeUsername(value)
+                                        }}
+                                        label="Логин"
+                                        autoFocus
+                                        placeholder="Логин"
+                                        error={errors.username?.message}
+                                        onBlur={field.onBlur}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="password"
+                                control={control}
+                                defaultValue=""
+                                disabled={isLoading}
+                                rules={{
+                                    required: 'Это поле обязательно',
+                                }}
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        onChange={(value) => {
+                                            field.onChange(value)
+                                            onChangePassword(value)
+                                        }}
+                                        label="Пароль"
+                                        type="password"
+                                        placeholder="Пароль"
+                                        error={errors.password?.message}
+                                        onBlur={field.onBlur}
+                                    />
+                                )}
                             />
                         </VStack>
-                    )}
-                </VStack>
+                        <VStack gap="8">
+                            {/* TODO понять как это применять */}
+                            <Controller
+                                name="password"
+                                control={control}
+                                defaultValue=""
+                                disabled={isLoading}
+                                render={({ field }) => (
+                                    <Checkbox
+                                        {...field}
+                                        onChange={(value) => {
+                                            field.onChange(value)
+                                            onChangeRemember(value)
+                                        }}
+                                        wrapperHidden={false}
+                                        label="Сохранить вход"
+                                        type="checkbox"
+                                        direction="row-reverse"
+                                        checked={Boolean(remember)}
+                                        error={errors.remember?.message}
+                                        onBlur={field.onBlur}
+                                    />
+                                )}
+                            />
+                        </VStack>
+                        <VStack gap="8" max>
+                            <Button
+                                disabled={isLoading}
+                                onClick={handleSubmit(loginHandler)}
+                                fullWidth
+                                type="submit"
+                            >
+                                Войти
+                            </Button>
+                            <Button
+                                disabled={isLoading}
+                                onClick={onClickRegistrationButton}
+                                fullWidth
+                            >
+                                Создать аккаунт
+                            </Button>
+                        </VStack>
+                        {isError && (
+                            <VStack>
+                                <Text
+                                    variant="error"
+                                    text="Неверный логин или пароль"
+                                />
+                            </VStack>
+                        )}
+                    </VStack>
+                </form>
             </Card>
         </DynamicModuleLoader>
     )

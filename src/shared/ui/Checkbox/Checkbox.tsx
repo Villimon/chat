@@ -3,6 +3,7 @@ import cls from './Checkbox.module.scss'
 import { cn, Mode } from '@/shared/lib/classNames/classNames'
 import { FlexDirection } from '@/shared/ui/Stack/Flex/Flex'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
+import { Text } from '@/shared/ui/Text/Text'
 
 type HTMLCheckboxProps = Omit<
     InputHTMLAttributes<HTMLInputElement>,
@@ -14,6 +15,7 @@ interface CheckboxProps extends HTMLCheckboxProps {
     label?: string
     onChange?: (value: boolean) => void
     placeholder?: string
+    error?: string
     autofocus?: boolean
     readonly?: boolean
     wrapperHidden?: boolean
@@ -34,6 +36,7 @@ export const Checkbox = memo(
         direction = 'column',
         disabled,
         checked,
+        error,
         ...otherProps
     }: CheckboxProps) => {
         const [isFocused, setIsFocused] = useState(false)
@@ -68,8 +71,8 @@ export const Checkbox = memo(
             [cls.InputWrapper]: wrapperHidden,
         }
 
-        const content = (
-            <>
+        return (
+            <HStack direction="row-reverse" gap="4" max>
                 {label && <label htmlFor="checkbox_id">{label}</label>}
                 <div className={cn('', mods, [className])}>
                     <input
@@ -87,12 +90,7 @@ export const Checkbox = memo(
                         {...otherProps}
                     />
                 </div>
-            </>
-        )
-
-        return (
-            <HStack direction="row-reverse" gap="4" max>
-                {content}
+                {error && <Text variant="error" text={error} />}
             </HStack>
         )
     },

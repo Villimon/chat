@@ -50,6 +50,7 @@
 
 .selected {
     border: 2px dashed var(--hint-primary);
+
     // TODO: сделать потом этот как иконку
     &::before {
         content: "";

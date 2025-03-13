@@ -13,15 +13,14 @@ type HTMLInputProps = Omit<
 interface InputProps extends HTMLInputProps {
     className?: string
     label?: string
-    value: string
+    value?: string
     onChange?: (value: string) => void
     type?: string
     placeholder?: string
+    error?: string
     autofocus?: boolean
     readonly?: boolean
     wrapperHidden?: boolean
-    validation?: boolean
-    onChangeValidation?: (value: boolean) => void
     direction?: FlexDirection
 }
 
@@ -38,8 +37,7 @@ export const Input = memo(
         className,
         direction = 'column',
         disabled,
-        validation,
-        onChangeValidation,
+        error,
         ...otherProps
     }: InputProps) => {
         const [isFocused, setIsFocused] = useState(false)
@@ -59,15 +57,11 @@ export const Input = memo(
         const onFocus = () => {
             if (!readonly) {
                 setIsFocused(true)
-                onChangeValidation?.(false)
             }
         }
 
         const onBlur = () => {
             setIsFocused(false)
-            if (value?.length <= 0) {
-                onChangeValidation?.(true)
-            }
         }
 
         const mods: Mode = {
@@ -93,12 +87,7 @@ export const Input = memo(
                         {...otherProps}
                     />
                 </div>
-                {validation && (
-                    <Text
-                        variant="error"
-                        text="Поле обязательно для заполнения"
-                    />
-                )}
+                {error && <Text variant="error" text={error} />}
             </VStack>
         )
     },
