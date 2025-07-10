@@ -46,8 +46,7 @@ export const routeAppConfig: Record<AppRouter, AppRouterProps> = {
     },
     [AppRouter.NOT_FOUND]: {
         path: '*',
-        // TODO: Сделать страницу ошибки
-        element: <div>NOT FOUND</div>,
+        element: <></>,
     },
 }
 

@@ -12,6 +12,7 @@ import { AppRouter, SidebarRouter } from './providers/RouteProvider'
 import { getUserData, getUserInited } from '@/entities/User'
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
 import { initAuthData } from '@/entities/User/model/services/initAuthData'
+import { Loader } from '@/shared/ui/Loader/Loader'
 
 // Какие роуты у нас будут
 // /chat/:id
@@ -43,97 +44,97 @@ const App = () => {
         dispatch(initAuthData())
     }, [dispatch])
 
-    if (!inited) {
-        return <div>LOADING </div>
-    }
-
     return (
         <div className={cn('app', {}, [theme, palette])}>
-            <ErrorBoundary>
-                <MainLayout
-                    isAuth={Boolean(isAuth)}
-                    content={<AppRouter {...location} />}
-                    sidebar={
-                        <SidebarRouter {...location} />
-                        // <>
-                        //     {hash === '#music' || hash === '#video' ? (
-                        //         <>
-                        //             <div
-                        //                 style={{
-                        //                     display: 'flex',
-                        //                     flexDirection: 'column',
-                        //                     gap: 12,
-                        //                 }}
-                        //             >
-                        //                 <button
-                        //                     onClick={() => addHash('#music')}
-                        //                 >
-                        //                     music
-                        //                 </button>
-                        //                 <button
-                        //                     onClick={() => addHash('#video')}
-                        //                 >
-                        //                     video
-                        //                 </button>
-                        //                 <Link to="/music">music</Link>
-                        //                 <Link to="/video">video</Link>
-                        //             </div>
-                        //             <PaletteSwitcher />
+            {inited ? (
+                <ErrorBoundary>
+                    <MainLayout
+                        isAuth={Boolean(isAuth)}
+                        content={<AppRouter {...location} />}
+                        sidebar={
+                            <SidebarRouter {...location} />
+                            // <>
+                            //     {hash === '#music' || hash === '#video' ? (
+                            //         <>
+                            //             <div
+                            //                 style={{
+                            //                     display: 'flex',
+                            //                     flexDirection: 'column',
+                            //                     gap: 12,
+                            //                 }}
+                            //             >
+                            //                 <button
+                            //                     onClick={() => addHash('#music')}
+                            //                 >
+                            //                     music
+                            //                 </button>
+                            //                 <button
+                            //                     onClick={() => addHash('#video')}
+                            //                 >
+                            //                     video
+                            //                 </button>
+                            //                 <Link to="/music">music</Link>
+                            //                 <Link to="/video">video</Link>
+                            //             </div>
+                            //             <PaletteSwitcher />
 
-                        //             <ThemeSwitcher />
-                        //         </>
-                        //     ) : (
-                        //         <>
-                        //             <div
-                        //                 style={{
-                        //                     display: 'flex',
-                        //                     flexDirection: 'column',
-                        //                     gap: 12,
-                        //                 }}
-                        //             >
-                        //                 <Link to="/">123</Link>
-                        //                 <Link to="/chat/32">chat</Link>
-                        //                 <Link to="/login">login</Link>
-                        //                 <Link to="/registration">
-                        //                     registration
-                        //                 </Link>
-                        //                 <button
-                        //                     onClick={() => addHash('#music')}
-                        //                 >
-                        //                     music
-                        //                 </button>
-                        //                 <button
-                        //                     onClick={() => addHash('#video')}
-                        //                 >
-                        //                     video
-                        //                 </button>
-                        //                 <Link to="/music">music</Link>
-                        //                 <Link to="/video">video</Link>
-                        //             </div>
-                        //             <PaletteSwitcher />
-                        //             <div>
-                        //                 <Text
-                        //                     title="asdasdsa"
-                        //                     size="xl"
-                        //                     variant="secondary"
-                        //                 />
-                        //                 <Text
-                        //                     text="qwewqeqwe"
-                        //                     size="xl"
-                        //                     variant="secondary"
-                        //                 />
-                        //                 <Text
-                        //                     label="zxczxczxc"
-                        //                     size="xl"
-                        //                     variant="secondary"
-                        //                 />
-                        //             </div>
-                        //         </>
-                        //     )}
-                        // </>
-                    }
-                />
-            </ErrorBoundary>
+                            //             <ThemeSwitcher />
+                            //         </>
+                            //     ) : (
+                            //         <>
+                            //             <div
+                            //                 style={{
+                            //                     display: 'flex',
+                            //                     flexDirection: 'column',
+                            //                     gap: 12,
+                            //                 }}
+                            //             >
+                            //                 <Link to="/">123</Link>
+                            //                 <Link to="/chat/32">chat</Link>
+                            //                 <Link to="/login">login</Link>
+                            //                 <Link to="/registration">
+                            //                     registration
+                            //                 </Link>
+                            //                 <button
+                            //                     onClick={() => addHash('#music')}
+                            //                 >
+                            //                     music
+                            //                 </button>
+                            //                 <button
+                            //                     onClick={() => addHash('#video')}
+                            //                 >
+                            //                     video
+                            //                 </button>
+                            //                 <Link to="/music">music</Link>
+                            //                 <Link to="/video">video</Link>
+                            //             </div>
+                            //             <PaletteSwitcher />
+                            //             <div>
+                            //                 <Text
+                            //                     title="asdasdsa"
+                            //                     size="xl"
+                            //                     variant="secondary"
+                            //                 />
+                            //                 <Text
+                            //                     text="qwewqeqwe"
+                            //                     size="xl"
+                            //                     variant="secondary"
+                            //                 />
+                            //                 <Text
+                            //                     label="zxczxczxc"
+                            //                     size="xl"
+                            //                     variant="secondary"
+                            //                 />
+                            //             </div>
+                            //         </>
+                            //     )}
+                            // </>
+                        }
+                    />
+                </ErrorBoundary>
+            ) : (
+                <Loader />
+            )}
         </div>
     )
 }

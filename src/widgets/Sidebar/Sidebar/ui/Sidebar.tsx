@@ -19,6 +19,7 @@ export const Sidebar = memo(() => {
             <Link to="/chat/34">chat</Link>
             <Link to="/login">login</Link>
             <Link to="/registration">registration</Link>
+            <Link to="/asdasdasd">asdasdasd</Link>
             <button onClick={() => addHash('#settings')}>settings</button>
             <button onClick={() => addHash('#settings.profile')}>
                 profile
