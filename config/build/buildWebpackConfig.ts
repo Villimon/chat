@@ -22,7 +22,27 @@ export function buildWebpackConfig(options: BuildOptions): Configuration {
             rules: buildLoaders(options),
         },
         resolve: buildResolvers(options),
-        devtool: isDev ? 'eval-cheap-module-source-map' : 'source-map',
+        devtool: isDev ? 'eval-cheap-module-source-map' : 'hidden-source-map',
         devServer: isDev ? buildDevServer(options) : undefined,
+        optimization: {
+            splitChunks: {
+                chunks: 'all',
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendors',
+                        chunks: 'all',
+                    },
+                },
+            },
+        },
+        cache: isDev
+            ? {
+                type: 'filesystem',
+                buildDependencies: {
+                    config: [__filename],
+                },
+            }
+            : undefined,
     }
 }

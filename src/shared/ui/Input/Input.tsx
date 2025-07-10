@@ -1,4 +1,11 @@
-import { InputHTMLAttributes, memo, useEffect, useRef, useState } from 'react'
+import {
+    InputHTMLAttributes,
+    memo,
+    NamedExoticComponent,
+    useEffect,
+    useRef,
+    useState,
+} from 'react'
 import cls from './Input.module.scss'
 import { Text } from '@/shared/ui/Text/Text'
 import { cn, Mode } from '@/shared/lib/classNames/classNames'
@@ -91,4 +98,5 @@ export const Input = memo(
             </VStack>
         )
     },
-)
+) as NamedExoticComponent<InputProps>
+Input.displayName = 'Input'

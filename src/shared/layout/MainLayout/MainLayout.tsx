@@ -1,4 +1,4 @@
-import { memo, ReactElement } from 'react'
+import { memo, ReactElement, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import cls from './MainLayout.module.scss'
 import { cn } from '@/shared/lib/classNames/classNames'
@@ -14,7 +14,10 @@ interface MainLayoutProps {
 export const MainLayout = memo(
     ({ sidebar, content, className, isAuth }: MainLayoutProps) => {
         const location = useLocation()
-        const isHiddenContent = location.pathname === '/'
+        const isHiddenContent = useMemo(
+            () => location.pathname === '/',
+            [location.pathname],
+        )
 
         const isMobile = useMedia('(max-width: 800px)')
 

@@ -1,4 +1,11 @@
-import { InputHTMLAttributes, memo, useEffect, useRef, useState } from 'react'
+import {
+    InputHTMLAttributes,
+    memo,
+    NamedExoticComponent,
+    useEffect,
+    useRef,
+    useState,
+} from 'react'
 import cls from './Checkbox.module.scss'
 import { cn, Mode } from '@/shared/lib/classNames/classNames'
 import { FlexDirection } from '@/shared/ui/Stack/Flex/Flex'
@@ -94,4 +101,5 @@ export const Checkbox = memo(
             </HStack>
         )
     },
-)
+) as NamedExoticComponent<CheckboxProps>
+Checkbox.displayName = 'Checkbox'

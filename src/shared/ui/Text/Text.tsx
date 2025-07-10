@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, NamedExoticComponent } from 'react'
 import { cn } from '@/shared/lib/classNames/classNames'
 import cls from './Text.module.scss'
 
@@ -62,4 +62,5 @@ export const Text = memo(
             </div>
         )
     },
-)
+) as NamedExoticComponent<TextProps>
+Text.displayName = 'Text'

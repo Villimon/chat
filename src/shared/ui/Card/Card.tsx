@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode } from 'react'
+import { HTMLAttributes, memo, NamedExoticComponent, ReactNode } from 'react'
 import { cn } from '@/shared/lib/classNames/classNames'
 import cls from './Card.module.scss'
 
@@ -22,26 +22,30 @@ const mapPaddingToClass: Record<CardPadding, string> = {
     24: 'gap_24',
 }
 
-export const Card = ({
-    className,
-    children,
-    fullWidth,
-    border = 'standart',
-    padding = '8',
-    variant = 'normal',
-    ...otherProps
-}: CardProps) => {
-    return (
-        <div
-            {...otherProps}
-            className={cn(cls.Card, { [cls.fullWidth]: fullWidth }, [
-                className,
-                cls[border],
-                cls[variant],
-                cls[mapPaddingToClass[padding]],
-            ])}
-        >
-            {children}
-        </div>
-    )
-}
+export const Card = memo(
+    ({
+        className,
+        children,
+        fullWidth,
+        border = 'standart',
+        padding = '8',
+        variant = 'normal',
+        ...otherProps
+    }: CardProps) => {
+        return (
+            <div
+                {...otherProps}
+                className={cn(cls.Card, { [cls.fullWidth]: fullWidth }, [
+                    className,
+                    cls[border],
+                    cls[variant],
+                    cls[mapPaddingToClass[padding]],
+                ])}
+            >
+                {children}
+            </div>
+        )
+    },
+) as NamedExoticComponent<CardProps>
+
+Card.displayName = 'Card'

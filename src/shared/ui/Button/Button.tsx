@@ -2,6 +2,8 @@ import {
     ButtonHTMLAttributes,
     ForwardedRef,
     forwardRef,
+    memo,
+    NamedExoticComponent,
     ReactNode,
 } from 'react'
 import cls from './Button.module.scss'
@@ -48,42 +50,49 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     color?: ButtonColor
 }
 
-export const Button = forwardRef(
-    (
-        {
-            className,
-            children,
-            variant = 'outline',
-            square,
-            disabled,
-            size = 'm',
-            fullWidth,
-            addonLeft,
-            addonRight,
-            color = 'normal',
-            ...otherProps
-        }: ButtonProps,
-        ref: ForwardedRef<HTMLButtonElement>,
-    ) => (
-        <button
-            ref={ref}
-            type="button"
-            {...otherProps}
-            disabled={disabled}
-            className={cn(
-                cls.Button,
-                {
-                    [cls.square]: square,
-                    [cls.disabled]: disabled,
-                    [cls.fullWidth]: fullWidth,
-                    [cls.withAddon]: Boolean(addonLeft) || Boolean(addonRight),
-                },
-                [className, cls[variant], cls[size], cls[color]],
-            )}
-        >
-            {addonLeft && <div className={cls.addonLeft}>{addonLeft}</div>}
-            {children}
-            {addonRight && <div className={cls.addonRight}>{addonRight}</div>}
-        </button>
+export const Button = memo(
+    forwardRef(
+        (
+            {
+                className,
+                children,
+                variant = 'outline',
+                square,
+                disabled,
+                size = 'm',
+                fullWidth,
+                addonLeft,
+                addonRight,
+                color = 'normal',
+                ...otherProps
+            }: ButtonProps,
+            ref: ForwardedRef<HTMLButtonElement>,
+        ) => (
+            <button
+                ref={ref}
+                type="button"
+                {...otherProps}
+                disabled={disabled}
+                className={cn(
+                    cls.Button,
+                    {
+                        [cls.square]: square,
+                        [cls.disabled]: disabled,
+                        [cls.fullWidth]: fullWidth,
+                        [cls.withAddon]:
+                            Boolean(addonLeft) || Boolean(addonRight),
+                    },
+                    [className, cls[variant], cls[size], cls[color]],
+                )}
+            >
+                {addonLeft && <div className={cls.addonLeft}>{addonLeft}</div>}
+                {children}
+                {addonRight && (
+                    <div className={cls.addonRight}>{addonRight}</div>
+                )}
+            </button>
+        ),
     ),
-)
+) as NamedExoticComponent<ButtonProps>
+
+Button.displayName = 'Button'

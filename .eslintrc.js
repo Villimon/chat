@@ -66,6 +66,7 @@ module.exports = {
         // Для нижних подчеркиваний в переменных
         'no-underscore-dangle': 'off',
         'linebreak-style': 0,
+        'react/no-unused-prop-types': 0,
         semi: 0,
         'i18next/no-literal-string': [
             'off',
