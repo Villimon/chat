@@ -29,11 +29,11 @@
 }
 
 *::-webkit-scrollbar-track {
-    background: var(--light-bg-redesigned);
+    background: var(--light-bg);
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: var(--bg-redesigned);
+    background-color: var(--bg-color);
     border-radius: 20px;
-    border: 2px solid var(--text-redesigned);
+    border: 2px solid var(--text-primary);
 }

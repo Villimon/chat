@@ -32,6 +32,7 @@ interface InputProps extends HTMLInputProps {
 }
 
 // TODO  сделать валидацию
+// TODO  Добавить возможность показывать иконки
 export const Input = memo(
     ({
         label,
