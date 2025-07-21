@@ -1,3 +1,5 @@
+export { dialogListReducer } from './Sidebar/DialogList/model/slice/DialogList'
+export type { DialogListSchema } from './Sidebar/DialogList/model/types/dialogListSchema'
 export { Sidebar } from './Sidebar/Sidebar/ui/Sidebar'
 export { AnswersAsync as Answers } from './Settings/Answers/ui/Answers.async'
 export { AppearenceAsync as Appearence } from './Settings/Appearence/ui/Appearence.async'

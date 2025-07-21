@@ -1,6 +1,6 @@
 export enum AppRouter {
     MAIN = 'main',
-    CHAT = 'chat',
+    CHAT = 'dialogs',
     LOGIN = 'login',
     REGISTRATION = 'registration',
     NOT_FOUND = 'not_found',
@@ -19,6 +19,6 @@ export enum SidebarRouterType {
 }
 
 export const getRouteMain = () => '/'
-export const getRouteChat = (id: string) => `/chat/${id}`
+export const getRouteChat = (id: string) => `/dialogs/${id}`
 export const getRouteLogin = () => '/login'
 export const getRouteRegistration = () => '/registration'

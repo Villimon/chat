@@ -1,14 +1,13 @@
-import { Suspense } from 'react'
-import { Location } from 'react-router-dom'
+import { FC, memo, useMemo } from 'react'
 import { routeSidebarConfig } from '../config/routeConfig'
 import { SidebarRouterType } from '@/shared/constants/routes'
-import { Loader } from '@/shared/ui/Loader/Loader'
 
-export const SidebarRouter = ({ hash, key }: Location) => {
-    return (
-        // TODO: Сделать лоадер
-        <Suspense key={key} fallback={<Loader />}>
-            {routeSidebarConfig[hash as SidebarRouterType]}
-        </Suspense>
-    )
+interface SidebarRouterProps {
+    hash: string
 }
+
+export const SidebarRouter: FC<SidebarRouterProps> = memo(({ hash }) => {
+    return useMemo(() => {
+        return routeSidebarConfig[hash as SidebarRouterType]
+    }, [hash])
+})

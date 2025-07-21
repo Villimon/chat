@@ -33,6 +33,7 @@ interface InputProps extends HTMLInputProps {
 
 // TODO  сделать валидацию
 // TODO  Добавить возможность показывать иконки
+// TODO  Добавить крестик, который будет очищать поле
 export const Input = memo(
     ({
         label,

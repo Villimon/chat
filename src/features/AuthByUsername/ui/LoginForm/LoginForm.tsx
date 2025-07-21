@@ -151,7 +151,6 @@ export const LoginForm: FC<LoginFormProps> = memo(({ className }) => {
                             />
                         </VStack>
                         <VStack gap="8">
-                            {/* TODO понять как это применять */}
                             <Controller
                                 name="password"
                                 control={control}

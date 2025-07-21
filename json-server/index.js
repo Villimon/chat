@@ -41,6 +41,59 @@ server.post('/login', (req, res) => {
     }
 })
 
+server.get('/dialogs', (req, res) => {
+    const db = JSON.parse(
+        fs.readFileSync(path.resolve(__dirname, 'db.json'), 'UTF-8'),
+    )
+
+    const { userId, _limit, _page, _sort } = req.query
+
+    if (!userId) {
+        return res.status(400).json({ error: 'Missing userId parameter' })
+    }
+
+    const dialogs = db.dialogs
+        .filter((item) => item.participants.includes(userId))
+        .map((dialog) => {
+            if (dialog.type === 'private') {
+                const interlocutorId = dialog.participants.find(
+                    (item) => item !== req.query.userId,
+                )
+
+                const interlocutor = db.users.find(
+                    (item) => item.id === interlocutorId,
+                )
+
+                return {
+                    ...dialog,
+                    interlocutor: interlocutor || null,
+                }
+            }
+
+            return dialog
+        })
+
+    if (_sort) {
+        dialogs.sort((a, b) => {
+            const valA = _sort.split('.').reduce((o, i) => o[i], a)
+            const valB = _sort.split('.').reduce((o, i) => o[i], b)
+
+            return new Date(valB) - new Date(valA)
+        })
+    }
+
+    const start = (_page - 1) * _limit
+    const end = start + +_limit
+    const paginatedDialogs = dialogs.slice(start, end)
+
+    res.json({
+        data: paginatedDialogs,
+        currentPage: _page,
+        totalPages: Math.ceil(dialogs.length / _limit),
+        totalItems: dialogs.length,
+    })
+})
+
 server.use((req, res, next) => {
     if (!req.headers.authorization) {
         return res.status(403).json({ message: 'AUTH ERROR' })

@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { SidebarHeader } from '../../SidebarHeader/ui/SidebarHeader'
+import { DialogList } from '../../DialogList/ui/DialogList'
 
 export const Sidebar = memo(() => {
     // const location = useLocation()
@@ -7,9 +8,11 @@ export const Sidebar = memo(() => {
     // const addHash = (hash: string) => {
     //     navigate(`${location.pathname}${hash}`)
     // }
+
     return (
         <aside>
             <SidebarHeader />
+            <DialogList />
             {/* <Link to="/">123</Link>
             <Link to="/chat/34">chat</Link>
             <Link to="/login">login</Link>

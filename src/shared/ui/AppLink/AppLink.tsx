@@ -36,10 +36,11 @@ export const AppLink = memo(
                 to={to}
                 {...otherProps}
                 className={({ isActive }) =>
-                    cn(cls.AppLink, { [activeClassName]: isActive }, [
-                        className,
-                        cls[variant],
-                    ])}
+                    cn(
+                        cls.AppLink,
+                        { [activeClassName]: isActive, [cls.active]: isActive },
+                        [className, cls[variant]],
+                    )}
             >
                 {children}
             </NavLink>

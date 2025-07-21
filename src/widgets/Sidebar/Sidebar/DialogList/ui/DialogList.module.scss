@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 0 0 0 15px;
+    height: calc(100vh - 76px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.skeletonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.skeletonTitle {
+    margin-bottom: 5px;
+}
+
+.skeletonDate {
+    margin-top: -20px;
+}

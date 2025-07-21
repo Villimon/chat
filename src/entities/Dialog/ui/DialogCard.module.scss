@@ -1,0 +1,24 @@
+.body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 5px;
+    border-radius: 10px;
+    height: 70px;
+    margin-right: 10px;
+}
+
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.activeClassName {
+    background-color: var(--text-secondary);
+}
+
+.date {
+    height: 100%;
+    margin-top: 5px;
+}

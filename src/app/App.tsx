@@ -3,7 +3,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import './styles/index.scss'
 import { useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { cn } from '@/shared/lib/classNames/classNames'
 import { useTheme } from '@/shared/hooks/useTheme/usetheme'
 import { MainLayout } from '@/shared/layout/MainLayout'
@@ -44,15 +44,25 @@ const App = () => {
         dispatch(initAuthData())
     }, [dispatch])
 
+    const sidebar = useMemo(
+        () => <SidebarRouter hash={location.hash} />,
+        [location.hash],
+    )
+
+    const content = useMemo(
+        () => <AppRouter key={location.pathname} />,
+        [location.pathname],
+    )
+
     return (
         <div className={cn('app', {}, [theme, palette])}>
             {inited ? (
                 <ErrorBoundary>
                     <MainLayout
                         isAuth={Boolean(isAuth)}
-                        content={<AppRouter {...location} />}
+                        content={content}
                         sidebar={
-                            <SidebarRouter {...location} />
+                            sidebar
                             // <>
                             //     {hash === '#music' || hash === '#video' ? (
                             //         <>

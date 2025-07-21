@@ -1,11 +1,15 @@
-import React, { useCallback } from 'react'
-import { Location, Route, Routes } from 'react-router-dom'
+import React, { FC, useCallback } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import { AppRouterProps } from '@/shared/types/router'
 import { routeAppConfig } from '../config/routeConfig'
 import { RequierAuth } from './RequierAuth'
 import { Loader } from '@/shared/ui/Loader/Loader'
 
-export const AppRouter = ({ key }: Location) => {
+interface AppRouterComponentProps {
+    key: string
+}
+
+export const AppRouter: FC<AppRouterComponentProps> = ({ key }) => {
     const renderWithWrapper = useCallback((route: AppRouterProps) => {
         return (
             <Route
