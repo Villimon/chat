@@ -8,14 +8,13 @@ import { AxiosInstance } from 'axios'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { LoginSchema } from '@/features/AuthByUsername'
 import { UserSchema } from '@/entities/User/model/types/userSchema'
-import { DialogListSchema, FoldersSchema } from '@/widgets/Sidebar'
+import { SidebarSchema } from '@/widgets/Sidebar'
 
 export interface StateSchema {
     [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>
     loginForm?: LoginSchema
     user: UserSchema
-    dialogList: DialogListSchema
-    folders: FoldersSchema
+    sidebar: SidebarSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

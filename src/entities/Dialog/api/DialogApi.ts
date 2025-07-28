@@ -1,7 +1,7 @@
 import { DialogDto } from '@/entities/Dialog/model/types/dialogSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 
-interface getDialogProps {
+interface GetDialogProps {
     userId: string
     limit?: number
     page?: number
@@ -9,10 +9,10 @@ interface getDialogProps {
 }
 
 // TODO: сделать прерывание запроса
-
+// TODO: проблема в том, что нет кеша по стараницам(если есть появляются свои проблемы с отрисовкой данных), от сюда проблема в том, что данные запрашиваются по новому а не берутся с кеша, если менялось page
 const dialiogApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
-        getDialog: build.query<DialogDto, getDialogProps>({
+        getDialog: build.query<DialogDto, GetDialogProps>({
             query: ({ userId, limit = 10, page = 1, folder }) => ({
                 url: '/dialogs',
                 method: 'GET',
@@ -36,8 +36,16 @@ const dialiogApi = rtkApi.injectEndpoints({
                         totalPages: newItems.totalPages,
                     }
                 }
+
+                const newData = newItems.data.filter(
+                    (newItem) =>
+                        !currentCache.data.some(
+                            (cachedItem) => cachedItem.id === newItem.id,
+                        ),
+                )
+
                 return {
-                    data: [...currentCache.data, ...newItems.data],
+                    data: [...currentCache.data, ...newData],
                     currentPage: newItems.currentPage,
                     totalItems: newItems.totalItems,
                     totalPages: newItems.totalPages,
@@ -45,10 +53,11 @@ const dialiogApi = rtkApi.injectEndpoints({
             },
             forceRefetch: ({ currentArg, previousArg }) => {
                 return (
-                    currentArg?.page !== previousArg?.page ||
-                    currentArg?.folder !== previousArg?.folder
+                    currentArg?.page !== previousArg?.page
+                    || currentArg?.folder !== previousArg?.folder
                 )
             },
+            keepUnusedDataFor: 60 * 5,
         }),
     }),
 })

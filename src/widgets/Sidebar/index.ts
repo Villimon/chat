@@ -1,5 +1,5 @@
-export { dialogListReducer } from './Sidebar/DialogList/model/slice/DialogList'
-export type { DialogListSchema } from './Sidebar/DialogList/model/types/dialogListSchema'
+export { sidebarReducer } from './Sidebar/model/slice/sidebar'
+export type { SidebarSchema } from './Sidebar/model/types/sidebarSchema'
 export { Sidebar } from './Sidebar/Sidebar/ui/Sidebar'
 export { AnswersAsync as Answers } from './Settings/Answers/ui/Answers.async'
 export { AppearenceAsync as Appearence } from './Settings/Appearence/ui/Appearence.async'
@@ -9,8 +9,3 @@ export { NotificationAsync as Notification } from './Settings/Notification/ui/No
 export { ProfileAsync as Profile } from './Settings/Profile/ui/Profile.async'
 export { SecurityAsync as Security } from './Settings/Security/ui/Security.async'
 export { SettingsAsync as Settings } from './Settings/Settings/ui/Settings.async'
-export {
-    foldersReducer,
-    foldersActions,
-} from './Sidebar/Folders/model/slice/FoldersSlice'
-export type { FoldersSchema } from './Sidebar/Folders/model/types/foldersSchema'

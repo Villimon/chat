@@ -3,6 +3,8 @@ export type FolderType = {
     title: string
 }
 
-export interface FoldersSchema {
+export interface SidebarSchema {
+    page: number
+    limit: number
     activeFolder: FolderType
 }

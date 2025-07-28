@@ -9,11 +9,11 @@ import { Text } from '@/shared/ui/Text/Text'
 import { Skeleton } from '@/shared/ui/Skeleton'
 import clsCard from '@/entities/Dialog/ui/DialogCard.module.scss'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
-import { getPage } from '../model/selectors/getPage/getPage'
-import { getLimit } from '../model/selectors/getLimit/getLimit'
+import { getPage } from '../../model/selectors/getPage/getPage'
+import { getLimit } from '../../model/selectors/getLimit/getLimit'
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
-import { dialogListActions } from '../model/slice/DialogList'
-import { getActiveFolder } from '../../Folders/model/selectors/getActiveFolder/getActiveFolder'
+import { getActiveFolder } from '../../model/selectors/getActiveFolder/getActiveFolder'
+import { sidebarActions } from '../../model/slice/sidebar'
 
 const SkeletonDialogCard = memo(({ className }: { className: string }) => {
     return (
@@ -76,7 +76,7 @@ export const DialogList = memo(({ className }: { className?: string }) => {
 
     const loadMore = useCallback(() => {
         if (!isFetching && dialogs && page < dialogs?.totalPages) {
-            dispatch(dialogListActions.setPage(1))
+            dispatch(sidebarActions.setPage(1))
         }
     }, [isFetching, dialogs, page, dispatch])
 
