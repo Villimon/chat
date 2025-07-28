@@ -46,13 +46,15 @@ server.get('/dialogs', (req, res) => {
         fs.readFileSync(path.resolve(__dirname, 'db.json'), 'UTF-8'),
     )
 
-    const { userId, _limit, _page, _sort } = req.query
+    const { userId, _limit, _page, _sort, folder } = req.query
 
     if (!userId) {
         return res.status(400).json({ error: 'Missing userId parameter' })
     }
 
-    const dialogs = db.dialogs
+    const user = db.users.find((item) => item.id === userId)
+
+    let dialogs = db.dialogs
         .filter((item) => item.participants.includes(userId))
         .map((dialog) => {
             if (dialog.type === 'private') {
@@ -72,6 +74,16 @@ server.get('/dialogs', (req, res) => {
 
             return dialog
         })
+
+    if (folder) {
+        dialogs = dialogs.filter((dialog) =>
+            user.dialogs.some(
+                (userDialog) =>
+                    userDialog.dialogId === dialog.id &&
+                    userDialog.folders.includes(folder),
+            ),
+        )
+    }
 
     if (_sort) {
         dialogs.sort((a, b) => {

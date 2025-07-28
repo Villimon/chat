@@ -1,11 +1,23 @@
+export type FolderType = {
+    value: string
+    title: string
+}
+
+export type DialogType = {
+    dialogId: string
+    folders: string[]
+}
+
 export interface User {
     id: string
     username: string
     avatar?: string
     firstName: string
     lastName: string
-    dialogs?: string[]
+    dialogs?: DialogType[]
+    folders?: FolderType[]
 }
+
 // TODO: вынесити потом  в нужно место
 export interface Messages {
     id: string

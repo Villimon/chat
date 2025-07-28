@@ -13,6 +13,9 @@ export const dialogList = createSlice({
         setPage(state, action: PayloadAction<number>) {
             state.page += action.payload
         },
+        reset() {
+            return initialState
+        },
     },
 })
 

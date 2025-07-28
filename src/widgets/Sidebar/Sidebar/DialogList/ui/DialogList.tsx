@@ -13,6 +13,7 @@ import { getPage } from '../model/selectors/getPage/getPage'
 import { getLimit } from '../model/selectors/getLimit/getLimit'
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
 import { dialogListActions } from '../model/slice/DialogList'
+import { getActiveFolder } from '../../Folders/model/selectors/getActiveFolder/getActiveFolder'
 
 const SkeletonDialogCard = memo(({ className }: { className: string }) => {
     return (
@@ -55,6 +56,7 @@ const EmptyListPlaceholder = memo(() => (
 
 export const DialogList = memo(({ className }: { className?: string }) => {
     const userData = useSelector(getUserData)
+    const activeFolder = useSelector(getActiveFolder)
     const page = useSelector(getPage)
     const limit = useSelector(getLimit)
     const dispatch = useAppDispatch()
@@ -64,10 +66,12 @@ export const DialogList = memo(({ className }: { className?: string }) => {
         isLoading,
         isError,
         isFetching,
+        isSuccess,
     } = useGetDialog({
         userId: userData?.id ?? '',
         page,
         limit,
+        folder: activeFolder.value,
     })
 
     const loadMore = useCallback(() => {
@@ -87,7 +91,7 @@ export const DialogList = memo(({ className }: { className?: string }) => {
         [],
     )
 
-    if (isLoading) {
+    if (!isSuccess && isFetching) {
         return <SkeletonDialogCard className={cls.container} />
     }
 

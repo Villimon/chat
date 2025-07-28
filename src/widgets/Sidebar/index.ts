@@ -9,3 +9,8 @@ export { NotificationAsync as Notification } from './Settings/Notification/ui/No
 export { ProfileAsync as Profile } from './Settings/Profile/ui/Profile.async'
 export { SecurityAsync as Security } from './Settings/Security/ui/Security.async'
 export { SettingsAsync as Settings } from './Settings/Settings/ui/Settings.async'
+export {
+    foldersReducer,
+    foldersActions,
+} from './Sidebar/Folders/model/slice/FoldersSlice'
+export type { FoldersSchema } from './Sidebar/Folders/model/types/foldersSchema'

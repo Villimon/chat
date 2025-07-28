@@ -4,7 +4,7 @@ import { StateSchema, ThunkExtraArg } from './StateSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { $api } from '@/shared/api/api'
 import { userReducer } from '@/entities/User'
-import { dialogListReducer } from '@/widgets/Sidebar'
+import { dialogListReducer, foldersReducer } from '@/widgets/Sidebar'
 
 export const createReduxStore = (
     asyncReducers?: ReducersMapObject<StateSchema>,
@@ -14,6 +14,7 @@ export const createReduxStore = (
         user: userReducer,
         dialogList: dialogListReducer,
         [rtkApi.reducerPath]: rtkApi.reducer,
+        folders: foldersReducer,
     }
 
     // redux code spliting

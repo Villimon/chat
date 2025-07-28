@@ -8,7 +8,42 @@
             "password": "123",
             "roles": ["ADMIN"],
             "avatar": "",
-            "dialogs": ["1", "2"]
+            "dialogs": [
+                {
+                    "dialogId": "1",
+                    "folders": ["personal", "groups"]
+                },
+                {
+                    "dialogId": "2",
+                    "folders": [ "groups"]
+                },
+                {
+                    "dialogId": "3",
+                    "folders": ["personal"]
+                },
+                {
+                    "dialogId": "4",
+                    "folders": [ "personal"]
+                },
+                {
+                    "dialogId": "5",
+                    "folders": ["personal"]
+                },
+                {
+                    "dialogId": "6",
+                    "folders": [ "groups"]
+                }
+            ],
+            "folders": [
+                {
+                    "value": "personal",
+                    "title": "Личные"
+                },
+                {
+                    "value": "groups",
+                    "title": "Группы"
+                }
+            ]
         },
         {
             "id": "2",
@@ -18,7 +53,34 @@
             "password": "123",
             "roles": ["USER"],
             "avatar": "",
-            "dialogs": ["1", "2", "3"]
+            "dialogs": [
+                {
+                    "dialogId": "1",
+                    "folders": ["personal", "groups"]
+                },
+                {
+                    "dialogId": "2",
+                    "folders": [ "groups"]
+                },
+                {
+                    "dialogId": "3",
+                    "folders": ["personal"]
+                },
+                {
+                    "dialogId": "4",
+                    "folders": ["personal"]
+                }
+            ],
+            "folders": [
+                {
+                    "value": "personal",
+                    "title": "Личные"
+                },
+                {
+                    "value": "groups",
+                    "title": "Группы"
+                }
+            ]
         }
     ],
     "dialogs": [
