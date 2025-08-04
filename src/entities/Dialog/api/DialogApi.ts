@@ -6,6 +6,7 @@ interface GetDialogProps {
     limit?: number
     page?: number
     folder?: string
+    query?: string
 }
 
 // TODO: сделать прерывание запроса
@@ -13,22 +14,23 @@ interface GetDialogProps {
 const dialiogApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
         getDialog: build.query<DialogDto, GetDialogProps>({
-            query: ({ userId, limit = 10, page = 1, folder }) => ({
+            query: ({ userId, limit = 20, page = 1, folder, query }) => ({
                 url: '/dialogs',
                 method: 'GET',
                 params: {
                     userId,
                     _limit: limit,
                     _page: page,
+                    _query: query,
                     _sort: 'lastMessage.timestamp',
                     folder: folder !== 'all' ? folder : undefined,
                 },
             }),
             serializeQueryArgs: ({ queryArgs }) => {
-                return `${queryArgs.userId}-${queryArgs.folder || 'all'}`
+                return `${queryArgs.folder || 'all'}-${queryArgs.query || ''}`
             },
-            merge: (currentCache, newItems) => {
-                if (newItems.currentPage === 1) {
+            merge: (currentCache, newItems, { arg }) => {
+                if (newItems.currentPage === 1 || arg.query) {
                     return {
                         data: newItems.data,
                         currentPage: newItems.currentPage,
@@ -52,10 +54,7 @@ const dialiogApi = rtkApi.injectEndpoints({
                 }
             },
             forceRefetch: ({ currentArg, previousArg }) => {
-                return (
-                    currentArg?.page !== previousArg?.page
-                    || currentArg?.folder !== previousArg?.folder
-                )
+                return currentArg?.page !== previousArg?.page
             },
             keepUnusedDataFor: 60 * 5,
         }),

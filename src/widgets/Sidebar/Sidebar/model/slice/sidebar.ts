@@ -8,6 +8,7 @@ const initialState: SidebarSchema = {
         title: 'Все',
         value: 'all',
     },
+    searchQuery: '',
 }
 
 export const sidebar = createSlice({
@@ -17,8 +18,11 @@ export const sidebar = createSlice({
         setPage(state, action: PayloadAction<number>) {
             state.page += action.payload
         },
-        setActiveFolser(state, action: PayloadAction<FolderType>) {
+        setActiveFolder(state, action: PayloadAction<FolderType>) {
             state.activeFolder = action.payload
+        },
+        setSearchQuery(state, action: PayloadAction<string>) {
+            state.searchQuery = action.payload
         },
         reset(state) {
             state.limit = initialState.limit

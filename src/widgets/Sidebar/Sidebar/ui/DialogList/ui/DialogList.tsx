@@ -1,19 +1,17 @@
 import { memo, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { Virtuoso } from 'react-virtuoso'
-import { DialogCard, useGetDialog } from '@/entities/Dialog'
-import { getUserData } from '@/entities/User'
+import { DialogCard } from '@/entities/Dialog'
 import { cn } from '@/shared/lib/classNames/classNames'
 import cls from './DialogList.module.scss'
 import { Text } from '@/shared/ui/Text/Text'
 import { Skeleton } from '@/shared/ui/Skeleton'
 import clsCard from '@/entities/Dialog/ui/DialogCard.module.scss'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
-import { getPage } from '../../model/selectors/getPage/getPage'
-import { getLimit } from '../../model/selectors/getLimit/getLimit'
+import { getPage } from '../../../model/selectors/getPage/getPage'
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
-import { getActiveFolder } from '../../model/selectors/getActiveFolder/getActiveFolder'
-import { sidebarActions } from '../../model/slice/sidebar'
+import { sidebarActions } from '../../../model/slice/sidebar'
+import { useDialogFetching } from '../../../api/useDialogFetching'
 
 const SkeletonDialogCard = memo(({ className }: { className: string }) => {
     return (
@@ -55,24 +53,15 @@ const EmptyListPlaceholder = memo(() => (
 ))
 
 export const DialogList = memo(({ className }: { className?: string }) => {
-    const userData = useSelector(getUserData)
-    const activeFolder = useSelector(getActiveFolder)
     const page = useSelector(getPage)
-    const limit = useSelector(getLimit)
     const dispatch = useAppDispatch()
 
     const {
         data: dialogs,
-        isLoading,
         isError,
         isFetching,
         isSuccess,
-    } = useGetDialog({
-        userId: userData?.id ?? '',
-        page,
-        limit,
-        folder: activeFolder.value,
-    })
+    } = useDialogFetching()
 
     const loadMore = useCallback(() => {
         if (!isFetching && dialogs && page < dialogs?.totalPages) {

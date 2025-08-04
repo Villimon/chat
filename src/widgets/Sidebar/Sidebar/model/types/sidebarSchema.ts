@@ -7,4 +7,5 @@ export interface SidebarSchema {
     page: number
     limit: number
     activeFolder: FolderType
+    searchQuery: string
 }

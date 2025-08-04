@@ -1,6 +1,6 @@
 export { sidebarReducer } from './Sidebar/model/slice/sidebar'
 export type { SidebarSchema } from './Sidebar/model/types/sidebarSchema'
-export { Sidebar } from './Sidebar/Sidebar/ui/Sidebar'
+export { Sidebar } from './Sidebar/ui/Sidebar/ui/Sidebar'
 export { AnswersAsync as Answers } from './Settings/Answers/ui/Answers.async'
 export { AppearenceAsync as Appearence } from './Settings/Appearence/ui/Appearence.async'
 export { FoldersAsync as Folders } from './Settings/Folders/ui/Folders.async'

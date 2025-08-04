@@ -46,7 +46,7 @@ server.get('/dialogs', (req, res) => {
         fs.readFileSync(path.resolve(__dirname, 'db.json'), 'UTF-8'),
     )
 
-    const { userId, _limit, _page, _sort, folder } = req.query
+    const { userId, _limit, _page, _sort, folder, _query } = req.query
 
     if (!userId) {
         return res.status(400).json({ error: 'Missing userId parameter' })
@@ -74,6 +74,27 @@ server.get('/dialogs', (req, res) => {
 
             return dialog
         })
+
+    if (_query) {
+        dialogs = dialogs.filter((dialog) => {
+            const query = _query.toLowerCase()
+            const title = dialog.title?.toLowerCase() || ''
+            let userFullName = ''
+            let userName = ''
+
+            if (dialog.interlocutor) {
+                userFullName =
+                    `${dialog.interlocutor.firstName} ${dialog.interlocutor.lastName}`.toLowerCase()
+                userName = dialog.interlocutor.username.toLowerCase()
+            }
+
+            return (
+                title.includes(query) ||
+                userFullName.includes(query) ||
+                userName.includes(query)
+            )
+        })
+    }
 
     if (folder) {
         dialogs = dialogs.filter((dialog) =>
