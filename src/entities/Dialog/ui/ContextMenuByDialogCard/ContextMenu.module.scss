@@ -1,0 +1,17 @@
+.contextMenu {
+    background: var(--bg-color);
+    border: 1px solid var(--text-secondary);
+    border-radius: 8px;
+    /* stylelint-disable-next-line color-function-notation */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 15%);
+    padding: 4px 0;
+}
+
+.menuItem {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    background: var(--accent-primary);
+}
