@@ -1,104 +1,27 @@
-import { memo, useCallback, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { memo } from 'react'
 import { Virtuoso } from 'react-virtuoso'
-import { DialogCard } from '@/entities/Dialog'
 import { cn } from '@/shared/lib/classNames/classNames'
 import cls from './DialogList.module.scss'
 import { Text } from '@/shared/ui/Text/Text'
-import { Skeleton } from '@/shared/ui/Skeleton'
-import clsCard from '@/entities/Dialog/ui/DialogCard/DialogCard.module.scss'
-import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
-import { getPage } from '../../../model/selectors/getPage/getPage'
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
-import { sidebarActions } from '../../../model/slice/sidebar'
-import { useDialogFetching } from '../../../api/useDialogFetching'
+import { useDialogList } from '../../../lib/hooks/useDialogList'
+import { useDialogListRenderer } from '../../../lib/hooks/useDialogListRenderer'
+import { useDialogListData } from '../../../lib/hooks/useDialogListData'
 
-const SkeletonDialogCard = memo(({ className }: { className: string }) => {
-    return (
-        <div className={cn('', {}, [className])}>
-            {Array(18)
-                .fill(0)
-                .map((_, index) => (
-                    <div key={index} className={clsCard.body}>
-                        <Skeleton width={50} height={50} border="50%" />
-                        <div className={clsCard.info}>
-                            <Skeleton
-                                width={200}
-                                height={20}
-                                className={cls.skeletonTitle}
-                            />
-                            <Skeleton width={300} height={20} />
-                        </div>
-                        <div>
-                            <Skeleton
-                                width={30}
-                                height={20}
-                                className={cls.skeletonDate}
-                            />
-                        </div>
-                    </div>
-                ))}
-        </div>
-    )
-})
-
-const LoadingFooter = memo(({ isFetching }: { isFetching: boolean }) => {
-    return isFetching ? (
-        <SkeletonDialogCard className={cls.skeletonContainer} />
-    ) : null
-})
-
-const EmptyListPlaceholder = memo(() => (
-    <Text text="Список диалогов пуст" align="center" />
-))
-
-// TODO навести тут порядок
 export const DialogList = memo(({ className }: { className?: string }) => {
-    const page = useSelector(getPage)
-    const dispatch = useAppDispatch()
+    const { handleCloseMenu, handleContextMenu, menuPosition, openedMenuId } = useDialogList()
 
-    const [openedMenuId, setOpenedMenuId] = useState<string | null>()
-    const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
+    const { dialogs, isError, isFetching, isSuccess, loadMore } = useDialogListData()
 
     const {
-        data: dialogs,
-        isError,
-        isFetching,
-        isSuccess,
-    } = useDialogFetching()
-
-    const loadMore = useCallback(() => {
-        if (!isFetching && dialogs && page < dialogs?.totalPages) {
-            dispatch(sidebarActions.setPage(1))
-        }
-    }, [isFetching, dialogs, page, dispatch])
-
-    const handleContextMenu = useCallback(
-        (e: React.MouseEvent, dialogId: string) => {
-            e.preventDefault()
-            setMenuPosition({ x: e.clientX, y: e.clientY })
-            setOpenedMenuId(dialogId)
-        },
-        [],
-    )
-
-    const handleCloseMenu = useCallback(() => {
-        setOpenedMenuId(null)
-    }, [])
-
-    const itemContent = useCallback(
-        (index: number, dialog: Dialog) => (
-            <DialogCard
-                key={dialog.id}
-                dialog={dialog}
-                className={cls.dialogItem}
-                onCloseMenu={handleCloseMenu}
-                onContextMenu={(e) => handleContextMenu(e, dialog.id)}
-                isOpenMenu={openedMenuId === dialog.id}
-                menuPosition={menuPosition}
-            />
-        ),
-        [openedMenuId, menuPosition, handleCloseMenu, handleContextMenu],
+        EmptyListPlaceholder,
+        LoadingFooter,
+        SkeletonDialogCard,
+        itemContent,
+    } = useDialogListRenderer(
+        handleContextMenu,
+        handleCloseMenu,
+        menuPosition,
+        openedMenuId,
     )
 
     if (!isSuccess && isFetching) {

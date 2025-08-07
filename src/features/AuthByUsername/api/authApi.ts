@@ -2,7 +2,7 @@ import { User, userActions } from '@/entities/User'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { USER_LOCAL_STORAGE_KEY } from '@/shared/constants/localstorage'
 
-interface LoginByUsernameProps {
+export interface LoginByUsernameProps {
     username: string
     password: string
     remember: boolean

@@ -3,20 +3,7 @@ import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 import { Theme } from '@/shared/constants/theme'
 import { ThemeBox } from '../../ui/ThemeBox/ThemeBox'
 import { useTheme } from '@/shared/hooks/useTheme/usetheme'
-
-// TODO: Подумать чтобы вынести это в отдельное место
-const themeBoxes = [
-    {
-        id: '1',
-        theme: Theme.LIGHT,
-        title: 'Светлая',
-    },
-    {
-        id: '2',
-        theme: Theme.DARK,
-        title: 'Темная',
-    },
-]
+import { themeBoxes } from '../../model/consts/themeBoxes'
 
 export const ThemeSwitcher = () => {
     const { theme, toggleTheme } = useTheme()

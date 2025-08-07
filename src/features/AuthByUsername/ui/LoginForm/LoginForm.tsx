@@ -1,12 +1,12 @@
-import { FC, memo, useCallback } from 'react'
+import { FC, memo } from 'react'
 import { useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import {
     DynamicModuleLoader,
     ReducersList,
 } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import { loginActions, loginReducer } from '../../model/slice/authSlice'
+import { loginReducer } from '../../model/slice/authSlice'
 import { Input } from '@/shared/ui/Input/Input'
 import { VStack } from '@/shared/ui/Stack/VStack/VStack'
 import { Card } from '@/shared/ui/Card/Card'
@@ -15,12 +15,12 @@ import cls from './LoginForm.module.scss'
 import { getUsername } from '../../model/selectors/getUsername/getUsername'
 import { getPassword } from '../../model/selectors/getPassword/getPassword'
 import { getRemember } from '../../model/selectors/getRemember/getRemember'
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
 import { useLoginMutation } from '../../api/authApi'
 import { Text } from '@/shared/ui/Text/Text'
 import { getUserData } from '@/entities/User'
 import { getRouteMain } from '@/shared/constants/routes'
 import { Checkbox } from '@/shared/ui/Checkbox/Checkbox'
+import { useLoginForm } from '../../lib/hooks/useLoginForm'
 
 const initialReducers: ReducersList = {
     loginForm: loginReducer,
@@ -35,8 +35,6 @@ export const LoginForm: FC<LoginFormProps> = memo(({ className }) => {
     const password = useSelector(getPassword)
     const remember = useSelector(getRemember)
     const isAuth = useSelector(getUserData)
-    const dispatch = useAppDispatch()
-    const navigate = useNavigate()
 
     const [login, { isError, isLoading }] = useLoginMutation()
 
@@ -53,42 +51,13 @@ export const LoginForm: FC<LoginFormProps> = memo(({ className }) => {
         mode: 'onChange',
     })
 
-    const onChangeUsername = useCallback(
-        (value: string) => {
-            dispatch(loginActions.setUsername(value))
-        },
-        [dispatch],
-    )
-
-    const onChangePassword = useCallback(
-        (value: string) => {
-            dispatch(loginActions.setPassword(value))
-        },
-        [dispatch],
-    )
-
-    const onChangeRemember = useCallback(
-        (value: boolean) => {
-            dispatch(loginActions.setRemember(value))
-        },
-        [dispatch],
-    )
-
-    const loginHandler = useCallback(
-        async (values: {
-            username: string
-            password: string
-            remember: boolean
-        }) => {
-            const { password, remember, username } = values
-            await login({ password, remember, username })
-        },
-        [login],
-    )
-
-    const onClickRegistrationButton = useCallback(() => {
-        navigate('/registration')
-    }, [navigate])
+    const {
+        loginHandler,
+        onChangePassword,
+        onChangeRemember,
+        onChangeUsername,
+        onClickRegistrationButton,
+    } = useLoginForm({ login })
 
     if (isAuth) {
         return <Navigate to={getRouteMain()} />

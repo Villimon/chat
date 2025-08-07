@@ -26,8 +26,9 @@ export const dialiogApi = rtkApi.injectEndpoints({
                     folder: folder !== 'all' ? folder : undefined,
                 },
             }),
-            serializeQueryArgs: ({ queryArgs }) => {
-                return `${queryArgs.folder || 'all'}-${queryArgs.query || ''}`
+            serializeQueryArgs: ({ endpointName, queryArgs }) => {
+                const { page, ...otherParams } = queryArgs
+                return [endpointName, otherParams]
             },
             merge: (currentCache, newItems, { arg }) => {
                 if (newItems.currentPage === 1 || arg.query) {
@@ -56,6 +57,12 @@ export const dialiogApi = rtkApi.injectEndpoints({
             forceRefetch: ({ currentArg, previousArg }) => {
                 return currentArg?.page !== previousArg?.page
             },
+            providesTags: (result) => [
+                ...(result?.data.map((dialog) => {
+                    return { type: 'Dialogs' as const, id: dialog.id }
+                }) || []),
+                'Dialogs',
+            ],
             keepUnusedDataFor: 60 * 5,
         }),
     }),

@@ -1,6 +1,7 @@
-import { FC, memo, useCallback, useMemo } from 'react'
+import { FC, memo } from 'react'
 import { TabItem, Tabs } from '@/shared/ui/Tabs/Tabs'
 import cls from './FoldersTabs.module.scss'
+import { useFoldersTabs } from '../lib/hooks/useFoldersTabs'
 
 interface FoldersTabsProps {
     value: TabItem
@@ -11,20 +12,10 @@ interface FoldersTabsProps {
 
 export const FoldersTabs: FC<FoldersTabsProps> = memo(
     ({ value, onChangeFolder, tabs, allUnreadMessages }) => {
-        const initialFirstTab = useMemo(() => {
-            return {
-                title: 'Все',
-                value: 'all',
-                unreadCount: allUnreadMessages,
-            }
-        }, [allUnreadMessages])
-
-        const onTabClick = useCallback(
-            (tab: TabItem) => {
-                onChangeFolder(tab)
-            },
-            [onChangeFolder],
-        )
+        const { initialFirstTab, onTabClick } = useFoldersTabs({
+            onChangeFolder,
+            allUnreadMessages,
+        })
 
         return (
             <Tabs
