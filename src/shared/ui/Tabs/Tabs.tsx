@@ -7,6 +7,7 @@ import cls from './Tabs.module.scss'
 export interface TabItem {
     value: string
     title: string
+    unreadCount?: number
 }
 
 interface TabsProps {
@@ -41,6 +42,15 @@ export const Tabs: FC<TabsProps> = memo(
                         variant={tab.value === value ? 'light' : 'normal'}
                     >
                         {tab.title}
+                        {tab.unreadCount && (
+                            <div
+                                className={cn(cls.unreadCount, {
+                                    [cls.activeTab]: tab.value === value,
+                                })}
+                            >
+                                {tab.unreadCount}
+                            </div>
+                        )}
                     </Card>
                 ))}
             </Flex>

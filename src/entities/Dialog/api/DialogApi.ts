@@ -11,7 +11,7 @@ interface GetDialogProps {
 
 // TODO: сделать прерывание запроса
 // TODO: проблема в том, что нет кеша по стараницам(если есть появляются свои проблемы с отрисовкой данных), от сюда проблема в том, что данные запрашиваются по новому а не берутся с кеша, если менялось page
-const dialiogApi = rtkApi.injectEndpoints({
+export const dialiogApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
         getDialog: build.query<DialogDto, GetDialogProps>({
             query: ({ userId, limit = 20, page = 1, folder, query }) => ({

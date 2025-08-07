@@ -68,7 +68,16 @@ server.get('/dialogs', (req, res) => {
 
                 return {
                     ...dialog,
-                    interlocutor: interlocutor || null,
+                    interlocutor:
+                        {
+                            id: interlocutor.id,
+                            firstName: interlocutor.firstName,
+                            lastName: interlocutor.lastName,
+                            username: interlocutor.username,
+                            avatar: interlocutor.avatar,
+                            dialogsByGroup: interlocutor.dialogsByGroup,
+                            folders: interlocutor.folders,
+                        } || null,
                 }
             }
 
@@ -98,7 +107,7 @@ server.get('/dialogs', (req, res) => {
 
     if (folder) {
         dialogs = dialogs.filter((dialog) =>
-            user.dialogs.some(
+            user.dialogsByGroup.some(
                 (userDialog) =>
                     userDialog.dialogId === dialog.id &&
                     userDialog.folders.includes(folder),

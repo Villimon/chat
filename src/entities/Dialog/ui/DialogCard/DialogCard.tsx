@@ -59,11 +59,18 @@ export const DialogCard: FC<DialogCardProps> = memo(
                         <Text text={fullName || dialog.title} />
                         <Text text={dialog.lastMessage.text} />
                     </div>
-                    <div className={cls.date}>
-                        <Text
-                            size="s"
-                            text={formatDate(dialog.lastMessage.timestamp)}
-                        />
+                    <div className={cls.rightInfo}>
+                        <div>
+                            <Text
+                                size="s"
+                                text={formatDate(dialog.lastMessage.timestamp)}
+                            />
+                        </div>
+                        {dialog.unreadCount > 0 && (
+                            <div className={cls.unreadCount}>
+                                {dialog.unreadCount}
+                            </div>
+                        )}
                     </div>
                 </AppLink>
 

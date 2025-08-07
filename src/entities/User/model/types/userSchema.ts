@@ -14,7 +14,7 @@ export interface User {
     avatar?: string
     firstName: string
     lastName: string
-    dialogs?: DialogType[]
+    dialogsByGroup?: DialogType[]
     folders?: FolderType[]
 }
 

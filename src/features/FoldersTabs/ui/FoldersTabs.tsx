@@ -6,16 +6,18 @@ interface FoldersTabsProps {
     value: TabItem
     onChangeFolder: (tab: TabItem) => void
     tabs: TabItem[]
+    allUnreadMessages?: number
 }
 
 export const FoldersTabs: FC<FoldersTabsProps> = memo(
-    ({ value, onChangeFolder, tabs }) => {
+    ({ value, onChangeFolder, tabs, allUnreadMessages }) => {
         const initialFirstTab = useMemo(() => {
             return {
                 title: 'Все',
                 value: 'all',
+                unreadCount: allUnreadMessages,
             }
-        }, [])
+        }, [allUnreadMessages])
 
         const onTabClick = useCallback(
             (tab: TabItem) => {

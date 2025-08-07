@@ -14,11 +14,33 @@
     flex-direction: column;
 }
 
-.activeClassName {
+.unreadCount {
+    border-radius: 100px;
     background-color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-color);
+    min-width: 1.125rem;
+    height: 1.125rem;
+    font-size: 14px;
+    padding: 0 0.3125rem;
 }
 
-.date {
+.activeClassName {
+    background-color: var(--text-secondary);
+
+    & .unreadCount {
+        background-color: var(--bg-color);
+        color: var(--text-secondary);
+    }
+}
+
+.rightInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: end;
+    justify-content: start;
     height: 100%;
-    margin-top: 5px;
 }
