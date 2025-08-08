@@ -1,4 +1,7 @@
-import { DialogDto } from '@/entities/Dialog/model/types/dialogSchema'
+import {
+    DialogDto,
+    DialogSettings,
+} from '@/entities/Dialog/model/types/dialogSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 
 export interface GetDialogProps {
@@ -7,6 +10,11 @@ export interface GetDialogProps {
     page?: number
     folder?: string
     query?: string
+}
+
+interface ToggleDialogMuteParams {
+    userSettings: DialogSettings
+    dialogId: string
 }
 
 // TODO: сделать прерывание запроса
@@ -60,17 +68,26 @@ export const dialiogApi = rtkApi.injectEndpoints({
                 return currentArg?.page !== previousArg?.page
             },
             providesTags: (result) => [
-                ...(result?.data.map((dialog) => ({
-                    type: 'Dialogs' as const,
-                    id: dialog.id,
-                })) || []),
+                ...(result?.data.map((dialog) => {
+                    return { type: 'Dialogs' as const, id: dialog.id }
+                }) || []),
                 'Dialogs',
             ],
             keepUnusedDataFor: 60 * 5,
+        }),
+        toggleDialogMute: build.mutation<DialogDto, ToggleDialogMuteParams>({
+            query: ({ dialogId, userSettings }) => ({
+                url: `/dialogs/${dialogId}`,
+                method: 'PATCH',
+                body: { userSettings },
+            }),
+            invalidatesTags: (result, error, { dialogId }) => [
+                { type: 'Dialogs', id: dialogId },
+            ],
         }),
     }),
 })
 
 export const useGetDialog = dialiogApi.useGetDialogQuery
-export const useLazyGetDialog = dialiogApi.useLazyGetDialogQuery
+export const useToggleDialog = dialiogApi.useToggleDialogMuteMutation
 export const getDialog = dialiogApi.endpoints.getDialog.initiate

@@ -3,19 +3,12 @@ export type FolderType = {
     title: string
 }
 
-export type DialogSettings = {
-    dialogId: string
-    folders: string[]
-    isMuted: boolean
-}
-
 export interface User {
     id: string
     username: string
     avatar?: string
     firstName: string
     lastName: string
-    dialogSettings?: DialogSettings[]
     folders?: FolderType[]
 }
 

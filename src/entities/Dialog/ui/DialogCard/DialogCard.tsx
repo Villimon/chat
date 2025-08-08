@@ -48,10 +48,8 @@ export const DialogCard: FC<DialogCardProps> = memo(
                 : undefined
 
         const isMutedDialog = useMemo(() => {
-            return dialog.interlocutor?.dialogSettings?.find(
-                (item) => item.dialogId === dialog.id,
-            )?.isMuted
-        }, [dialog.id, dialog.interlocutor?.dialogSettings])
+            return dialog.userSettings.isMuted
+        }, [dialog])
 
         return (
             <div onContextMenu={onContextMenu}>
@@ -73,7 +71,7 @@ export const DialogCard: FC<DialogCardProps> = memo(
                                 text={formatDate(dialog.lastMessage.timestamp)}
                             />
                         </div>
-                        {dialog.unreadCount > 0 && (
+                        {dialog.userSettings.unreadCount > 0 && (
                             <div
                                 className={cn(
                                     cls.unreadCount,
@@ -83,7 +81,7 @@ export const DialogCard: FC<DialogCardProps> = memo(
                                     [],
                                 )}
                             >
-                                {dialog.unreadCount}
+                                {dialog.userSettings.unreadCount}
                             </div>
                         )}
                     </div>
@@ -93,9 +91,9 @@ export const DialogCard: FC<DialogCardProps> = memo(
                     <ContextMenu
                         menuPosition={menuPosition}
                         onCloseMenu={onCloseMenu}
-                        dialog={dialog}
                         isOpenMenu={isOpenMenu}
                         isMutedDialog={isMutedDialog}
+                        dialog={dialog}
                     />
                 )}
             </div>

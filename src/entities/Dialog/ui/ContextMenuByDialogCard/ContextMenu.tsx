@@ -1,20 +1,20 @@
 import { FC, memo, useEffect, useRef } from 'react'
 import cls from './ContextMenu.module.scss'
-import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 import { MenuPosition } from '../../model/types'
 import { ToggleDialogMute } from '../../../../features/ToggleDialogMute/ui/ToggleDialogMute'
+import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 
 interface ContextMenuProps {
-    dialog?: Dialog
     className?: string
     onCloseMenu?: () => void
     menuPosition?: MenuPosition
     isOpenMenu?: boolean
     isMutedDialog?: boolean
+    dialog?: Dialog
 }
 
 export const ContextMenu: FC<ContextMenuProps> = memo(
-    ({ dialog, onCloseMenu, menuPosition, isOpenMenu, isMutedDialog }) => {
+    ({ onCloseMenu, menuPosition, isOpenMenu, isMutedDialog, dialog }) => {
         const menuRef = useRef<HTMLDivElement>(null)
 
         useEffect(() => {
@@ -51,22 +51,20 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
                 <div
                     className={cls.menuItem}
                     onClick={() => {
-                        console.log('Action 1 clicked for dialog', dialog?.id)
                         onCloseMenu?.()
                     }}
                 >
                     Закрепить чат/Открепить чат
                 </div>
                 <ToggleDialogMute
-                    dialog={dialog}
                     className={cls.menuItem}
                     isMutedDialog={isMutedDialog}
                     onCloseMenu={onCloseMenu}
+                    dialog={dialog}
                 />
                 <div
                     className={cls.menuItem}
                     onClick={() => {
-                        console.log('Delete clicked for dialog', dialog?.id)
                         onCloseMenu?.()
                     }}
                 >
@@ -75,7 +73,6 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
                 <div
                     className={cls.menuItem}
                     onClick={() => {
-                        console.log('Delete clicked for dialog', dialog?.id)
                         onCloseMenu?.()
                     }}
                 >
@@ -84,7 +81,6 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
                 <div
                     className={cls.menuItem}
                     onClick={() => {
-                        console.log('Delete clicked for dialog', dialog?.id)
                         onCloseMenu?.()
                     }}
                 >

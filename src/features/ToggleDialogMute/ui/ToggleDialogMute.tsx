@@ -1,35 +1,27 @@
 import { FC, memo } from 'react'
-import { useSelector } from 'react-redux'
-import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
-import { getUserData, useToggleDialogMuteMutation } from '@/entities/User'
 import { cn } from '@/shared/lib/classNames/classNames'
+import { useToggleDialog } from '@/entities/Dialog/api/DialogApi'
+import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 
 interface ToggleDialogMuteProps {
-    dialog?: Dialog
     className?: string
     onCloseMenu?: () => void
     isMutedDialog?: boolean
+    dialog?: Dialog
 }
 
 export const ToggleDialogMute: FC<ToggleDialogMuteProps> = memo(
-    ({ dialog, onCloseMenu, isMutedDialog, className }) => {
-        const userData = useSelector(getUserData)
-        const [toggleDialogMute] = useToggleDialogMuteMutation()
+    ({ onCloseMenu, isMutedDialog, className, dialog }) => {
+        const [toggleDialogMute] = useToggleDialog()
 
         const handleToggleDialogMute = async () => {
-            if (!userData?.dialogSettings || !dialog?.id) return
+            if (!dialog?.id) return
 
             await toggleDialogMute({
-                userId: userData?.id ?? '',
-                dialogSettings: userData?.dialogSettings?.map((item) => {
-                    if (item.dialogId === dialog?.id) {
-                        return {
-                            ...item,
-                            isMuted: !item.isMuted,
-                        }
-                    }
-                    return item
-                }),
+                userSettings: {
+                    ...dialog.userSettings,
+                    isMuted: !dialog.userSettings.isMuted,
+                },
                 dialogId: dialog.id,
             }).unwrap()
         }

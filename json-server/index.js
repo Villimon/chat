@@ -84,6 +84,13 @@ server.get('/dialogs', (req, res) => {
             return dialog
         })
 
+    dialogs = dialogs.map((dialog) => {
+        return {
+            ...dialog,
+            userSettings: dialog.userSettings[userId],
+        }
+    })
+
     if (_query) {
         dialogs = dialogs.filter((dialog) => {
             const query = _query.toLowerCase()
@@ -106,13 +113,11 @@ server.get('/dialogs', (req, res) => {
     }
 
     if (folder) {
-        dialogs = dialogs.filter((dialog) =>
-            user.dialogSettings.some(
-                (userDialog) =>
-                    userDialog.dialogId === dialog.id &&
-                    userDialog.folders.includes(folder),
-            ),
-        )
+        dialogs = dialogs.filter((dialog) => {
+            const userFolders = dialog.userSettings.folders || []
+
+            return userFolders.includes(folder)
+        })
     }
 
     if (_sort) {

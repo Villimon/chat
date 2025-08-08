@@ -1,6 +1,6 @@
 import { FoldersTabs } from '@/features/FoldersTabs'
-import { useFolders } from '../../../lib/hooks/useFolders'
 import { useDialogFetching } from '../../../api/useDialogFetching'
+import { useFolders } from '../../../lib/hooks/useFolders'
 
 export const Folders = () => {
     const { handleFolderChange, activeFolder } = useDialogFetching()

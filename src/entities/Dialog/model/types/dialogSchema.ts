@@ -1,5 +1,12 @@
 import { User } from '@/entities/User'
 
+export type DialogSettings = {
+    unreadCount: number
+    folders: string[]
+    isMuted: boolean
+    isPinned?: Record<string, string>
+}
+
 export interface Dialog {
     id: string
     type: 'private' | 'group' | 'channel'
@@ -10,9 +17,9 @@ export interface Dialog {
         senderId: string
         timestamp: string
     }
-    unreadCount: number
     avatar?: string
     interlocutor?: User
+    userSettings: DialogSettings
 }
 
 export interface DialogDto {
