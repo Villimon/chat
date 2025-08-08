@@ -27,6 +27,11 @@
     padding: 0 0.3125rem;
 }
 
+.isMuted {
+    background-color: var(--hint-primary);
+    color: var(--bg-color);
+}
+
 .activeClassName {
     background-color: var(--text-secondary);
 

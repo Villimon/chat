@@ -1,3 +1,4 @@
+export { useDialogFetching } from './Sidebar/api/useDialogFetching'
 export { sidebarReducer } from './Sidebar/model/slice/sidebar'
 export type { SidebarSchema } from './Sidebar/model/types/sidebarSchema'
 export { Sidebar } from './Sidebar/ui/Sidebar/ui/Sidebar'

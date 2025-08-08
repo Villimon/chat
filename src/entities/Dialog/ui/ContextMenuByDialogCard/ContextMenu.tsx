@@ -2,6 +2,7 @@ import { FC, memo, useEffect, useRef } from 'react'
 import cls from './ContextMenu.module.scss'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 import { MenuPosition } from '../../model/types'
+import { ToggleDialogMute } from '../../../../features/ToggleDialogMute/ui/ToggleDialogMute'
 
 interface ContextMenuProps {
     dialog?: Dialog
@@ -9,17 +10,18 @@ interface ContextMenuProps {
     onCloseMenu?: () => void
     menuPosition?: MenuPosition
     isOpenMenu?: boolean
+    isMutedDialog?: boolean
 }
 
 export const ContextMenu: FC<ContextMenuProps> = memo(
-    ({ dialog, onCloseMenu, menuPosition, isOpenMenu }) => {
+    ({ dialog, onCloseMenu, menuPosition, isOpenMenu, isMutedDialog }) => {
         const menuRef = useRef<HTMLDivElement>(null)
 
         useEffect(() => {
             const handleClickOutside = (e: MouseEvent) => {
                 if (
-                    menuRef.current
-                    && !menuRef.current.contains(e.target as Node)
+                    menuRef.current &&
+                    !menuRef.current.contains(e.target as Node)
                 ) {
                     onCloseMenu?.()
                 }
@@ -55,15 +57,12 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
                 >
                     Закрепить чат/Открепить чат
                 </div>
-                <div
+                <ToggleDialogMute
+                    dialog={dialog}
                     className={cls.menuItem}
-                    onClick={() => {
-                        console.log('Action 2 clicked for dialog', dialog?.id)
-                        onCloseMenu?.()
-                    }}
-                >
-                    Выключить уведомления/Включить уведомления
-                </div>
+                    isMutedDialog={isMutedDialog}
+                    onCloseMenu={onCloseMenu}
+                />
                 <div
                     className={cls.menuItem}
                     onClick={() => {

@@ -1,7 +1,7 @@
 import { DialogDto } from '@/entities/Dialog/model/types/dialogSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 
-interface GetDialogProps {
+export interface GetDialogProps {
     userId: string
     limit?: number
     page?: number
@@ -39,14 +39,15 @@ export const dialiogApi = rtkApi.injectEndpoints({
                         totalPages: newItems.totalPages,
                     }
                 }
-
+                if (!currentCache?.data || !newItems?.data) {
+                    return newItems
+                }
                 const newData = newItems.data.filter(
                     (newItem) =>
                         !currentCache.data.some(
                             (cachedItem) => cachedItem.id === newItem.id,
                         ),
                 )
-
                 return {
                     data: [...currentCache.data, ...newData],
                     currentPage: newItems.currentPage,
@@ -55,12 +56,14 @@ export const dialiogApi = rtkApi.injectEndpoints({
                 }
             },
             forceRefetch: ({ currentArg, previousArg }) => {
+                if (!previousArg) return false
                 return currentArg?.page !== previousArg?.page
             },
             providesTags: (result) => [
-                ...(result?.data.map((dialog) => {
-                    return { type: 'Dialogs' as const, id: dialog.id }
-                }) || []),
+                ...(result?.data.map((dialog) => ({
+                    type: 'Dialogs' as const,
+                    id: dialog.id,
+                })) || []),
                 'Dialogs',
             ],
             keepUnusedDataFor: 60 * 5,
@@ -69,3 +72,5 @@ export const dialiogApi = rtkApi.injectEndpoints({
 })
 
 export const useGetDialog = dialiogApi.useGetDialogQuery
+export const useLazyGetDialog = dialiogApi.useLazyGetDialogQuery
+export const getDialog = dialiogApi.endpoints.getDialog.initiate

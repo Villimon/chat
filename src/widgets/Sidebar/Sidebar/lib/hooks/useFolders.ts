@@ -14,7 +14,7 @@ export const useFolders = () => {
             limit: 20,
         }),
     )
-    const dialogsByGroup = userData?.dialogsByGroup
+    const dialogSettings = userData?.dialogSettings
     const dialogs = allCachedData?.data
     const folders = userData?.folders
 
@@ -22,7 +22,7 @@ export const useFolders = () => {
     const dialogsWithFolders = useMemo(
         () =>
             dialogs?.map((dialog) => {
-                const dialogByGroup = dialogsByGroup?.find(
+                const dialogByGroup = dialogSettings?.find(
                     (item) => item.dialogId === dialog.id,
                 )
                 if (dialogByGroup) {
@@ -33,7 +33,7 @@ export const useFolders = () => {
                 }
                 return dialog
             }),
-        [dialogs, dialogsByGroup],
+        [dialogs, dialogSettings],
     )
 
     const foldersWithUnreadCount = useMemo(

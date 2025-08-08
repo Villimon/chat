@@ -1,4 +1,4 @@
-import { FC, memo } from 'react'
+import { FC, memo, useMemo } from 'react'
 import { format, isThisWeek, isToday, setDefaultOptions } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Avatar } from '@/shared/ui/Avatar/Avatar'
@@ -7,8 +7,8 @@ import cls from './DialogCard.module.scss'
 import { cn } from '@/shared/lib/classNames/classNames'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 import { AppLink } from '@/shared/ui/AppLink/AppLink'
-import { ContextMenu } from '@/entities/Dialog/ui/ContextMenuByDialogCard/ContextMenu'
 import { MenuPosition } from '../../model/types'
+import { ContextMenu } from '@/entities/Dialog/ui/ContextMenuByDialogCard/ContextMenu'
 
 interface DialogCardProps {
     dialog: Dialog
@@ -42,9 +42,16 @@ export const DialogCard: FC<DialogCardProps> = memo(
         onContextMenu,
         menuPosition,
     }) => {
-        const fullName = dialog.interlocutor?.firstName && dialog.interlocutor?.lastName
-            ? `${dialog.interlocutor?.firstName} ${dialog.interlocutor?.lastName}`
-            : undefined
+        const fullName =
+            dialog.interlocutor?.firstName && dialog.interlocutor?.lastName
+                ? `${dialog.interlocutor?.firstName} ${dialog.interlocutor?.lastName}`
+                : undefined
+
+        const isMutedDialog = useMemo(() => {
+            return dialog.interlocutor?.dialogSettings?.find(
+                (item) => item.dialogId === dialog.id,
+            )?.isMuted
+        }, [dialog.id, dialog.interlocutor?.dialogSettings])
 
         return (
             <div onContextMenu={onContextMenu}>
@@ -67,7 +74,15 @@ export const DialogCard: FC<DialogCardProps> = memo(
                             />
                         </div>
                         {dialog.unreadCount > 0 && (
-                            <div className={cls.unreadCount}>
+                            <div
+                                className={cn(
+                                    cls.unreadCount,
+                                    {
+                                        [cls.isMuted]: isMutedDialog,
+                                    },
+                                    [],
+                                )}
+                            >
                                 {dialog.unreadCount}
                             </div>
                         )}
@@ -80,6 +95,7 @@ export const DialogCard: FC<DialogCardProps> = memo(
                         onCloseMenu={onCloseMenu}
                         dialog={dialog}
                         isOpenMenu={isOpenMenu}
+                        isMutedDialog={isMutedDialog}
                     />
                 )}
             </div>

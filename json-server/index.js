@@ -59,7 +59,7 @@ server.get('/dialogs', (req, res) => {
         .map((dialog) => {
             if (dialog.type === 'private') {
                 const interlocutorId = dialog.participants.find(
-                    (item) => item !== req.query.userId,
+                    (item) => item === userId,
                 )
 
                 const interlocutor = db.users.find(
@@ -75,7 +75,7 @@ server.get('/dialogs', (req, res) => {
                             lastName: interlocutor.lastName,
                             username: interlocutor.username,
                             avatar: interlocutor.avatar,
-                            dialogsByGroup: interlocutor.dialogsByGroup,
+                            dialogSettings: interlocutor.dialogSettings,
                             folders: interlocutor.folders,
                         } || null,
                 }
@@ -107,7 +107,7 @@ server.get('/dialogs', (req, res) => {
 
     if (folder) {
         dialogs = dialogs.filter((dialog) =>
-            user.dialogsByGroup.some(
+            user.dialogSettings.some(
                 (userDialog) =>
                     userDialog.dialogId === dialog.id &&
                     userDialog.folders.includes(folder),

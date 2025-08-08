@@ -1,3 +1,5 @@
+import { User } from '@/entities/User'
+
 export interface Dialog {
     id: string
     type: 'private' | 'group' | 'channel'
@@ -10,13 +12,7 @@ export interface Dialog {
     }
     unreadCount: number
     avatar?: string
-    interlocutor?: {
-        id: string
-        firstName: string
-        lastName: string
-        avatar: string
-        online?: boolean
-    }
+    interlocutor?: User
 }
 
 export interface DialogDto {
