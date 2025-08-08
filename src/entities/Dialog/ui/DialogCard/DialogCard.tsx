@@ -42,10 +42,9 @@ export const DialogCard: FC<DialogCardProps> = memo(
         onContextMenu,
         menuPosition,
     }) => {
-        const fullName =
-            dialog.interlocutor?.firstName && dialog.interlocutor?.lastName
-                ? `${dialog.interlocutor?.firstName} ${dialog.interlocutor?.lastName}`
-                : undefined
+        const fullName = dialog.interlocutor?.firstName && dialog.interlocutor?.lastName
+            ? `${dialog.interlocutor?.firstName} ${dialog.interlocutor?.lastName}`
+            : undefined
 
         const isMutedDialog = useMemo(() => {
             return dialog.userSettings.isMuted

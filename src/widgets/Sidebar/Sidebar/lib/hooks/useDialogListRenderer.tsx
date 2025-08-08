@@ -35,7 +35,7 @@ export const useDialogListRenderer = (
     const SkeletonDialogCard = memo(({ className }: { className: string }) => {
         return (
             <div className={cn('', {}, [className])}>
-                {Array(18)
+                {Array(10)
                     .fill(0)
                     .map((_, index) => (
                         <div key={index} className={clsCard.body}>

@@ -59,7 +59,7 @@ server.get('/dialogs', (req, res) => {
         .map((dialog) => {
             if (dialog.type === 'private') {
                 const interlocutorId = dialog.participants.find(
-                    (item) => item === userId,
+                    (item) => item !== userId,
                 )
 
                 const interlocutor = db.users.find(
@@ -138,6 +138,50 @@ server.get('/dialogs', (req, res) => {
         currentPage: _page,
         totalPages: Math.ceil(dialogs.length / _limit),
         totalItems: dialogs.length,
+    })
+})
+
+server.patch('/dialogs/:dialogId/toggle-mute', (req, res) => {
+    const { dialogId } = req.params
+    const { userId } = req.body
+
+    const { db } = router
+    const dialog = db.get('dialogs').find({ id: dialogId }).value()
+
+    if (!dialog) {
+        return res.status(404).json({ error: 'Dialog not found' })
+    }
+
+    if (!dialog.userSettings[userId]) {
+        return res.status(400).json({ error: 'User settings not found' })
+    }
+
+    const updatedSettings = {
+        ...dialog.userSettings,
+        [userId]: {
+            ...dialog.userSettings[userId],
+            isMuted: !dialog.userSettings[userId].isMuted,
+        },
+    }
+
+    db.get('dialogs')
+        .find({ id: dialogId })
+        .assign({ userSettings: updatedSettings })
+        .write()
+
+    let resultDialog = db.get('dialogs').value()
+    resultDialog = resultDialog.map((dialog) => {
+        return {
+            ...dialog,
+            userSettings: dialog.userSettings[userId],
+        }
+    })
+
+    res.json({
+        data: resultDialog,
+        currentPage: 1,
+        totalPages: 1,
+        totalItems: 1,
     })
 })
 

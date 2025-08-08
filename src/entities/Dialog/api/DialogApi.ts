@@ -1,7 +1,4 @@
-import {
-    DialogDto,
-    DialogSettings,
-} from '@/entities/Dialog/model/types/dialogSchema'
+import { DialogDto } from '@/entities/Dialog/model/types/dialogSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 
 export interface GetDialogProps {
@@ -13,13 +10,13 @@ export interface GetDialogProps {
 }
 
 interface ToggleDialogMuteParams {
-    userSettings: DialogSettings
+    userId: string
     dialogId: string
 }
 
 // TODO: сделать прерывание запроса
 // TODO: проблема в том, что нет кеша по стараницам(если есть появляются свои проблемы с отрисовкой данных), от сюда проблема в том, что данные запрашиваются по новому а не берутся с кеша, если менялось page
-export const dialiogApi = rtkApi.injectEndpoints({
+export const dialogApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
         getDialog: build.query<DialogDto, GetDialogProps>({
             query: ({ userId, limit = 20, page = 1, folder, query }) => ({
@@ -39,29 +36,27 @@ export const dialiogApi = rtkApi.injectEndpoints({
                 return [endpointName, otherParams]
             },
             merge: (currentCache, newItems, { arg }) => {
-                if (newItems.currentPage === 1 || arg.query) {
-                    return {
-                        data: newItems.data,
-                        currentPage: newItems.currentPage,
-                        totalItems: newItems.totalItems,
-                        totalPages: newItems.totalPages,
-                    }
+                const currentPage = arg.page
+
+                if (currentPage === 1 || arg.query) {
+                    return newItems
                 }
+
                 if (!currentCache?.data || !newItems?.data) {
                     return newItems
                 }
-                const newData = newItems.data.filter(
-                    (newItem) =>
-                        !currentCache.data.some(
-                            (cachedItem) => cachedItem.id === newItem.id,
-                        ),
-                )
+
                 return {
-                    data: [...currentCache.data, ...newData],
-                    currentPage: newItems.currentPage,
-                    totalItems: newItems.totalItems,
-                    totalPages: newItems.totalPages,
+                    ...newItems,
+                    data: [...currentCache.data, ...newItems.data],
                 }
+
+                // const newData = newItems.data.filter(
+                //     (newItem) =>
+                //         !currentCache.data.some(
+                //             (cachedItem) => cachedItem.id === newItem.id,
+                //         ),
+                // )
             },
             forceRefetch: ({ currentArg, previousArg }) => {
                 if (!previousArg) return false
@@ -73,21 +68,26 @@ export const dialiogApi = rtkApi.injectEndpoints({
                 }) || []),
                 'Dialogs',
             ],
-            keepUnusedDataFor: 60 * 5,
         }),
+        // TODO: попробовать сделать оптимистик апдейт
         toggleDialogMute: build.mutation<DialogDto, ToggleDialogMuteParams>({
-            query: ({ dialogId, userSettings }) => ({
-                url: `/dialogs/${dialogId}`,
+            query: ({ dialogId, userId }) => ({
+                url: `/dialogs/${dialogId}/toggle-mute`,
                 method: 'PATCH',
-                body: { userSettings },
+                body: { userId },
             }),
-            invalidatesTags: (result, error, { dialogId }) => [
-                { type: 'Dialogs', id: dialogId },
-            ],
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled
+                    dispatch(rtkApi.util.invalidateTags(['Dialogs']))
+                } catch (e) {
+                    console.error(e)
+                }
+            },
         }),
     }),
 })
 
-export const useGetDialog = dialiogApi.useGetDialogQuery
-export const useToggleDialog = dialiogApi.useToggleDialogMuteMutation
-export const getDialog = dialiogApi.endpoints.getDialog.initiate
+export const useGetDialog = dialogApi.useGetDialogQuery
+export const useToggleDialog = dialogApi.useToggleDialogMuteMutation
+export const getDialog = dialogApi.endpoints.getDialog.initiate

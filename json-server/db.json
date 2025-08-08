@@ -92,7 +92,7 @@
           "isPinned": {
             "all": true
           },
-          "isMuted": true,
+          "isMuted": false,
           "unreadCount": 3
         },
         "2": {

@@ -20,8 +20,8 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
         useEffect(() => {
             const handleClickOutside = (e: MouseEvent) => {
                 if (
-                    menuRef.current &&
-                    !menuRef.current.contains(e.target as Node)
+                    menuRef.current
+                    && !menuRef.current.contains(e.target as Node)
                 ) {
                     onCloseMenu?.()
                 }

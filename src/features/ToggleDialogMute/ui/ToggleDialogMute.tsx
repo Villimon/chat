@@ -1,7 +1,9 @@
 import { FC, memo } from 'react'
+import { useSelector } from 'react-redux'
 import { cn } from '@/shared/lib/classNames/classNames'
 import { useToggleDialog } from '@/entities/Dialog/api/DialogApi'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
+import { getUserData } from '@/entities/User'
 
 interface ToggleDialogMuteProps {
     className?: string
@@ -13,15 +15,13 @@ interface ToggleDialogMuteProps {
 export const ToggleDialogMute: FC<ToggleDialogMuteProps> = memo(
     ({ onCloseMenu, isMutedDialog, className, dialog }) => {
         const [toggleDialogMute] = useToggleDialog()
+        const userData = useSelector(getUserData)
 
         const handleToggleDialogMute = async () => {
-            if (!dialog?.id) return
+            if (!dialog?.id || !userData?.id) return
 
             await toggleDialogMute({
-                userSettings: {
-                    ...dialog.userSettings,
-                    isMuted: !dialog.userSettings.isMuted,
-                },
+                userId: userData.id,
                 dialogId: dialog.id,
             }).unwrap()
         }
