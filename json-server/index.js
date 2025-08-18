@@ -185,6 +185,33 @@ server.patch('/dialogs/:dialogId/toggle-mute', (req, res) => {
     })
 })
 
+server.patch('/dialogs/:dialogId/leave-dialog', (req, res) => {
+    const { dialogId } = req.params
+    const { userId } = req.body
+
+    const { db } = router
+    const dialog = db.get('dialogs').find({ id: dialogId }).value()
+
+    if (!dialog) {
+        return res.status(404).json({ error: 'Dialog not found' })
+    }
+
+    if (!dialog.userSettings[userId]) {
+        return res.status(400).json({ error: 'User settings not found' })
+    }
+
+    const updatedParticipants = dialog.participants.filter(
+        (item) => item !== userId,
+    )
+
+    db.get('dialogs')
+        .find({ id: dialogId })
+        .assign({ participants: updatedParticipants })
+        .write()
+
+    res.json(dialog)
+})
+
 server.use((req, res, next) => {
     if (!req.headers.authorization) {
         return res.status(403).json({ message: 'AUTH ERROR' })

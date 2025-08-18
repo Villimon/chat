@@ -16,23 +16,25 @@ export const useFolders = () => {
         }),
     )
 
-    //! TODO:Могут быть проблемы из-за этого
-    const dialogs = useRef<DialogDto | undefined>(undefined)
-    const folders = userData?.folders
-
+    const lastValidData = useRef<DialogDto | undefined>(undefined)
     useEffect(() => {
         if (allCachedData) {
-            dialogs!.current = allCachedData
+            lastValidData.current = allCachedData
         }
     }, [allCachedData])
 
+    const folders = userData?.folders
+
     const foldersWithUnreadCount = useMemo(() => {
+        const dataToUse = allCachedData || lastValidData.current
+        if (!folders || !dataToUse?.data) {
+            return folders
+        }
+
         return folders?.map((folder) => {
-            const dialogsWithOurFolders = dialogs?.current?.data.filter(
-                (dialog) => {
-                    return dialog.userSettings.folders.includes(folder.value)
-                },
-            )
+            const dialogsWithOurFolders = dataToUse.data.filter((dialog) => {
+                return dialog.userSettings.folders.includes(folder.value)
+            })
 
             if (dialogsWithOurFolders) {
                 return {
@@ -44,15 +46,15 @@ export const useFolders = () => {
             }
             return folder
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dialogs.current, folders])
+    }, [allCachedData, folders])
 
     const allUnreadMessages = useMemo(() => {
-        return dialogs?.current?.data
+        const dataToUse = allCachedData || lastValidData.current
+        if (!dataToUse?.data) return 0
+        return dataToUse.data
             ?.map((item) => item.userSettings.unreadCount)
             .reduce((acc, sum) => acc + sum, 0)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dialogs.current])
+    }, [allCachedData])
 
     return {
         foldersWithUnreadCount,

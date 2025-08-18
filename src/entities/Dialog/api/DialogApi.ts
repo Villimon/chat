@@ -9,8 +9,12 @@ export interface GetDialogProps {
     query?: string
 }
 
-interface ToggleDialogMuteParams {
+interface MutateDialogParams {
     userId: string
+    dialogId: string
+}
+
+interface DeleteDialogParams {
     dialogId: string
 }
 
@@ -50,13 +54,6 @@ export const dialogApi = rtkApi.injectEndpoints({
                     ...newItems,
                     data: [...currentCache.data, ...newItems.data],
                 }
-
-                // const newData = newItems.data.filter(
-                //     (newItem) =>
-                //         !currentCache.data.some(
-                //             (cachedItem) => cachedItem.id === newItem.id,
-                //         ),
-                // )
             },
             forceRefetch: ({ currentArg, previousArg }) => {
                 if (!previousArg) return false
@@ -69,25 +66,93 @@ export const dialogApi = rtkApi.injectEndpoints({
                 'Dialogs',
             ],
         }),
-        // TODO: попробовать сделать оптимистик апдейт
-        toggleDialogMute: build.mutation<DialogDto, ToggleDialogMuteParams>({
+        toggleDialogMute: build.mutation<
+            DialogDto,
+            MutateDialogParams & { folder: string }
+        >({
             query: ({ dialogId, userId }) => ({
                 url: `/dialogs/${dialogId}/toggle-mute`,
                 method: 'PATCH',
                 body: { userId },
             }),
-            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+            async onQueryStarted(
+                { dialogId, userId, folder },
+                { dispatch, queryFulfilled },
+            ) {
+                // TODO: если при наличие других параметров(старица или запрос) не будет происходить оптимистичный апдейт, то нужно будет прокидывать сюда все параметры или создать хук(пример снизу)
+                const patchResult = dispatch(
+                    rtkApi.util.updateQueryData(
+                        // @ts-ignore
+                        'getDialog',
+                        {
+                            userId,
+                            folder,
+                            limit: 20,
+                            page: 1,
+                            query: '',
+                        },
+                        (draft: DialogDto) => {
+                            const dialog = draft.data.find(
+                                (d) => d.id === dialogId,
+                            )
+                            if (dialog) {
+                                dialog.userSettings.isMuted = !dialog.userSettings.isMuted
+                            }
+                        },
+                    ),
+                )
                 try {
                     await queryFulfilled
-                    dispatch(rtkApi.util.invalidateTags(['Dialogs']))
-                } catch (e) {
-                    console.error(e)
+                } catch {
+                    // Если запрос провалился — откатываем изменения
+                    patchResult.undo()
                 }
             },
+            invalidatesTags: (_res, _err, { dialogId }) => [
+                { type: 'Dialogs', id: dialogId },
+            ],
+        }),
+        leaveDialog: build.mutation<DialogDto, MutateDialogParams>({
+            query: ({ dialogId, userId }) => ({
+                url: `/dialogs/${dialogId}/leave-dialog`,
+                method: 'PATCH',
+                body: { userId },
+            }),
+            invalidatesTags: ['Dialogs'],
+        }),
+        deleteDialog: build.mutation<DialogDto, DeleteDialogParams>({
+            query: ({ dialogId }) => ({
+                url: `/dialogs/${dialogId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Dialogs'],
         }),
     }),
 })
 
 export const useGetDialog = dialogApi.useGetDialogQuery
 export const useToggleDialog = dialogApi.useToggleDialogMuteMutation
+export const useLeaveDialog = dialogApi.useLeaveDialogMutation
+export const useDeleteDialog = dialogApi.useDeleteDialogMutation
 export const getDialog = dialogApi.endpoints.getDialog.initiate
+
+/*
+export const useDialogParams = () => {
+  const paramsRef = useRef<any>();
+
+  const { data } = useGetDialogQuery(paramsRef.current, {
+    onSuccess: (_, args) => {
+      paramsRef.current = args;
+    }
+  });
+
+  return paramsRef.current || {
+    userId: '',
+    limit: 20,
+    page: 1,
+    folder: 'all',
+    query: ''
+  };
+};
+
+*/

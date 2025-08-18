@@ -109,6 +109,43 @@
       }
     },
     {
+      "id": "5",
+      "type": "private",
+      "participants": [
+        "1",
+        "2"
+      ],
+      "title": "Удалить",
+      "lastMessage": {
+        "text": "Привет! Как дела?",
+        "senderId": "1",
+        "timestamp": "2025-07-21T14:30:00Z"
+      },
+      "userSettings": {
+        "1": {
+          "folders": [
+            "groups"
+          ],
+          "isPinned": {
+            "all": true
+          },
+          "isMuted": false,
+          "unreadCount": 123
+        },
+        "2": {
+          "folders": [
+            "personal",
+            "groups"
+          ],
+          "isPinned": {
+            "all": true
+          },
+          "isMuted": true,
+          "unreadCount": 0
+        }
+      }
+    },
+    {
       "id": "2",
       "type": "group",
       "participants": [
@@ -117,6 +154,45 @@
         "4"
       ],
       "title": "Рабочая группа",
+      "avatar": "",
+      "lastMessage": {
+        "text": "Завтра встреча в 10:00",
+        "senderId": "3",
+        "timestamp": "2025-07-18T09:15:00Z"
+      },
+      "userSettings": {
+        "1": {
+          "folders": [
+            "personal"
+          ],
+          "isPinned": {
+            "all": true
+          },
+          "isMuted": false,
+          "unreadCount": 0
+        },
+        "2": {
+          "folders": [
+            "personal",
+            "groups"
+          ],
+          "isPinned": {
+            "all": true
+          },
+          "isMuted": true,
+          "unreadCount": 3
+        }
+      }
+    },
+    {
+      "id": "4",
+      "type": "group",
+      "participants": [
+        "1",
+        "3",
+        "4"
+      ],
+      "title": "Удалить",
       "avatar": "",
       "lastMessage": {
         "text": "Завтра встреча в 10:00",
@@ -169,7 +245,7 @@
           "isPinned": {
             "all": true
           },
-          "isMuted": false,
+          "isMuted": true,
           "unreadCount": 3
         },
         "2": {

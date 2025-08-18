@@ -3,6 +3,7 @@ import cls from './ContextMenu.module.scss'
 import { MenuPosition } from '../../model/types'
 import { ToggleDialogMute } from '../../../../features/ToggleDialogMute/ui/ToggleDialogMute'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
+import { DialogActions } from '../../../../features/DialogActions/ui/DialogActions/DialogActions'
 
 interface ContextMenuProps {
     className?: string
@@ -19,9 +20,15 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
 
         useEffect(() => {
             const handleClickOutside = (e: MouseEvent) => {
+                const target = e.target as Node
+                const isClickOnModal = document
+                    .getElementById('modal')
+                    ?.contains(target)
+
                 if (
                     menuRef.current
-                    && !menuRef.current.contains(e.target as Node)
+                    && !menuRef.current.contains(target)
+                    && !isClickOnModal
                 ) {
                     onCloseMenu?.()
                 }
@@ -78,14 +85,12 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
                 >
                     Добавить в папку
                 </div>
-                <div
+
+                <DialogActions
                     className={cls.menuItem}
-                    onClick={() => {
-                        onCloseMenu?.()
-                    }}
-                >
-                    Удалить чат/Покинуть группу
-                </div>
+                    dialog={dialog}
+                    onCloseMenu={onCloseMenu}
+                />
             </div>
         )
     },

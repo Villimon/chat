@@ -55,7 +55,7 @@ const App = () => {
     )
 
     return (
-        <div className={cn('app', {}, [theme, palette])}>
+        <div id="app" className={cn('app', {}, [theme, palette])}>
             {inited ? (
                 <ErrorBoundary>
                     <MainLayout

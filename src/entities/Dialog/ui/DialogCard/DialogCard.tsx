@@ -5,10 +5,10 @@ import { Avatar } from '@/shared/ui/Avatar/Avatar'
 import { Text } from '@/shared/ui/Text/Text'
 import cls from './DialogCard.module.scss'
 import { cn } from '@/shared/lib/classNames/classNames'
-import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
+import { Dialog } from '../../model/types/dialogSchema'
 import { AppLink } from '@/shared/ui/AppLink/AppLink'
 import { MenuPosition } from '../../model/types'
-import { ContextMenu } from '@/entities/Dialog/ui/ContextMenuByDialogCard/ContextMenu'
+import { ContextMenu } from '../ContextMenuByDialogCard/ContextMenu'
 
 interface DialogCardProps {
     dialog: Dialog
