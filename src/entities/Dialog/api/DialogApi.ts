@@ -14,6 +14,12 @@ interface MutateDialogParams {
     dialogId: string
 }
 
+interface DialogFolderActionsParams {
+    userId: string
+    dialogId: string
+    valueFolder: string
+}
+
 interface DeleteDialogParams {
     dialogId: string
 }
@@ -170,6 +176,22 @@ export const dialogApi = rtkApi.injectEndpoints({
             },
             invalidatesTags: ['Dialogs'],
         }),
+        addToFolder: build.mutation<DialogDto, DialogFolderActionsParams>({
+            query: ({ dialogId, userId, valueFolder }) => ({
+                url: `/dialogs/${dialogId}/add-to-folder`,
+                method: 'PATCH',
+                body: { userId, valueFolder },
+            }),
+            invalidatesTags: ['Dialogs'],
+        }),
+        removeToFolder: build.mutation<DialogDto, DialogFolderActionsParams>({
+            query: ({ dialogId, userId, valueFolder }) => ({
+                url: `/dialogs/${dialogId}/remove-to-folder`,
+                method: 'PATCH',
+                body: { userId, valueFolder },
+            }),
+            invalidatesTags: ['Dialogs'],
+        }),
     }),
 })
 
@@ -178,6 +200,8 @@ export const useToggleDialog = dialogApi.useToggleDialogMuteMutation
 export const useLeaveDialog = dialogApi.useLeaveDialogMutation
 export const useDeleteDialog = dialogApi.useDeleteDialogMutation
 export const useUpdateReadStatus = dialogApi.useUpdateReadStatusMutation
+export const useAddToFolder = dialogApi.useAddToFolderMutation
+export const useRemoveToFolder = dialogApi.useRemoveToFolderMutation
 export const getDialog = dialogApi.endpoints.getDialog.initiate
 
 /*

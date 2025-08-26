@@ -5,6 +5,7 @@ import { ToggleDialogMute } from '../../../../features/ToggleDialogMute/ui/Toggl
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 import { DialogActions } from '../../../../features/DialogActions/ui/DialogActions/DialogActions'
 import { DialogCounterControl } from '../../../../features/DialogCounterControl/ui/DialogCounterControl'
+import { DialogFolderActions } from '../../../../features/DialogFolderActions/ui/DialogFolderActions'
 
 interface ContextMenuProps {
     className?: string
@@ -76,15 +77,11 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
                     onCloseMenu={onCloseMenu}
                     dialog={dialog}
                 />
-                <div
+                <DialogFolderActions
                     className={cls.menuItem}
-                    onClick={() => {
-                        onCloseMenu?.()
-                    }}
-                >
-                    Добавить в папку
-                </div>
-
+                    dialog={dialog}
+                    onCloseMenu={onCloseMenu}
+                />
                 <DialogActions
                     className={cls.menuItem}
                     dialog={dialog}

@@ -212,6 +212,94 @@ server.patch('/dialogs/:dialogId/leave-dialog', (req, res) => {
     res.json(dialog)
 })
 
+server.patch('/dialogs/:dialogId/add-to-folder', (req, res) => {
+    const { dialogId } = req.params
+    const { userId, valueFolder } = req.body
+
+    const { db } = router
+    const dialog = db.get('dialogs').find({ id: dialogId }).value()
+
+    if (!dialog) {
+        return res.status(404).json({ error: 'Dialog not found' })
+    }
+
+    if (!dialog.userSettings[userId]) {
+        return res.status(400).json({ error: 'User settings not found' })
+    }
+
+    if (dialog.userSettings[userId].folders.includes(valueFolder)) {
+        return res.status(400).json({ error: 'Такая папка уже есть' })
+    }
+
+    const updatedFolders = {
+        ...dialog.userSettings,
+        [userId]: {
+            ...dialog.userSettings[userId],
+            folders: [...dialog.userSettings[userId].folders, valueFolder],
+        },
+    }
+
+    db.get('dialogs')
+        .find({ id: dialogId })
+        .assign({ userSettings: updatedFolders })
+        .write()
+
+    let resultDialog = db.get('dialogs').value()
+    resultDialog = resultDialog.map((dialog) => {
+        return {
+            ...dialog,
+            userSettings: dialog.userSettings[userId],
+        }
+    })
+
+    res.json(resultDialog)
+})
+
+server.patch('/dialogs/:dialogId/remove-to-folder', (req, res) => {
+    const { dialogId } = req.params
+    const { userId, valueFolder } = req.body
+
+    const { db } = router
+    const dialog = db.get('dialogs').find({ id: dialogId }).value()
+
+    if (!dialog) {
+        return res.status(404).json({ error: 'Dialog not found' })
+    }
+
+    if (!dialog.userSettings[userId]) {
+        return res.status(400).json({ error: 'User settings not found' })
+    }
+
+    if (!dialog.userSettings[userId].folders.includes(valueFolder)) {
+        return res.status(400).json({ error: 'Такая папки нет' })
+    }
+
+    const updatedFolders = {
+        ...dialog.userSettings,
+        [userId]: {
+            ...dialog.userSettings[userId],
+            folders: dialog.userSettings[userId].folders.filter(
+                (item) => item !== valueFolder,
+            ),
+        },
+    }
+
+    db.get('dialogs')
+        .find({ id: dialogId })
+        .assign({ userSettings: updatedFolders })
+        .write()
+
+    let resultDialog = db.get('dialogs').value()
+    resultDialog = resultDialog.map((dialog) => {
+        return {
+            ...dialog,
+            userSettings: dialog.userSettings[userId],
+        }
+    })
+
+    res.json(resultDialog)
+})
+
 server.patch('/dialogs/:dialogId/update-read-status', (req, res) => {
     const { dialogId } = req.params
     const { userId } = req.body

@@ -124,6 +124,7 @@
       "userSettings": {
         "1": {
           "folders": [
+            "personal",
             "groups"
           ],
           "isPinned": {
@@ -163,7 +164,8 @@
       "userSettings": {
         "1": {
           "folders": [
-            "personal"
+            "personal",
+            "groups"
           ],
           "isPinned": {
             "all": true
@@ -202,7 +204,8 @@
       "userSettings": {
         "1": {
           "folders": [
-            "personal"
+            "personal",
+            "groups"
           ],
           "isPinned": {
             "all": true
