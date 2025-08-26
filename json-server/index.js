@@ -212,6 +212,45 @@ server.patch('/dialogs/:dialogId/leave-dialog', (req, res) => {
     res.json(dialog)
 })
 
+server.patch('/dialogs/:dialogId/update-read-status', (req, res) => {
+    const { dialogId } = req.params
+    const { userId } = req.body
+
+    const { db } = router
+    const dialog = db.get('dialogs').find({ id: dialogId }).value()
+
+    if (!dialog) {
+        return res.status(404).json({ error: 'Dialog not found' })
+    }
+
+    if (!dialog.userSettings[userId]) {
+        return res.status(400).json({ error: 'User settings not found' })
+    }
+
+    const updatedUnreadCount = {
+        ...dialog.userSettings,
+        [userId]: {
+            ...dialog.userSettings[userId],
+            unreadCount: dialog.userSettings[userId].unreadCount > 0 ? 0 : 1,
+        },
+    }
+
+    db.get('dialogs')
+        .find({ id: dialogId })
+        .assign({ userSettings: updatedUnreadCount })
+        .write()
+
+    let resultDialog = db.get('dialogs').value()
+    resultDialog = resultDialog.map((dialog) => {
+        return {
+            ...dialog,
+            userSettings: dialog.userSettings[userId],
+        }
+    })
+
+    res.json(dialog)
+})
+
 server.use((req, res, next) => {
     if (!req.headers.authorization) {
         return res.status(403).json({ message: 'AUTH ERROR' })

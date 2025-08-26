@@ -19,7 +19,7 @@ interface DeleteDialogParams {
 }
 
 // TODO: сделать прерывание запроса
-// TODO: проблема в том, что нет кеша по стараницам(если есть появляются свои проблемы с отрисовкой данных), от сюда проблема в том, что данные запрашиваются по новому а не берутся с кеша, если менялось page
+// TODO: прокидывать folder для правильной инвалидации
 export const dialogApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
         getDialog: build.query<DialogDto, GetDialogProps>({
@@ -127,6 +127,49 @@ export const dialogApi = rtkApi.injectEndpoints({
             }),
             invalidatesTags: ['Dialogs'],
         }),
+        updateReadStatus: build.mutation<
+            DialogDto,
+            MutateDialogParams & { folder: string }
+        >({
+            query: ({ dialogId, userId }) => ({
+                url: `/dialogs/${dialogId}/update-read-status`,
+                method: 'PATCH',
+                body: { userId },
+            }),
+            async onQueryStarted(
+                { dialogId, userId, folder },
+                { dispatch, queryFulfilled },
+            ) {
+                const patchResult = dispatch(
+                    rtkApi.util.updateQueryData(
+                        // @ts-ignore
+                        'getDialog',
+                        {
+                            userId,
+                            folder,
+                            limit: 20,
+                            page: 1,
+                            query: '',
+                        },
+                        (draft: DialogDto) => {
+                            const dialog = draft.data.find(
+                                (d) => d.id === dialogId,
+                            )
+                            if (dialog) {
+                                dialog.userSettings.unreadCount = dialog.userSettings.unreadCount > 0 ? 0 : 1
+                            }
+                        },
+                    ),
+                )
+                try {
+                    await queryFulfilled
+                } catch {
+                    // Если запрос провалился — откатываем изменения
+                    patchResult.undo()
+                }
+            },
+            invalidatesTags: ['Dialogs'],
+        }),
     }),
 })
 
@@ -134,6 +177,7 @@ export const useGetDialog = dialogApi.useGetDialogQuery
 export const useToggleDialog = dialogApi.useToggleDialogMuteMutation
 export const useLeaveDialog = dialogApi.useLeaveDialogMutation
 export const useDeleteDialog = dialogApi.useDeleteDialogMutation
+export const useUpdateReadStatus = dialogApi.useUpdateReadStatusMutation
 export const getDialog = dialogApi.endpoints.getDialog.initiate
 
 /*

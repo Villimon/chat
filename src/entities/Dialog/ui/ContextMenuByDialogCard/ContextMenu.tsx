@@ -4,6 +4,7 @@ import { MenuPosition } from '../../model/types'
 import { ToggleDialogMute } from '../../../../features/ToggleDialogMute/ui/ToggleDialogMute'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 import { DialogActions } from '../../../../features/DialogActions/ui/DialogActions/DialogActions'
+import { DialogCounterControl } from '../../../../features/DialogCounterControl/ui/DialogCounterControl'
 
 interface ContextMenuProps {
     className?: string
@@ -14,6 +15,7 @@ interface ContextMenuProps {
     dialog?: Dialog
 }
 
+// TODO: неправильно расположение
 export const ContextMenu: FC<ContextMenuProps> = memo(
     ({ onCloseMenu, menuPosition, isOpenMenu, isMutedDialog, dialog }) => {
         const menuRef = useRef<HTMLDivElement>(null)
@@ -69,14 +71,11 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
                     onCloseMenu={onCloseMenu}
                     dialog={dialog}
                 />
-                <div
+                <DialogCounterControl
                     className={cls.menuItem}
-                    onClick={() => {
-                        onCloseMenu?.()
-                    }}
-                >
-                    Прочитан/Не прочитан
-                </div>
+                    onCloseMenu={onCloseMenu}
+                    dialog={dialog}
+                />
                 <div
                     className={cls.menuItem}
                     onClick={() => {
