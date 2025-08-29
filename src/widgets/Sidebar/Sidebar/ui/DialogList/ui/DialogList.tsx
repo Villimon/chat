@@ -8,9 +8,15 @@ import { useDialogListRenderer } from '../../../lib/hooks/useDialogListRenderer'
 import { useDialogListData } from '../../../lib/hooks/useDialogListData'
 
 export const DialogList = memo(({ className }: { className?: string }) => {
-    const { handleCloseMenu, handleContextMenu, menuPosition, openedMenuId } = useDialogList()
-
     const { dialogs, isError, isFetching, isSuccess, loadMore } = useDialogListData()
+
+    const {
+        handleCloseMenu,
+        handleContextMenu,
+        menuPosition,
+        openedMenuId,
+        getNextOrder,
+    } = useDialogList({ dialogs })
 
     const {
         EmptyListPlaceholder,
@@ -21,6 +27,7 @@ export const DialogList = memo(({ className }: { className?: string }) => {
         handleContextMenu,
         handleCloseMenu,
         menuPosition,
+        getNextOrder,
         openedMenuId,
     )
 

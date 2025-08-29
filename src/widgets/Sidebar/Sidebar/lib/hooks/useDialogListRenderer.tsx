@@ -11,6 +11,7 @@ export const useDialogListRenderer = (
     handleContextMenu: (e: React.MouseEvent, dialogId: string) => void,
     handleCloseMenu: () => void,
     menuPosition: { x: number; y: number },
+    getNextOrder: () => number,
     openedMenuId?: string | null,
 ) => {
     const itemContent = useCallback(
@@ -23,9 +24,16 @@ export const useDialogListRenderer = (
                 onContextMenu={(e) => handleContextMenu(e, dialog.id)}
                 isOpenMenu={openedMenuId === dialog.id}
                 menuPosition={menuPosition}
+                nextOrder={getNextOrder()}
             />
         ),
-        [openedMenuId, menuPosition, handleCloseMenu, handleContextMenu],
+        [
+            handleCloseMenu,
+            openedMenuId,
+            menuPosition,
+            getNextOrder,
+            handleContextMenu,
+        ],
     )
 
     const EmptyListPlaceholder = memo(() => (

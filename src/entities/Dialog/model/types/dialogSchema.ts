@@ -1,10 +1,15 @@
 import { User } from '@/entities/User'
 
+type isPinned = {
+    isPinned: boolean
+    order: number
+}
+
 export type DialogSettings = {
     unreadCount: number
     folders: string[]
     isMuted: boolean
-    isPinned?: Record<string, string>
+    pinned?: Record<string, isPinned>
 }
 
 export interface Dialog {

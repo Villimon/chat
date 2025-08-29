@@ -24,6 +24,11 @@ interface DeleteDialogParams {
     dialogId: string
 }
 
+interface ToggleDialogPinParams extends DialogFolderActionsParams {
+    nextOrder: number
+    pinned: boolean
+}
+
 // TODO: сделать прерывание запроса
 // TODO: прокидывать folder для правильной инвалидации
 export const dialogApi = rtkApi.injectEndpoints({
@@ -192,6 +197,14 @@ export const dialogApi = rtkApi.injectEndpoints({
             }),
             invalidatesTags: ['Dialogs'],
         }),
+        toggleDialogPin: build.mutation<DialogDto, ToggleDialogPinParams>({
+            query: ({ dialogId, userId, valueFolder, nextOrder, pinned }) => ({
+                url: `/dialogs/${dialogId}/pinning-dialog`,
+                method: 'PATCH',
+                body: { userId, valueFolder, nextOrder, pinned },
+            }),
+            invalidatesTags: ['Dialogs'],
+        }),
     }),
 })
 
@@ -202,6 +215,7 @@ export const useDeleteDialog = dialogApi.useDeleteDialogMutation
 export const useUpdateReadStatus = dialogApi.useUpdateReadStatusMutation
 export const useAddToFolder = dialogApi.useAddToFolderMutation
 export const useRemoveToFolder = dialogApi.useRemoveToFolderMutation
+export const useToggleDialogPin = dialogApi.useToggleDialogPinMutation
 export const getDialog = dialogApi.endpoints.getDialog.initiate
 
 /*

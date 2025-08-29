@@ -6,6 +6,7 @@ import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 import { DialogActions } from '../../../../features/DialogActions/ui/DialogActions/DialogActions'
 import { DialogCounterControl } from '../../../../features/DialogCounterControl/ui/DialogCounterControl'
 import { DialogFolderActions } from '../../../../features/DialogFolderActions/ui/DialogFolderActions'
+import { DialogPinning } from '../../../../features/DialogPinning/ui/DialogPinning'
 
 interface ContextMenuProps {
     className?: string
@@ -13,12 +14,22 @@ interface ContextMenuProps {
     menuPosition?: MenuPosition
     isOpenMenu?: boolean
     isMutedDialog?: boolean
+    isPinedDialog?: boolean
     dialog?: Dialog
+    nextOrder: number
 }
 
 // TODO: неправильно расположение
 export const ContextMenu: FC<ContextMenuProps> = memo(
-    ({ onCloseMenu, menuPosition, isOpenMenu, isMutedDialog, dialog }) => {
+    ({
+        onCloseMenu,
+        menuPosition,
+        isOpenMenu,
+        isMutedDialog,
+        dialog,
+        isPinedDialog,
+        nextOrder,
+    }) => {
         const menuRef = useRef<HTMLDivElement>(null)
 
         useEffect(() => {
@@ -58,14 +69,13 @@ export const ContextMenu: FC<ContextMenuProps> = memo(
                     zIndex: 1000,
                 }}
             >
-                <div
+                <DialogPinning
+                    isPined={isPinedDialog}
+                    nextOrder={nextOrder}
                     className={cls.menuItem}
-                    onClick={() => {
-                        onCloseMenu?.()
-                    }}
-                >
-                    Закрепить чат/Открепить чат
-                </div>
+                    onCloseMenu={onCloseMenu}
+                    dialog={dialog}
+                />
                 <ToggleDialogMute
                     className={cls.menuItem}
                     isMutedDialog={isMutedDialog}

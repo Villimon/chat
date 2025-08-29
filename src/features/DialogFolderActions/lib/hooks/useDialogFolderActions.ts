@@ -26,13 +26,16 @@ export const useDialogFolderActions = ({
         async (value: string) => {
             if (!dialog?.id || !userData?.id || !value) return
 
-            await addToFolder({
-                userId: userData.id,
-                dialogId: dialog.id,
-                valueFolder: value,
-            }).unwrap()
-
-            onCloseMenu?.()
+            try {
+                await addToFolder({
+                    userId: userData.id,
+                    dialogId: dialog.id,
+                    valueFolder: value,
+                }).unwrap()
+                onCloseMenu?.()
+            } catch (e) {
+                console.log(e)
+            }
         },
         [addToFolder, dialog?.id, userData?.id, onCloseMenu],
     )
@@ -41,13 +44,17 @@ export const useDialogFolderActions = ({
         async (value: string) => {
             if (!dialog?.id || !userData?.id || !value) return
 
-            await removeToFolder({
-                userId: userData.id,
-                dialogId: dialog.id,
-                valueFolder: value,
-            }).unwrap()
+            try {
+                await removeToFolder({
+                    userId: userData.id,
+                    dialogId: dialog.id,
+                    valueFolder: value,
+                }).unwrap()
 
-            onCloseMenu?.()
+                onCloseMenu?.()
+            } catch (e) {
+                console.log(e)
+            }
         },
         [dialog?.id, userData?.id, removeToFolder, onCloseMenu],
     )

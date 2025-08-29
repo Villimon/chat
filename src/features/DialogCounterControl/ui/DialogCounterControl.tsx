@@ -25,11 +25,15 @@ export const DialogCounterControl: FC<DialogCounterControlProps> = memo(
         const handleCounterControl = useCallback(async () => {
             if (!dialog?.id || !userData?.id) return
 
-            await updateReadStatus({
-                userId: userData.id,
-                dialogId: dialog.id,
-                folder: activeFolder.value,
-            }).unwrap()
+            try {
+                await updateReadStatus({
+                    userId: userData.id,
+                    dialogId: dialog.id,
+                    folder: activeFolder.value,
+                }).unwrap()
+            } catch (e) {
+                console.log(e)
+            }
         }, [dialog?.id, userData?.id, updateReadStatus, activeFolder])
 
         const handleClick = useCallback(() => {

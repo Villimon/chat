@@ -1,6 +1,7 @@
 import { FC, memo, useMemo } from 'react'
 import { format, isThisWeek, isToday, setDefaultOptions } from 'date-fns'
 import { ru } from 'date-fns/locale'
+import { useSelector } from 'react-redux'
 import { Avatar } from '@/shared/ui/Avatar/Avatar'
 import { Text } from '@/shared/ui/Text/Text'
 import cls from './DialogCard.module.scss'
@@ -9,6 +10,11 @@ import { Dialog } from '../../model/types/dialogSchema'
 import { AppLink } from '@/shared/ui/AppLink/AppLink'
 import { MenuPosition } from '../../model/types'
 import { ContextMenu } from '../ContextMenuByDialogCard/ContextMenu'
+import { VStack } from '@/shared/ui/Stack/VStack/VStack'
+import { HStack } from '@/shared/ui/Stack/HStack/HStack'
+import { Icon } from '@/shared/ui/Icon/Icon'
+import PinIcon from '@/shared/assets/icons/pin.svg'
+import { getActiveFolder } from '../../../../widgets/Sidebar/Sidebar/model/selectors/getActiveFolder/getActiveFolder'
 
 interface DialogCardProps {
     dialog: Dialog
@@ -17,6 +23,7 @@ interface DialogCardProps {
     onContextMenu?: (e: React.MouseEvent) => void
     isOpenMenu?: boolean
     menuPosition?: MenuPosition
+    nextOrder: number
 }
 
 setDefaultOptions({ locale: ru })
@@ -41,14 +48,21 @@ export const DialogCard: FC<DialogCardProps> = memo(
         onCloseMenu,
         onContextMenu,
         menuPosition,
+        nextOrder,
     }) => {
         const fullName = dialog.interlocutor?.firstName && dialog.interlocutor?.lastName
             ? `${dialog.interlocutor?.firstName} ${dialog.interlocutor?.lastName}`
             : undefined
 
+        const activeFolder = useSelector(getActiveFolder)
+
         const isMutedDialog = useMemo(() => {
             return dialog.userSettings.isMuted
         }, [dialog])
+
+        const isPined = useMemo(() => {
+            return dialog.userSettings.pinned?.[activeFolder.value]?.isPinned
+        }, [activeFolder.value, dialog.userSettings.pinned])
 
         return (
             <div onContextMenu={onContextMenu}>
@@ -59,19 +73,29 @@ export const DialogCard: FC<DialogCardProps> = memo(
                 >
                     {/* TODO: показываь online, делать это через вебсокет */}
                     <Avatar size={50} src={dialog.avatar} />
-                    <div className={cls.info}>
+                    <VStack className={cls.info}>
                         <Text text={fullName || dialog.title} />
                         <Text text={dialog.lastMessage.text} />
-                    </div>
-                    <div className={cls.rightInfo}>
-                        <div>
+                    </VStack>
+                    <VStack
+                        gap="8"
+                        className={cls.rightInfo}
+                        justify="start"
+                        align="end"
+                    >
+                        <HStack gap="4">
+                            {isPined && (
+                                <Icon Svg={PinIcon} height={25} width={25} />
+                            )}
                             <Text
                                 size="s"
                                 text={formatDate(dialog.lastMessage.timestamp)}
                             />
-                        </div>
+                        </HStack>
                         {dialog.userSettings.unreadCount > 0 && (
-                            <div
+                            <HStack
+                                align="center"
+                                justify="center"
                                 className={cn(
                                     cls.unreadCount,
                                     {
@@ -81,9 +105,9 @@ export const DialogCard: FC<DialogCardProps> = memo(
                                 )}
                             >
                                 {dialog.userSettings.unreadCount}
-                            </div>
+                            </HStack>
                         )}
-                    </div>
+                    </VStack>
                 </AppLink>
 
                 {isOpenMenu && (
@@ -93,6 +117,8 @@ export const DialogCard: FC<DialogCardProps> = memo(
                         isOpenMenu={isOpenMenu}
                         isMutedDialog={isMutedDialog}
                         dialog={dialog}
+                        nextOrder={nextOrder}
+                        isPinedDialog={isPined}
                     />
                 )}
             </div>

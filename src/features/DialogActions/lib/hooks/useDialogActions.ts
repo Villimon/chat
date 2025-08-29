@@ -35,20 +35,28 @@ export const useDialogActions = ({
 
     const handleLeaveDialogClick = useCallback(async () => {
         if (dialog?.id && userData?.id) {
-            await leaveDialog({
-                dialogId: dialog?.id,
-                userId: userData.id,
-            }).unwrap()
+            try {
+                await leaveDialog({
+                    dialogId: dialog?.id,
+                    userId: userData.id,
+                }).unwrap()
 
-            onCloseMenu?.()
+                onCloseMenu?.()
+            } catch (e) {
+                console.log(e)
+            }
         }
     }, [dialog?.id, leaveDialog, userData?.id, onCloseMenu])
 
     const handleDeleteDialogClick = useCallback(async () => {
         if (dialog?.id) {
-            await deleteDialog({ dialogId: dialog?.id }).unwrap()
+            try {
+                await deleteDialog({ dialogId: dialog?.id }).unwrap()
 
-            onCloseMenu?.()
+                onCloseMenu?.()
+            } catch (e) {
+                console.log(e)
+            }
         }
     }, [dialog?.id, deleteDialog, onCloseMenu])
 

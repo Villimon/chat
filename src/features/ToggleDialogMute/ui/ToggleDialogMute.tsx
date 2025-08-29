@@ -23,11 +23,15 @@ export const ToggleDialogMute: FC<ToggleDialogMuteProps> = memo(
         const handleToggleDialogMute = useCallback(async () => {
             if (!dialog?.id || !userData?.id) return
 
-            await toggleDialogMute({
-                userId: userData.id,
-                dialogId: dialog.id,
-                folder: activeFolder.value,
-            }).unwrap()
+            try {
+                await toggleDialogMute({
+                    userId: userData.id,
+                    dialogId: dialog.id,
+                    folder: activeFolder.value,
+                }).unwrap()
+            } catch (e) {
+                console.log(e)
+            }
         }, [dialog?.id, toggleDialogMute, userData?.id, activeFolder])
 
         const handleClick = useCallback(() => {

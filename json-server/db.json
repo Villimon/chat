@@ -89,8 +89,11 @@
           "folders": [
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": true,
+              "order": 13
+            }
           },
           "isMuted": false,
           "unreadCount": 3
@@ -100,8 +103,11 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": true,
+              "order": 5
+            }
           },
           "isMuted": true,
           "unreadCount": 0
@@ -127,8 +133,11 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": false,
+              "order": 11
+            }
           },
           "isMuted": false,
           "unreadCount": 123
@@ -138,8 +147,11 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": true,
+              "order": 2
+            }
           },
           "isMuted": true,
           "unreadCount": 0
@@ -167,8 +179,11 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": true,
+              "order": 12
+            }
           },
           "isMuted": false,
           "unreadCount": 0
@@ -178,8 +193,11 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": true,
+              "order": 3
+            }
           },
           "isMuted": true,
           "unreadCount": 3
@@ -207,8 +225,19 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": true,
+              "order": 10
+            },
+            "groups": {
+              "isPinned": true,
+              "order": 1
+            },
+            "personal": {
+              "isPinned": true,
+              "order": 1
+            }
           },
           "isMuted": false,
           "unreadCount": 0
@@ -218,8 +247,11 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": true,
+              "order": 4
+            }
           },
           "isMuted": true,
           "unreadCount": 3
@@ -245,8 +277,11 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": false,
+              "order": 9
+            }
           },
           "isMuted": true,
           "unreadCount": 3
@@ -256,8 +291,11 @@
             "personal",
             "groups"
           ],
-          "isPinned": {
-            "all": true
+          "pinned": {
+            "all": {
+              "isPinned": true,
+              "order": 1
+            }
           },
           "isMuted": true,
           "unreadCount": 0

@@ -125,6 +125,35 @@ server.get('/dialogs', (req, res) => {
             const valA = _sort.split('.').reduce((o, i) => o[i], a)
             const valB = _sort.split('.').reduce((o, i) => o[i], b)
 
+            // Получаем настройки пользователя (предполагаем, что userId известен)
+            const userSettingsA = a.userSettings
+            const userSettingsB = b.userSettings
+
+            const currentFolder = folder || 'all'
+
+            // Проверяем, закреплены ли диалоги
+            const isPinnedA =
+                userSettingsA?.pinned?.[currentFolder]?.isPinned || false
+            const isPinnedB =
+                userSettingsB?.pinned?.[currentFolder]?.isPinned || false
+
+            // Получаем порядок закрепления
+            const orderA =
+                userSettingsA?.pinned?.[currentFolder]?.order || Infinity
+            const orderB =
+                userSettingsB?.pinned?.[currentFolder]?.order || Infinity
+
+            // Сначала сортируем по pinned: закрепленные выше
+            if (isPinnedA && !isPinnedB) return -1
+            if (!isPinnedA && isPinnedB) return 1
+
+            // Если оба закреплены, сортируем по order
+            if (isPinnedA && isPinnedB) {
+                if (orderA !== orderB) {
+                    return orderB - orderA
+                }
+            }
+
             return new Date(valB) - new Date(valA)
         })
     }
@@ -183,6 +212,70 @@ server.patch('/dialogs/:dialogId/toggle-mute', (req, res) => {
         totalPages: 1,
         totalItems: 1,
     })
+})
+
+server.patch('/dialogs/:dialogId/pinning-dialog', (req, res) => {
+    const { dialogId } = req.params
+    const { userId, nextOrder, pinned, valueFolder } = req.body
+
+    const { db } = router
+    const dialog = db.get('dialogs').find({ id: dialogId }).value()
+
+    if (!dialog) {
+        return res.status(404).json({ error: 'Dialog not found' })
+    }
+
+    if (!dialog.userSettings[userId]) {
+        return res.status(400).json({ error: 'User settings not found' })
+    }
+
+    let updatedSettings
+
+    if (pinned) {
+        updatedSettings = {
+            ...dialog.userSettings,
+            [userId]: {
+                ...dialog.userSettings[userId],
+                pinned: {
+                    ...dialog.userSettings[userId].pinned,
+                    [valueFolder]: {
+                        isPinned: pinned,
+                        order: nextOrder,
+                    },
+                },
+            },
+        }
+    } else {
+        updatedSettings = {
+            ...dialog.userSettings,
+            [userId]: {
+                ...dialog.userSettings[userId],
+                pinned: {
+                    ...dialog.userSettings[userId].pinned,
+                    [valueFolder]: {
+                        isPinned: pinned,
+                        order: dialog.userSettings[userId].pinned[valueFolder]
+                            .order,
+                    },
+                },
+            },
+        }
+    }
+
+    db.get('dialogs')
+        .find({ id: dialogId })
+        .assign({ userSettings: updatedSettings })
+        .write()
+
+    let resultDialog = db.get('dialogs').value()
+    resultDialog = resultDialog.map((dialog) => {
+        return {
+            ...dialog,
+            userSettings: dialog.userSettings[userId],
+        }
+    })
+
+    res.json(resultDialog)
 })
 
 server.patch('/dialogs/:dialogId/leave-dialog', (req, res) => {
