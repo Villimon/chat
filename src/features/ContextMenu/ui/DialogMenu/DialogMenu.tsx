@@ -1,14 +1,14 @@
-import { FC, memo, useEffect, useRef } from 'react'
-import cls from './ContextMenu.module.scss'
-import { MenuPosition } from '../../model/types'
-import { ToggleDialogMute } from '../../../../features/ToggleDialogMute/ui/ToggleDialogMute'
+import { FC, memo, useRef, useEffect } from 'react'
+import { MenuPosition } from '@/entities/Dialog/model/types'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
-import { DialogActions } from '../../../../features/DialogActions/ui/DialogActions/DialogActions'
-import { DialogCounterControl } from '../../../../features/DialogCounterControl/ui/DialogCounterControl'
-import { DialogFolderActions } from '../../../../features/DialogFolderActions/ui/DialogFolderActions'
-import { DialogPinning } from '../../../../features/DialogPinning/ui/DialogPinning'
+import { DialogActions } from '../../../DialogActions/ui/DialogActions/DialogActions'
+import { DialogCounterControl } from '../../../DialogCounterControl/ui/DialogCounterControl'
+import { DialogFolderActions } from '../../../DialogFolderActions/ui/DialogFolderActions'
+import { DialogPinning } from '../../../DialogPinning/ui/DialogPinning'
+import { ToggleDialogMute } from '../../../ToggleDialogMute/ui/ToggleDialogMute'
+import cls from './DialogMenu.module.scss'
 
-interface ContextMenuProps {
+interface DialogMenuProps {
     className?: string
     onCloseMenu?: () => void
     menuPosition?: MenuPosition
@@ -19,8 +19,7 @@ interface ContextMenuProps {
     nextOrder: number
 }
 
-// TODO: неправильно расположение
-export const ContextMenu: FC<ContextMenuProps> = memo(
+export const DialogMenu: FC<DialogMenuProps> = memo(
     ({
         onCloseMenu,
         menuPosition,

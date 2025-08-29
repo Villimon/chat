@@ -21,9 +21,30 @@ interface UseDialogListProps {
 export const useDialogList = ({
     dialogs,
 }: UseDialogListProps): ReturnUseDialogLis => {
+    // Вынести всю логику по контекстному меню в хук useContextMenu и использовать хук тут
     const [openedMenuId, setOpenedMenuId] = useState<string | null>()
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
     const activeFolder = useSelector(getActiveFolder)
+
+    /*
+    export const useContextMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [target, setTarget] = useState<Dialog | Folder | Message>();
+
+  const openMenu = (event: React.MouseEvent, menuTarget: any) => {
+    event.preventDefault();
+    setPosition({ x: event.clientX, y: event.clientY });
+    setTarget(menuTarget);
+    setIsOpen(true);
+  };
+
+  const closeMenu = () => setIsOpen(false);
+
+  return { isOpen, position, target, openMenu, closeMenu };
+};
+
+    */
 
     const handleContextMenu = useCallback(
         (e: React.MouseEvent, dialogId: string) => {

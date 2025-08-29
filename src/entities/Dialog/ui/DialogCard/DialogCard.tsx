@@ -9,12 +9,12 @@ import { cn } from '@/shared/lib/classNames/classNames'
 import { Dialog } from '../../model/types/dialogSchema'
 import { AppLink } from '@/shared/ui/AppLink/AppLink'
 import { MenuPosition } from '../../model/types'
-import { ContextMenu } from '../ContextMenuByDialogCard/ContextMenu'
 import { VStack } from '@/shared/ui/Stack/VStack/VStack'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 import { Icon } from '@/shared/ui/Icon/Icon'
 import PinIcon from '@/shared/assets/icons/pin.svg'
 import { getActiveFolder } from '../../../../widgets/Sidebar/Sidebar/model/selectors/getActiveFolder/getActiveFolder'
+import { DialogMenu } from '@/features/ContextMenu'
 
 interface DialogCardProps {
     dialog: Dialog
@@ -111,7 +111,7 @@ export const DialogCard: FC<DialogCardProps> = memo(
                 </AppLink>
 
                 {isOpenMenu && (
-                    <ContextMenu
+                    <DialogMenu
                         menuPosition={menuPosition}
                         onCloseMenu={onCloseMenu}
                         isOpenMenu={isOpenMenu}

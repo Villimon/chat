@@ -30,7 +30,7 @@ export const DialogFolderActions: FC<DialogFolderActionsProps> = memo(
         } = useDialogFolderActions({ dialog, onCloseMenu })
 
         return (
-            <div className={cn('', {}, [className])}>
+            <>
                 <Button
                     color="error"
                     variant="clear"
@@ -72,7 +72,7 @@ export const DialogFolderActions: FC<DialogFolderActionsProps> = memo(
                         <Button>Создать новую папку</Button>
                     </VStack>
                 </Modal>
-            </div>
+            </>
         )
     },
 )
