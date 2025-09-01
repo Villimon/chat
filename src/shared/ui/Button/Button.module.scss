@@ -7,7 +7,7 @@
     justify-content: center;
 
     &:hover {
-        color: var(--accent-primary);
+        color: var(--text-secondary);
 
         .addonLeft svg,
         .addonRight svg {
@@ -29,7 +29,7 @@
     border-radius: 34px;
 
     &:hover {
-        border: 2px solid var(--accent-primary);
+        border: 2px solid var(--text-secondary);
     }
 
     &.normal {
