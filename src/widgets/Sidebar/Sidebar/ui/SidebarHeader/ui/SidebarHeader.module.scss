@@ -3,3 +3,11 @@
     gap: 10px;
     padding: 0 15px;
 }
+
+.submenu {
+    &:hover {
+        p:first-child {
+            color: var(--accent-primary);
+        }
+    }
+}

@@ -5,7 +5,7 @@
 .menu {
     border-radius: 18px;
     border: 1px solid var(--accent-primary);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .trigger {
@@ -24,7 +24,7 @@
 }
 
 .active {
-    background: var(--light-bg);
+    color: var(--accent-primary);
 }
 
 .selected {
