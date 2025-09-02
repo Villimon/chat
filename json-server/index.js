@@ -41,6 +41,32 @@ server.post('/login', (req, res) => {
     }
 })
 
+server.post('/users/:userId', (req, res) => {
+    const { userId } = req.params
+    const { folderName } = req.body
+
+    const { db } = router
+    const user = db.get('users').find({ id: userId }).value()
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' })
+    }
+
+    const valueNewFolder = user.folders.length + 1
+
+    const updateFolders = [
+        ...user.folders,
+        { value: String(valueNewFolder), title: folderName },
+    ]
+
+    db.get('users')
+        .find({ id: userId })
+        .assign({ folders: updateFolders })
+        .write()
+
+    res.json(user)
+})
+
 server.get('/dialogs', (req, res) => {
     const db = JSON.parse(
         fs.readFileSync(path.resolve(__dirname, 'db.json'), 'UTF-8'),

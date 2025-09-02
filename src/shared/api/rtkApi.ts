@@ -14,6 +14,6 @@ export const rtkApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Dialogs'],
+    tagTypes: ['Dialogs', 'User'],
     endpoints: () => ({}),
 })

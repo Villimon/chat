@@ -9,6 +9,7 @@ import { VStack } from '@/shared/ui/Stack/VStack/VStack'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 import { getUserFolders } from '@/entities/User'
 import { useDialogFolderActions } from '../lib/hooks/useDialogFolderActions'
+import { CreateFolder } from '../../CreateFolder/ui/CreateFolder'
 
 interface DialogFolderActionsProps {
     className?: string
@@ -27,6 +28,9 @@ export const DialogFolderActions: FC<DialogFolderActionsProps> = memo(
             handleOnClose,
             handleRemoveToFolder,
             isOpen,
+            handleOnClickCreateFolderModal,
+            handleOnCloseCreateFolderModal,
+            isOpenCreateFolderModal,
         } = useDialogFolderActions({ dialog, onCloseMenu })
 
         return (
@@ -68,8 +72,16 @@ export const DialogFolderActions: FC<DialogFolderActionsProps> = memo(
                                 )
                             })}
                         </HStack>
-                        {/* TODO: Добавить создани папки */}
-                        <Button>Создать новую папку</Button>
+                        <Button onClick={handleOnClickCreateFolderModal}>
+                            Создать новую папку
+                        </Button>
+                        {isOpenCreateFolderModal && (
+                            <CreateFolder
+                                onCloseMenu={onCloseMenu}
+                                isOpen={isOpenCreateFolderModal}
+                                onClose={handleOnCloseCreateFolderModal}
+                            />
+                        )}
                     </VStack>
                 </Modal>
             </>

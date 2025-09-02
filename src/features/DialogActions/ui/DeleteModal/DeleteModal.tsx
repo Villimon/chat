@@ -26,14 +26,19 @@ export const DeleteModal: FC<DeleteModalProps> = memo(
                 >
                     Удалить чат
                 </Button>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <Button onClick={deleteDialog} style={{ marginBottom: 10 }}>
-                        Удалить чат у всех
-                    </Button>
-                    <Button onClick={leaveDialog}>
-                        Удалить чат только у меня
-                    </Button>
-                </Modal>
+                {isOpen && (
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                        <Button
+                            onClick={deleteDialog}
+                            style={{ marginBottom: 10 }}
+                        >
+                            Удалить чат у всех
+                        </Button>
+                        <Button onClick={leaveDialog}>
+                            Удалить чат только у меня
+                        </Button>
+                    </Modal>
+                )}
             </>
         )
     },

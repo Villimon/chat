@@ -17,6 +17,7 @@ export const useDialogFolderActions = ({
     onCloseMenu,
 }: UseDialogFolderActionsProps) => {
     const [isOpen, setIsOpen] = useState(false)
+    const [isOpenCreateFolderModal, setIsOpenCreateFolderModal] = useState(false)
 
     const [addToFolder] = useAddToFolder()
     const [removeToFolder] = useRemoveToFolder()
@@ -67,11 +68,23 @@ export const useDialogFolderActions = ({
         setIsOpen(false)
     }, [])
 
+    const handleOnClickCreateFolderModal = useCallback(() => {
+        setIsOpen(false)
+        setIsOpenCreateFolderModal(true)
+    }, [])
+
+    const handleOnCloseCreateFolderModal = useCallback(() => {
+        setIsOpenCreateFolderModal(false)
+    }, [])
+
     return {
         isOpen,
+        isOpenCreateFolderModal,
         handleAddToFolder,
         handleRemoveToFolder,
         handleOnClick,
         handleOnClose,
+        handleOnClickCreateFolderModal,
+        handleOnCloseCreateFolderModal,
     }
 }

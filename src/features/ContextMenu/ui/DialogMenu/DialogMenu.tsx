@@ -33,10 +33,8 @@ export const DialogMenu: FC<DialogMenuProps> = memo(
 
         useEffect(() => {
             const handleClickOutside = (e: MouseEvent) => {
-                const target = e.target as Node
-                const isClickOnModal = document
-                    .getElementById('modal')
-                    ?.contains(target)
+                const target = e.target as Element
+                const isClickOnModal = target.closest('#modal') !== null
 
                 if (
                     menuRef.current
