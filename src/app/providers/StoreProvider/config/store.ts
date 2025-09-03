@@ -5,6 +5,7 @@ import { rtkApi } from '@/shared/api/rtkApi'
 import { $api } from '@/shared/api/api'
 import { userReducer } from '@/entities/User'
 import { sidebarReducer } from '@/widgets/Sidebar'
+import { contextMenuReducer } from '@/features/ContextMenu'
 
 export const createReduxStore = (
     asyncReducers?: ReducersMapObject<StateSchema>,
@@ -14,6 +15,7 @@ export const createReduxStore = (
         user: userReducer,
         [rtkApi.reducerPath]: rtkApi.reducer,
         sidebar: sidebarReducer,
+        contextMenu: contextMenuReducer,
     }
 
     // redux code spliting

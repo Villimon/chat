@@ -10,6 +10,7 @@ import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 import { getUserFolders } from '@/entities/User'
 import { useDialogFolderActions } from '../lib/hooks/useDialogFolderActions'
 import { CreateFolder } from '../../CreateFolder/ui/CreateFolder'
+import cls from './DialogFolderActions.module.scss'
 
 interface DialogFolderActionsProps {
     className?: string
@@ -46,9 +47,9 @@ export const DialogFolderActions: FC<DialogFolderActionsProps> = memo(
                     Добавить в папку
                 </Button>
                 <Modal isOpen={isOpen} onClose={handleOnClose}>
-                    <VStack gap="16">
+                    <VStack gap="16" className={cls.modal}>
                         <Text text="Добавить в папку:" />
-                        <HStack gap="4">
+                        <HStack gap="4" wrap="wrap">
                             {userFolders?.map((folder) => {
                                 const isDialogInFolder = userDialogFolder?.includes(folder.value)
 

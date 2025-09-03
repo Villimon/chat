@@ -1,5 +1,6 @@
 import {
     FC,
+    JSX,
     memo,
     NamedExoticComponent,
     useCallback,
@@ -26,10 +27,24 @@ interface TabsProps {
     onClickTab: (tab: TabItem) => void
     direction?: FlexDirection
     className?: string
+    onContextMenu?: (e: React.MouseEvent, targetId: string) => void
+    openedMenuId?: string | null
+    isContextmenu?: boolean
+    contextmenu?: (tab: TabItem) => JSX.Element
 }
 
 export const Tabs: FC<TabsProps> = memo(
-    ({ items, onClickTab, value, className, direction = 'row' }) => {
+    ({
+        items,
+        onClickTab,
+        value,
+        className,
+        direction = 'row',
+        onContextMenu,
+        openedMenuId,
+        isContextmenu = false,
+        contextmenu,
+    }) => {
         const tabsRef = useRef<HTMLDivElement | null>(null)
         const [showLeftArrow, setShowLeftArrow] = useState(false)
         const [showRightArrow, setShowRightArrow] = useState(false)
@@ -102,28 +117,39 @@ export const Tabs: FC<TabsProps> = memo(
                         className={cls.tabsInner}
                     >
                         {items.map((tab) => (
-                            <Card
-                                border="round"
-                                key={tab.value}
-                                onClick={() => clickHandler(tab)}
-                                className={cls.tab}
-                                variant={
-                                    tab.value === value ? 'light' : 'normal'
-                                }
-                                data-tab-value={tab.value}
-                            >
-                                {tab.title}
-                                {Boolean(tab.unreadCount) && (
-                                    <div
-                                        className={cn(cls.unreadCount, {
-                                            [cls.activeTab]:
-                                                tab.value === value,
-                                        })}
-                                    >
-                                        {tab.unreadCount}
-                                    </div>
-                                )}
-                            </Card>
+                            <>
+                                <Card
+                                    border="round"
+                                    key={tab.value}
+                                    onClick={() => clickHandler(tab)}
+                                    className={cls.tab}
+                                    variant={
+                                        tab.value === value ? 'light' : 'normal'
+                                    }
+                                    data-tab-value={tab.value}
+                                    onContextMenu={
+                                        isContextmenu
+                                            ? (e) =>
+                                                onContextMenu?.(e, tab.value)
+                                            : undefined
+                                    }
+                                >
+                                    {tab.title}
+                                    {Boolean(tab.unreadCount) && (
+                                        <div
+                                            className={cn(cls.unreadCount, {
+                                                [cls.activeTab]:
+                                                    tab.value === value,
+                                            })}
+                                        >
+                                            {tab.unreadCount}
+                                        </div>
+                                    )}
+                                </Card>
+                                {openedMenuId === `${tab.value}-folder`
+                                    && isContextmenu
+                                    && contextmenu?.(tab)}
+                            </>
                         ))}
                     </Flex>
                 </div>

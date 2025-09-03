@@ -1,4 +1,4 @@
-import { FC, memo, useRef, useEffect } from 'react'
+import { FC, memo } from 'react'
 import { MenuPosition } from '@/entities/Dialog/model/types'
 import { Dialog } from '@/entities/Dialog/model/types/dialogSchema'
 import { DialogActions } from '../../../DialogActions/ui/DialogActions/DialogActions'
@@ -6,7 +6,8 @@ import { DialogCounterControl } from '../../../DialogCounterControl/ui/DialogCou
 import { DialogFolderActions } from '../../../DialogFolderActions/ui/DialogFolderActions'
 import { DialogPinning } from '../../../DialogPinning/ui/DialogPinning'
 import { ToggleDialogMute } from '../../../ToggleDialogMute/ui/ToggleDialogMute'
-import cls from './DialogMenu.module.scss'
+import cls from '../../styles/ContextMenu.module.scss'
+import { useMenuLogic } from '../../lib/hooks/useMenuLogic'
 
 interface DialogMenuProps {
     className?: string
@@ -29,31 +30,7 @@ export const DialogMenu: FC<DialogMenuProps> = memo(
         isPinedDialog,
         nextOrder,
     }) => {
-        const menuRef = useRef<HTMLDivElement>(null)
-
-        useEffect(() => {
-            const handleClickOutside = (e: MouseEvent) => {
-                const target = e.target as Element
-                const isClickOnModal = target.closest('#modal') !== null
-
-                if (
-                    menuRef.current
-                    && !menuRef.current.contains(target)
-                    && !isClickOnModal
-                ) {
-                    onCloseMenu?.()
-                }
-            }
-
-            if (isOpenMenu) {
-                document.addEventListener('click', handleClickOutside)
-                return () => {
-                    document.removeEventListener('click', handleClickOutside)
-                }
-            }
-
-            return undefined
-        }, [isOpenMenu, onCloseMenu])
+        const menuRef = useMenuLogic(isOpenMenu, onCloseMenu)
 
         return (
             <div

@@ -10,26 +10,14 @@ import { useDialogListData } from '../../../lib/hooks/useDialogListData'
 export const DialogList = memo(({ className }: { className?: string }) => {
     const { dialogs, isError, isFetching, isSuccess, loadMore } = useDialogListData()
 
-    const {
-        handleCloseMenu,
-        handleContextMenu,
-        menuPosition,
-        openedMenuId,
-        getNextOrder,
-    } = useDialogList({ dialogs })
+    const { getNextOrder } = useDialogList({ dialogs })
 
     const {
         EmptyListPlaceholder,
         LoadingFooter,
         SkeletonDialogCard,
         itemContent,
-    } = useDialogListRenderer(
-        handleContextMenu,
-        handleCloseMenu,
-        menuPosition,
-        getNextOrder,
-        openedMenuId,
-    )
+    } = useDialogListRenderer(getNextOrder)
 
     if (!isSuccess && isFetching) {
         return <SkeletonDialogCard className={cls.container} />

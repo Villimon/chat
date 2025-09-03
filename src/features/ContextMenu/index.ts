@@ -1,1 +1,5 @@
+export { contextMenuReducer } from './model/slice/ContextMenuSlice'
+export type { ContextMenuSchema } from './model/types/ContextMenuSchema'
+export { FolderMenu } from './ui/FolderMenu/FolderMenu'
+export { useContextMenu } from './lib/hooks/useContextMenu'
 export { DialogMenu } from './ui/DialogMenu/DialogMenu'

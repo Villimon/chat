@@ -6,33 +6,35 @@ import { Text } from '@/shared/ui/Text/Text'
 import { Skeleton } from '@/shared/ui/Skeleton'
 import clsCard from '@/entities/Dialog/ui/DialogCard/DialogCard.module.scss'
 import { cn } from '@/shared/lib/classNames/classNames'
+import { useContextMenu } from '@/features/ContextMenu'
 
-export const useDialogListRenderer = (
-    handleContextMenu: (e: React.MouseEvent, dialogId: string) => void,
-    handleCloseMenu: () => void,
-    menuPosition: { x: number; y: number },
-    getNextOrder: () => number,
-    openedMenuId?: string | null,
-) => {
+export const useDialogListRenderer = (getNextOrder: () => number) => {
+    const {
+        handleContextMenu,
+        openedMenuId,
+        position,
+        handleCloseContextMenu,
+    } = useContextMenu('dialog')
+
     const itemContent = useCallback(
         (index: number, dialog: Dialog) => (
             <DialogCard
                 key={dialog.id}
                 dialog={dialog}
                 className={cls.dialogItem}
-                onCloseMenu={handleCloseMenu}
                 onContextMenu={(e) => handleContextMenu(e, dialog.id)}
-                isOpenMenu={openedMenuId === dialog.id}
-                menuPosition={menuPosition}
+                isOpenMenu={openedMenuId === `${dialog.id}-dialog`}
                 nextOrder={getNextOrder()}
+                menuPosition={position}
+                onCloseMenu={handleCloseContextMenu}
             />
         ),
         [
-            handleCloseMenu,
             openedMenuId,
-            menuPosition,
             getNextOrder,
             handleContextMenu,
+            handleCloseContextMenu,
+            position,
         ],
     )
 

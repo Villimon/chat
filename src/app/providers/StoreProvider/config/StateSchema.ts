@@ -9,12 +9,14 @@ import { rtkApi } from '@/shared/api/rtkApi'
 import { LoginSchema } from '@/features/AuthByUsername'
 import { UserSchema } from '@/entities/User/model/types/userSchema'
 import { SidebarSchema } from '@/widgets/Sidebar'
+import { ContextMenuSchema } from '@/features/ContextMenu'
 
 export interface StateSchema {
     [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>
     loginForm?: LoginSchema
     user: UserSchema
     sidebar: SidebarSchema
+    contextMenu: ContextMenuSchema
 }
 
 export type StateSchemaKey = keyof StateSchema
