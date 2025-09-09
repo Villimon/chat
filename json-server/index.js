@@ -67,6 +67,64 @@ server.post('/users/:userId', (req, res) => {
     res.json(user)
 })
 
+server.patch('/users/:userId/folder-edit', (req, res) => {
+    const { userId } = req.params
+    const { folderValue, newTitle } = req.body
+
+    const { db } = router
+    const user = db.get('users').find({ id: userId }).value()
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' })
+    }
+
+    if (!newTitle.trim().length) {
+        return res
+            .status(404)
+            .json({ error: 'Название папки не может быть пустым' })
+    }
+
+    const updateFolders = user.folders.map((item) => {
+        if (item.value === folderValue) {
+            return {
+                value: item.value,
+                title: newTitle,
+            }
+        }
+        return item
+    })
+
+    db.get('users')
+        .find({ id: userId })
+        .assign({ folders: updateFolders })
+        .write()
+
+    res.json(user)
+})
+
+server.delete('/users/:userId/folder-delete', (req, res) => {
+    const { userId } = req.params
+    const { folderValue } = req.body
+
+    const { db } = router
+    const user = db.get('users').find({ id: userId }).value()
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' })
+    }
+
+    const updateFolders = user.folders.filter(
+        (folder) => folder.value !== folderValue,
+    )
+
+    db.get('users')
+        .find({ id: userId })
+        .assign({ folders: updateFolders })
+        .write()
+
+    res.json(user)
+})
+
 server.get('/dialogs', (req, res) => {
     const db = JSON.parse(
         fs.readFileSync(path.resolve(__dirname, 'db.json'), 'UTF-8'),

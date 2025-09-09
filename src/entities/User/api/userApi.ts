@@ -1,6 +1,17 @@
 import { User } from '../model/types/userSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 
+interface EditFolderParams {
+    userId: string
+    folderValue: string
+    newTitle: string
+}
+
+interface DeleteFolderParams {
+    userId: string
+    folderValue: string
+}
+
 const userApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
         getUserDataById: build.query<User, string>({
@@ -25,8 +36,30 @@ const userApi = rtkApi.injectEndpoints({
                 { type: 'User', id: userId },
             ],
         }),
+        editFolder: build.mutation<User, EditFolderParams>({
+            query: ({ folderValue, userId, newTitle }) => ({
+                url: `/users/${userId}/folder-edit`,
+                method: 'PATCH',
+                body: { folderValue, newTitle },
+            }),
+            invalidatesTags: (result, error, { userId }) => [
+                { type: 'User', id: userId },
+            ],
+        }),
+        deleteFolder: build.mutation<User, DeleteFolderParams>({
+            query: ({ folderValue, userId }) => ({
+                url: `/users/${userId}/folder-delete`,
+                method: 'DELETE',
+                body: { folderValue },
+            }),
+            invalidatesTags: (result, error, { userId }) => [
+                { type: 'User', id: userId },
+            ],
+        }),
     }),
 })
 
 export const getUserDataByIdQuery = userApi.endpoints.getUserDataById.initiate
 export const useCreateNewFolder = userApi.useCreateNewFolderMutation
+export const useEditFolder = userApi.useEditFolderMutation
+export const useDeleteFolder = userApi.useDeleteFolderMutation

@@ -1,5 +1,5 @@
 export { useDialogFetching } from './Sidebar/api/useDialogFetching'
-export { sidebarReducer } from './Sidebar/model/slice/sidebar'
+export { sidebarReducer, sidebarActions } from './Sidebar/model/slice/sidebar'
 export type { SidebarSchema } from './Sidebar/model/types/sidebarSchema'
 export { Sidebar } from './Sidebar/ui/Sidebar/ui/Sidebar'
 export { AnswersAsync as Answers } from './Settings/Answers/ui/Answers.async'

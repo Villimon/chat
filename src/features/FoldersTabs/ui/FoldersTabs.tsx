@@ -32,6 +32,7 @@ export const FoldersTabs: FC<FoldersTabsProps> = memo(
                     isOpenMenu={openedMenuId === `${tab.value}-folder`}
                     menuPosition={position}
                     onCloseMenu={handleCloseContextMenu}
+                    tab={tab}
                 />
             ),
             [openedMenuId, handleCloseContextMenu, position],
