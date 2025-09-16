@@ -10,12 +10,12 @@ export enum SidebarRouterType {
     SIDEBAR = '',
     SETTINGS = '#settings',
     SETTINGS_PROFILE = '#settings.profile',
+    SETTINGS_STATUS = '#settings.status',
     SETTINGS_GENERAL = '#settings.general',
     SETTINGS_SECUTITY = '#settings.security',
     SETTINGS_FOLDERS = '#settings.folders',
     SETTINGS_NOTIFICATION = '#settings.notification',
     SETTINGS_APPEARENCE = '#settings.appearence',
-    SETTINGS_ANSWERS = '#settings.answers',
 }
 
 export const getRouteMain = () => '/'

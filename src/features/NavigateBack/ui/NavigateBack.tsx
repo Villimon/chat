@@ -5,6 +5,7 @@ import cls from './NavigateBack.module.scss'
 import { AppLink } from '@/shared/ui/AppLink/AppLink'
 import { cn } from '@/shared/lib/classNames/classNames'
 import { useNavigateBack } from '../lib/hooks/useNavigateBack'
+import { Text } from '@/shared/ui/Text/Text'
 
 interface NavigateBackProps {
     hash?: string
@@ -16,8 +17,9 @@ export const NavigateBack: FC<NavigateBackProps> = memo(
         const cleanUrl = useNavigateBack({ hash })
 
         return (
-            <AppLink to={cleanUrl} className={cn('', {}, [className])}>
-                <Icon className={cls.icon} Svg={LeftArrowIcon} />
+            <AppLink to={cleanUrl} className={cn(cls.link, {}, [className])}>
+                <Icon Svg={LeftArrowIcon} />
+                <Text text="Назад" />
             </AppLink>
         )
     },

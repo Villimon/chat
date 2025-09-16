@@ -11,7 +11,6 @@ import {
 import { AppRouterProps } from '@/shared/types/router'
 import {
     Settings,
-    Answers,
     Appearence,
     Folders,
     General,
@@ -53,11 +52,11 @@ export const routeAppConfig: Record<AppRouter, AppRouterProps> = {
 export const routeSidebarConfig: Record<SidebarRouterType, JSX.Element> = {
     [SidebarRouterType.SIDEBAR]: <Sidebar />,
     [SidebarRouterType.SETTINGS]: <Settings />,
-    [SidebarRouterType.SETTINGS_ANSWERS]: <Answers />,
     [SidebarRouterType.SETTINGS_APPEARENCE]: <Appearence />,
     [SidebarRouterType.SETTINGS_FOLDERS]: <Folders />,
     [SidebarRouterType.SETTINGS_GENERAL]: <General />,
     [SidebarRouterType.SETTINGS_NOTIFICATION]: <Notification />,
     [SidebarRouterType.SETTINGS_PROFILE]: <Profile />,
     [SidebarRouterType.SETTINGS_SECUTITY]: <Security />,
+    [SidebarRouterType.SETTINGS_STATUS]: <div>asdasdsa</div>,
 }
