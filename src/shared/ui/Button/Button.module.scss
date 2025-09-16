@@ -50,6 +50,10 @@
     border: none;
     background: none;
     outline: none;
+
+    &.error {
+        color: var(--cancel-primary);
+    }
 }
 
 .addonLeft,

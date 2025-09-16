@@ -6,6 +6,7 @@ import CopyPlugin from 'copy-webpack-plugin'
 import CircularDependencyPlugin from 'circular-dependency-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { BuildOptions } from './types/config'
+import pkg from '../../package.json'
 
 export function buildPlugins({
     paths,
@@ -22,6 +23,7 @@ export function buildPlugins({
         new webpack.DefinePlugin({
             __IS_DEV__: JSON.stringify(isDev),
             __API__: JSON.stringify(apiUrl),
+            __APP_VERSION__: JSON.stringify(pkg.version),
         }),
         new webpack.ProgressPlugin(),
     ]

@@ -1,6 +1,7 @@
-import { FC, memo, useMemo } from 'react'
+import { FC, memo, Suspense, useMemo } from 'react'
 import { routeSidebarConfig } from '../config/routeConfig'
 import { SidebarRouterType } from '@/shared/constants/routes'
+import { Loader } from '@/shared/ui/Loader/Loader'
 
 interface SidebarRouterProps {
     hash: string
@@ -8,6 +9,11 @@ interface SidebarRouterProps {
 
 export const SidebarRouter: FC<SidebarRouterProps> = memo(({ hash }) => {
     return useMemo(() => {
-        return routeSidebarConfig[hash as SidebarRouterType]
+        const content = routeSidebarConfig[hash as SidebarRouterType]
+        return (
+            <Suspense key={hash} fallback={<Loader />}>
+                {content}
+            </Suspense>
+        )
     }, [hash])
 })
