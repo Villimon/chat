@@ -18,6 +18,8 @@ const defaultPalette = localStorage.getItem(
 ) as Palette
 
 const ThemeProvider = ({ children }: ThemeProviderProps) => {
+    const [isThemeInited, setThemeInited] = useState(false)
+    const [isPaletteInited, setPaletteInited] = useState(false)
     const userData = useSelector(getUserData)
     const userTheme = userData?.settings.appearance?.theme as Theme
     const userPalette = userData?.settings.appearance?.palette as Palette
@@ -30,16 +32,18 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
     )
 
     useEffect(() => {
-        if (userTheme) {
+        if (!isThemeInited && userTheme) {
             setTheme(userTheme)
+            setThemeInited(true)
         }
-    }, [userTheme])
+    }, [userTheme, isThemeInited])
 
     useEffect(() => {
-        if (userPalette) {
+        if (!isPaletteInited && userPalette) {
             setPalette(userPalette)
+            setPaletteInited(true)
         }
-    }, [userPalette])
+    }, [userPalette, isPaletteInited])
 
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_THEME_KEY, theme)

@@ -16,7 +16,7 @@ export const PaletteSwitcher = () => {
     )
 
     return (
-        <HStack>
+        <HStack max wrap="wrap">
             {paletters.map((item) => (
                 <PaletteComponent
                     palette={item}
