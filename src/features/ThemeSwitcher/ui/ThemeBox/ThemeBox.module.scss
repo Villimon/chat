@@ -55,9 +55,9 @@
     &::before {
         content: "";
         position: absolute;
-        bottom: 1%;
-        right: 1%;
-        background-color: var(--accent-primary);
+        bottom: -5%;
+        right: -5%;
+        background-color: var(--text-secondary);
         display: block;
         width: 20px;
         height: 20px;

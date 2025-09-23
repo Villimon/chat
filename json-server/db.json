@@ -4,7 +4,7 @@
       "id": "1",
       "firstName": "Admin",
       "lastName": "Adminov",
-      "username": "@admin",
+      "username": "admin",
       "password": "123",
       "roles": [
         "ADMIN"
@@ -23,45 +23,26 @@
           "value": "3",
           "title": "Друзья"
         }
-      ]
+      ],
+      "settings": {
+        "appearance": {
+          "theme": "app_dark_theme",
+          "messageDisplay": "with_background",
+          "palette": "app_palette_orange"
+        },
+        "language": "ru"
+      }
     },
     {
       "id": "2",
       "firstName": "User",
       "lastName": "Userov",
-      "username": "@User",
+      "username": "User",
       "password": "123",
       "roles": [
         "USER"
       ],
       "avatar": "",
-      "dialogSettings": [
-        {
-          "dialogId": "1",
-          "folders": [
-            "personal",
-            "groups"
-          ]
-        },
-        {
-          "dialogId": "2",
-          "folders": [
-            "groups"
-          ]
-        },
-        {
-          "dialogId": "3",
-          "folders": [
-            "personal"
-          ]
-        },
-        {
-          "dialogId": "4",
-          "folders": [
-            "personal"
-          ]
-        }
-      ],
       "folders": [
         {
           "value": "personal",
@@ -71,7 +52,15 @@
           "value": "groups",
           "title": "Группы"
         }
-      ]
+      ],
+      "settings": {
+        "appearance": {
+          "theme": "app_dark_theme",
+          "messageDisplay": "with_background",
+          "palette": "app_palette_orange"
+        },
+        "language": "ru"
+      }
     }
   ],
   "dialogs": [

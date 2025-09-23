@@ -3,6 +3,24 @@ export type FolderType = {
     title: string
 }
 
+export type AppearanceType = {
+    theme?: 'app_dark_theme' | 'app_light_theme'
+    messageDisplay?: 'with_background' | 'without_background'
+    palette?:
+        | 'app_palette_green'
+        | 'app_palette_lime'
+        | 'app_palette_tael'
+        | 'app_palette_blue'
+        | 'app_palette_indigo'
+        | 'app_palette_orange'
+        | 'app_palette_test'
+}
+
+export type SettingsType = {
+    appearance?: AppearanceType
+    language?: 'ru' | 'en'
+}
+
 export interface User {
     id: string
     username: string
@@ -10,6 +28,7 @@ export interface User {
     firstName: string
     lastName: string
     folders?: FolderType[]
+    settings: SettingsType
 }
 
 // TODO: вынесити потом  в нужно место

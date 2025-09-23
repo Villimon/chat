@@ -1,4 +1,4 @@
-import { User } from '../model/types/userSchema'
+import { SettingsType, User } from '../model/types/userSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 
 interface EditFolderParams {
@@ -10,6 +10,11 @@ interface EditFolderParams {
 interface DeleteFolderParams {
     userId: string
     folderValue: string
+}
+
+interface SetUserSettings {
+    userId: string
+    userSettings: SettingsType
 }
 
 const userApi = rtkApi.injectEndpoints({
@@ -56,10 +61,21 @@ const userApi = rtkApi.injectEndpoints({
                 { type: 'User', id: userId },
             ],
         }),
+        setUserSettings: build.mutation<User, SetUserSettings>({
+            query: ({ userSettings, userId }) => ({
+                url: `/users/${userId}/user-settings`,
+                method: 'PATCH',
+                body: { userSettings },
+            }),
+            invalidatesTags: (result, error, { userId }) => [
+                { type: 'User', id: userId },
+            ],
+        }),
     }),
 })
 
 export const getUserDataByIdQuery = userApi.endpoints.getUserDataById.initiate
 export const useCreateNewFolder = userApi.useCreateNewFolderMutation
+export const useSetUserSettings = userApi.useSetUserSettingsMutation
 export const useEditFolder = userApi.useEditFolderMutation
 export const useDeleteFolder = userApi.useDeleteFolderMutation

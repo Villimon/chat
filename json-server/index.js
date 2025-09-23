@@ -102,6 +102,34 @@ server.patch('/users/:userId/folder-edit', (req, res) => {
     res.json(user)
 })
 
+server.patch('/users/:userId/user-settings', (req, res) => {
+    const { userId } = req.params
+    const { userSettings } = req.body
+
+    const { db } = router
+    const user = db.get('users').find({ id: userId }).value()
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' })
+    }
+
+    const updateUserSettings = {
+        ...user.settings,
+        ...userSettings,
+        appearance: {
+            ...user.settings.appearance,
+            ...userSettings.appearance,
+        },
+    }
+
+    db.get('users')
+        .find({ id: userId })
+        .assign({ settings: updateUserSettings })
+        .write()
+
+    res.json(user)
+})
+
 server.delete('/users/:userId/folder-delete', (req, res) => {
     const { userId } = req.params
     const { folderValue } = req.body

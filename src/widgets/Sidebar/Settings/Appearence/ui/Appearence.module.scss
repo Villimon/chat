@@ -1,0 +1,21 @@
+.appearenceContainer {
+    padding: 0 24px;
+}
+
+.menu {
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    a {
+        cursor: pointer;
+    }
+
+    &:hover {
+        background-color: var(--dark-bg);
+
+        a {
+            color: var(--text-secondary);
+        }
+    }
+}

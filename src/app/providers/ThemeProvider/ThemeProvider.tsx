@@ -1,10 +1,12 @@
-import { ReactNode, useMemo, useState } from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { ThemeContext } from '@/shared/lib/context/ThemeContext'
 import { Palette, Theme } from '@/shared/constants/theme'
 import {
     LOCAL_STORAGE_PALETTE_KEY,
     LOCAL_STORAGE_THEME_KEY,
 } from '@/shared/constants/localstorage'
+import { getUserData } from '@/entities/User'
 
 interface ThemeProviderProps {
     children: ReactNode
@@ -16,10 +18,33 @@ const defaultPalette = localStorage.getItem(
 ) as Palette
 
 const ThemeProvider = ({ children }: ThemeProviderProps) => {
-    const [theme, setTheme] = useState<Theme>(defaultTheme || Theme.LIGHT)
-    const [palette, setPalette] = useState<Palette>(
-        defaultPalette || Palette.APP_PALETTE_GREEN,
+    const userData = useSelector(getUserData)
+    const userTheme = userData?.settings.appearance?.theme as Theme
+    const userPalette = userData?.settings.appearance?.palette as Palette
+
+    const [theme, setTheme] = useState<Theme>(
+        userTheme || defaultTheme || Theme.LIGHT,
     )
+    const [palette, setPalette] = useState<Palette>(
+        userPalette || defaultPalette || Palette.APP_PALETTE_GREEN,
+    )
+
+    useEffect(() => {
+        if (userTheme) {
+            setTheme(userTheme)
+        }
+    }, [userTheme])
+
+    useEffect(() => {
+        if (userPalette) {
+            setPalette(userPalette)
+        }
+    }, [userPalette])
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_THEME_KEY, theme)
+        localStorage.setItem(LOCAL_STORAGE_PALETTE_KEY, palette)
+    }, [theme, palette])
 
     const defaultProps = useMemo(
         () => ({

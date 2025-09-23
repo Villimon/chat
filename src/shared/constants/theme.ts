@@ -12,3 +12,8 @@ export enum Palette {
     APP_PALETTE_ORANGE = 'app_palette_orange',
     APP_PALETTE_TEST = 'app_palette_test',
 }
+
+export enum Display {
+    WITH_BACKGROUND = 'with_background',
+    WITHOUT_BACKGROUND = 'without_background',
+}

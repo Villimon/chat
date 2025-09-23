@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 import { Theme } from '@/shared/constants/theme'
 import { ThemeBox } from '../../ui/ThemeBox/ThemeBox'
-import { useTheme } from '@/shared/hooks/useTheme/usetheme'
 import { themeBoxes } from '../../model/consts/themeBoxes'
+import { useTheme } from '@/shared/hooks/useTheme/useTheme'
 
 export const ThemeSwitcher = () => {
     const { theme, toggleTheme } = useTheme()

@@ -1,0 +1,29 @@
+.fistMessage {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: var(--dark-bg);
+}
+
+.secondMessage {
+    position: absolute;
+    top: 35px;
+    left: 10px;
+    width: 100px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: var(--dark-bg);
+}
+
+.thirdMessage {
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    width: 100px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: var(--accent-primary);
+}
