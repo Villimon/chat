@@ -8,6 +8,7 @@ import { VStack } from '@/shared/ui/Stack/VStack/VStack'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 import { ThemeSelector } from './ThemeSelector'
 import { PaletteSelector } from './PaletteSelector'
+import { DialogLayoutSelector } from './DialogLayoutSelector'
 
 const Appearence = memo(() => {
     return (
@@ -18,11 +19,7 @@ const Appearence = memo(() => {
                     <AppLink to="#background">Фон чата</AppLink>
                 </HStack>
                 <DisplayingMessages />
-                <div>
-                    Список чатов
-                    <span>Ращверный ( как сделано сейчас)</span>
-                    <span>Компактный - иконка и имя пользователя</span>
-                </div>
+                <DialogLayoutSelector />
                 <ThemeSelector />
                 <PaletteSelector />
             </VStack>

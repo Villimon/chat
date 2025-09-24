@@ -3,10 +3,10 @@ import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 import { Theme } from '@/shared/constants/theme'
 import { ThemeBox } from '../../ui/ThemeBox/ThemeBox'
 import { themeBoxes } from '../../model/consts/themeBoxes'
-import { useTheme } from '@/shared/hooks/useTheme/useTheme'
+import { useAppearance } from '@/shared/hooks/useAppearance/useAppearance'
 
 export const ThemeSwitcher = () => {
-    const { theme, toggleTheme } = useTheme()
+    const { theme, toggleTheme } = useAppearance()
 
     const onToggleHandlerTheme = useCallback(
         (theme: Theme) => {

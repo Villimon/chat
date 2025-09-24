@@ -17,3 +17,8 @@ export enum Display {
     WITH_BACKGROUND = 'with_background',
     WITHOUT_BACKGROUND = 'without_background',
 }
+
+export enum DialogLayout {
+    EXPANDED = 'expanded',
+    COMPACT = 'compact',
+}

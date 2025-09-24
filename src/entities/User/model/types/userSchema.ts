@@ -14,6 +14,7 @@ export type AppearanceType = {
         | 'app_palette_indigo'
         | 'app_palette_orange'
         | 'app_palette_test'
+    dialogLayout?: 'expanded' | 'compact'
 }
 
 export type SettingsType = {

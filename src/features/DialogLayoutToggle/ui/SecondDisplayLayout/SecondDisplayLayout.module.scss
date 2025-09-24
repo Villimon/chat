@@ -1,0 +1,17 @@
+.body {
+    padding: 10px;
+}
+
+.avatar {
+    border-radius: 50%;
+    min-width: 15px;
+    height: 15px;
+    background-color: var(--bg-color);
+}
+
+.username {
+    border-radius: 1px;
+    width: 100%;
+    height: 8px;
+    background-color: var(--bg-color);
+}

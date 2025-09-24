@@ -5,7 +5,6 @@ import './styles/index.scss'
 import { useSelector } from 'react-redux'
 import { useEffect, useMemo } from 'react'
 import { cn } from '@/shared/lib/classNames/classNames'
-import { useTheme } from '@/shared/hooks/useTheme/useTheme'
 import { MainLayout } from '@/shared/layout/MainLayout'
 import { ErrorBoundary } from './providers/ErrorBoundary'
 import { AppRouter, SidebarRouter } from './providers/RouteProvider'
@@ -13,6 +12,7 @@ import { getUserData, getUserInited } from '@/entities/User'
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
 import { initAuthData } from '@/entities/User/model/services/initAuthData'
 import { Loader } from '@/shared/ui/Loader/Loader'
+import { useAppearance } from '@/shared/hooks/useAppearance/useAppearance'
 
 // Какие роуты у нас будут
 // /chat/:id
@@ -28,16 +28,12 @@ import { Loader } from '@/shared/ui/Loader/Loader'
 // /registration
 
 const App = () => {
-    const { theme, palette } = useTheme()
+    const { theme, palette } = useAppearance()
     const location = useLocation()
     const navigate = useNavigate()
     const isAuth = useSelector(getUserData)
     const inited = useSelector(getUserInited)
     const dispatch = useAppDispatch()
-
-    const addHash = (hash: string) => {
-        navigate(`${location.pathname}${hash}`)
-    }
 
     // TODO: Поправить цвета темной темы
     useEffect(() => {

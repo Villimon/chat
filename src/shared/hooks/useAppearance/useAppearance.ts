@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { ThemeContext } from '@/shared/lib/context/ThemeContext'
-import { Palette, Theme } from '@/shared/constants/theme'
+import { DialogLayout, Palette, Theme } from '@/shared/constants/theme'
 import {
+    LOCAL_STORAGE_DIALOG_LAYOUT_KEY,
     LOCAL_STORAGE_PALETTE_KEY,
     LOCAL_STORAGE_THEME_KEY,
 } from '@/shared/constants/localstorage'
@@ -10,16 +10,27 @@ import { useSetUserSettings } from '@/entities/User/api/userApi'
 import { getUserData } from '@/entities/User'
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch '
 import { initAuthData } from '@/entities/User/model/services/initAuthData'
+import { AppearanceContext } from '@/shared/lib/context/AppearanceContext'
 
-interface UseThemeResult {
+interface useAppearanceResult {
     theme: Theme
     toggleTheme: (theme: Theme) => void
     palette: Palette
     togglePalette: (palette: Palette) => void
+    dialogLayout: DialogLayout
+    toggleDialogLayout: (dialogLayout: DialogLayout) => void
 }
 
-export const useTheme = (): UseThemeResult => {
-    const { theme, setTheme, palette, setPalette } = useContext(ThemeContext)
+export const useAppearance = (): useAppearanceResult => {
+    const {
+        theme,
+        setTheme,
+        palette,
+        setPalette,
+        dialogLayout,
+        setDialogLayout,
+    } = useContext(AppearanceContext)
+
     const [setUserSettings] = useSetUserSettings()
     const userData = useSelector(getUserData)
     const dispatch = useAppDispatch()
@@ -56,10 +67,26 @@ export const useTheme = (): UseThemeResult => {
         dispatch(initAuthData())
     }
 
+    const toggleDialogLayout = (dialogLayout: DialogLayout) => {
+        const newDialogLayout = dialogLayout
+        setDialogLayout?.(newDialogLayout)
+        localStorage.setItem(
+            LOCAL_STORAGE_DIALOG_LAYOUT_KEY,
+            newDialogLayout as DialogLayout,
+        )
+        setUserSettings({
+            userId: userData?.id ?? '',
+            userSettings: { appearance: { dialogLayout: newDialogLayout } },
+        })
+        dispatch(initAuthData())
+    }
+
     return {
         theme: theme || Theme.LIGHT,
         toggleTheme,
         palette: palette || Palette.APP_PALETTE_GREEN,
         togglePalette,
+        dialogLayout: dialogLayout || DialogLayout.EXPANDED,
+        toggleDialogLayout,
     }
 }

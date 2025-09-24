@@ -1,41 +1,87 @@
-.body {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 5px;
-    border-radius: 10px;
-    height: 70px;
-    margin-right: 10px;
-}
+.expanded {
+    .body {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 5px;
+        border-radius: 10px;
+        height: 70px;
+        margin-right: 10px;
+    }
 
-.info {
-    flex: 1;
-}
+    .info {
+        flex: 1;
+    }
 
-.unreadCount {
-    border-radius: 100px;
-    background-color: var(--text-secondary);
-    color: var(--bg-color);
-    min-width: 1.125rem;
-    height: 1.125rem;
-    font-size: 14px;
-    padding: 0 0.3125rem;
-}
+    .unreadCount {
+        border-radius: 100px;
+        background-color: var(--text-secondary);
+        color: var(--bg-color);
+        min-width: 1.125rem;
+        height: 1.125rem;
+        font-size: 14px;
+        padding: 0 0.3125rem;
+    }
 
-.isMuted {
-    background-color: var(--hint-primary);
-    color: var(--bg-color);
-}
+    .isMuted {
+        background-color: var(--hint-primary);
+        color: var(--bg-color);
+    }
 
-.activeClassName {
-    background-color: var(--text-secondary);
+    .activeClassName {
+        background-color: var(--text-secondary);
 
-    & .unreadCount {
-        background-color: var(--bg-color);
-        color: var(--text-secondary);
+        & .unreadCount {
+            background-color: var(--bg-color);
+            color: var(--text-secondary);
+        }
+    }
+
+    .rightInfo {
+        height: 100%;
     }
 }
 
-.rightInfo {
-    height: 100%;
+.compact {
+    .body {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 5px;
+        border-radius: 10px;
+        height: 50px;
+        margin-right: 10px;
+    }
+
+    .info {
+        flex: 1;
+    }
+
+    .unreadCount {
+        border-radius: 100px;
+        background-color: var(--text-secondary);
+        color: var(--bg-color);
+        min-width: 1.125rem;
+        height: 1.125rem;
+        font-size: 14px;
+        padding: 0 0.3125rem;
+    }
+
+    .isMuted {
+        background-color: var(--hint-primary);
+        color: var(--bg-color);
+    }
+
+    .activeClassName {
+        background-color: var(--text-secondary);
+
+        & .unreadCount {
+            background-color: var(--bg-color);
+            color: var(--text-secondary);
+        }
+    }
+
+    .rightInfo {
+        height: 100%;
+    }
 }

@@ -15,6 +15,7 @@ import { Icon } from '@/shared/ui/Icon/Icon'
 import PinIcon from '@/shared/assets/icons/pin.svg'
 import { getActiveFolder } from '../../../../widgets/Sidebar/Sidebar/model/selectors/getActiveFolder/getActiveFolder'
 import { DialogMenu } from '@/features/ContextMenu'
+import { useAppearance } from '@/shared/hooks/useAppearance/useAppearance'
 
 interface DialogCardProps {
     dialog: Dialog
@@ -50,9 +51,11 @@ export const DialogCard: FC<DialogCardProps> = memo(
         menuPosition,
         nextOrder,
     }) => {
+        const { dialogLayout } = useAppearance()
         const fullName = dialog.interlocutor?.firstName && dialog.interlocutor?.lastName
             ? `${dialog.interlocutor?.firstName} ${dialog.interlocutor?.lastName}`
             : undefined
+        const isDeafaultDialogLayout = dialogLayout === 'expanded'
 
         const activeFolder = useSelector(getActiveFolder)
 
@@ -65,49 +68,92 @@ export const DialogCard: FC<DialogCardProps> = memo(
         }, [activeFolder.value, dialog.userSettings.pinned])
 
         return (
-            <div onContextMenu={onContextMenu}>
+            <div
+                onContextMenu={onContextMenu}
+                className={cn('', {}, [cls[dialogLayout]])}
+            >
                 <AppLink
                     to={`/dialogs/${dialog.id}`}
                     className={cn(cls.body, {}, [className])}
                     activeClassName={cls.activeClassName}
                 >
                     {/* TODO: показываь online, делать это через вебсокет */}
-                    <Avatar size={50} src={dialog.avatar} />
+                    <Avatar
+                        size={isDeafaultDialogLayout ? 50 : 30}
+                        src={dialog.avatar}
+                    />
                     <VStack className={cls.info}>
                         <Text text={fullName || dialog.title} />
-                        <Text text={dialog.lastMessage.text} />
-                    </VStack>
-                    <VStack
-                        gap="8"
-                        className={cls.rightInfo}
-                        justify="start"
-                        align="end"
-                    >
-                        <HStack gap="4">
-                            {isPined && (
-                                <Icon Svg={PinIcon} height={25} width={25} />
-                            )}
-                            <Text
-                                size="s"
-                                text={formatDate(dialog.lastMessage.timestamp)}
-                            />
-                        </HStack>
-                        {dialog.userSettings.unreadCount > 0 && (
-                            <HStack
-                                align="center"
-                                justify="center"
-                                className={cn(
-                                    cls.unreadCount,
-                                    {
-                                        [cls.isMuted]: isMutedDialog,
-                                    },
-                                    [],
-                                )}
-                            >
-                                {dialog.userSettings.unreadCount}
-                            </HStack>
+                        {isDeafaultDialogLayout && (
+                            <Text text={dialog.lastMessage.text} />
                         )}
                     </VStack>
+                    {isDeafaultDialogLayout ? (
+                        <VStack
+                            gap="8"
+                            className={cls.rightInfo}
+                            justify="start"
+                            align="end"
+                        >
+                            <HStack gap="4">
+                                {isPined && (
+                                    <Icon
+                                        Svg={PinIcon}
+                                        height={25}
+                                        width={25}
+                                    />
+                                )}
+                                <Text
+                                    size="s"
+                                    text={formatDate(
+                                        dialog.lastMessage.timestamp,
+                                    )}
+                                />
+                            </HStack>
+                            {dialog.userSettings.unreadCount > 0 && (
+                                <HStack
+                                    align="center"
+                                    justify="center"
+                                    className={cn(
+                                        cls.unreadCount,
+                                        {
+                                            [cls.isMuted]: isMutedDialog,
+                                        },
+                                        [],
+                                    )}
+                                >
+                                    {dialog.userSettings.unreadCount}
+                                </HStack>
+                            )}
+                        </VStack>
+                    ) : (
+                        <HStack gap="8" className={cls.rightInfo}>
+                            <HStack gap="4">
+                                {isPined && (
+                                    <Icon
+                                        Svg={PinIcon}
+                                        height={25}
+                                        width={25}
+                                    />
+                                )}
+                            </HStack>
+                            {dialog.userSettings.unreadCount > 0 && (
+                                <HStack
+                                    align="center"
+                                    justify="center"
+                                    className={cn(
+                                        cls.unreadCount,
+                                        {
+                                            [cls.isMuted]: isMutedDialog,
+                                        },
+                                        [],
+                                    )}
+                                >
+                                    {dialog.userSettings.unreadCount}
+                                </HStack>
+                            )}
+                        </HStack>
+                    )}
                 </AppLink>
 
                 {isOpenMenu && (

@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { Palette } from '@/shared/constants/theme'
-import { useTheme } from '@/shared/hooks/useTheme/useTheme'
 import { PaletteComponent } from '../../ui/Palette/Palette'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
 import { paletters } from '../../model/consts/paletters'
+import { useAppearance } from '@/shared/hooks/useAppearance/useAppearance'
 
 export const PaletteSwitcher = () => {
-    const { palette, togglePalette } = useTheme()
+    const { palette, togglePalette } = useAppearance()
 
     const onToggleHandlerPalette = useCallback(
         (palette: Palette) => {

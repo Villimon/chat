@@ -35,9 +35,8 @@ export const DialogFolderActions: FC<DialogFolderActionsProps> = memo(
         } = useDialogFolderActions({ dialog, onCloseMenu })
 
         return (
-            <>
+            <div className={cn('', {}, [className])}>
                 <Button
-                    color="error"
                     variant="clear"
                     type="button"
                     className={cn('', {}, [className])}
@@ -85,7 +84,7 @@ export const DialogFolderActions: FC<DialogFolderActionsProps> = memo(
                         )}
                     </VStack>
                 </Modal>
-            </>
+            </div>
         )
     },
 )
