@@ -105,7 +105,11 @@
           "pinned": {
             "all": {
               "isPinned": true,
-              "order": 13
+              "order": 16
+            },
+            "groups": {
+              "isPinned": true,
+              "order": 3
             }
           },
           "isMuted": false,
@@ -149,7 +153,7 @@
           "pinned": {
             "all": {
               "isPinned": false,
-              "order": 11
+              "order": 20
             }
           },
           "isMuted": false,
@@ -194,8 +198,12 @@
           ],
           "pinned": {
             "all": {
-              "isPinned": true,
+              "isPinned": false,
               "order": 12
+            },
+            "groups": {
+              "isPinned": false,
+              "order": 2
             }
           },
           "isMuted": false,
@@ -240,11 +248,11 @@
           ],
           "pinned": {
             "all": {
-              "isPinned": true,
+              "isPinned": false,
               "order": 10
             },
             "groups": {
-              "isPinned": true,
+              "isPinned": false,
               "order": 1
             },
             "personal": {
@@ -292,12 +300,12 @@
           ],
           "pinned": {
             "all": {
-              "isPinned": false,
-              "order": 9
+              "isPinned": true,
+              "order": 19
             }
           },
-          "isMuted": true,
-          "unreadCount": 3
+          "isMuted": false,
+          "unreadCount": 1
         },
         "2": {
           "folders": [
@@ -333,6 +341,47 @@
       "senderId": "2",
       "timestamp": "2023-05-15T14:32:00Z",
       "status": "read"
+    }
+  ],
+  "user_sessions": [
+    {
+      "id": "a6f41114-4b74-4f4a-aecf-b600efdb363d",
+      "user_id": "1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 YaBrowser/25.8.0.0 Safari/537.36",
+      "session_token": "d642f7cd-7507-4a5d-8f33-8f948dee4da6",
+      "ip_address": "::1",
+      "platform": "desktop-windows",
+      "browser": "Chrome",
+      "os": "Windows",
+      "created_at": "2025-09-25T14:18:47.052Z",
+      "last_activity_at": "2025-09-25T15:40:51.102Z",
+      "expires_at": "2025-10-25T15:40:51.102Z"
+    },
+    {
+      "id": "a4039f47-6d6f-4695-a0d2-0e1d4507933c",
+      "user_id": "1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 YaBrowser/25.8.0.0 Safari/537.36",
+      "session_token": "9e24afeb-adb1-4130-bdc4-d44f77728ef8",
+      "ip_address": "::1",
+      "platform": "desktop-windows",
+      "browser": "Chrome",
+      "os": "Windows",
+      "created_at": "2025-09-25T14:42:58.647Z",
+      "last_activity_at": "2025-09-25T14:42:59.471Z",
+      "expires_at": "2025-10-25T14:42:59.471Z"
+    },
+    {
+      "id": "ffd8801d-5e5c-4377-a06d-9ebf2c5d0c0a",
+      "user_id": "1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0",
+      "session_token": "e11a4416-8af2-422f-9f3e-7e295775d1c2",
+      "ip_address": "::1",
+      "platform": "desktop-windows",
+      "browser": "Chrome",
+      "os": "Windows",
+      "created_at": "2025-09-25T15:40:45.153Z",
+      "last_activity_at": "2025-09-25T15:40:45.975Z",
+      "expires_at": "2025-10-25T15:40:45.975Z"
     }
   ]
 }

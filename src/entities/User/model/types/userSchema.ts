@@ -30,6 +30,7 @@ export interface User {
     lastName: string
     folders?: FolderType[]
     settings: SettingsType
+    token: string
 }
 
 // TODO: вынесити потом  в нужно место

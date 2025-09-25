@@ -33,7 +33,7 @@ const userApi = rtkApi.injectEndpoints({
             { userId: string; folderName: string }
         >({
             query: ({ folderName, userId }) => ({
-                url: `/users/${userId}`,
+                url: `/users/${userId}/create-folder`,
                 method: 'POST',
                 body: { folderName },
             }),

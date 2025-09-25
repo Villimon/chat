@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { USER_LOCAL_STORAGE_KEY } from '@/shared/constants/localstorage'
+import { TOKEN_LOCAL_STORAGE_KEY } from '@/shared/constants/localstorage'
 
 export const rtkApi = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
         baseUrl: __API__,
         prepareHeaders: (headers) => {
-            const token = localStorage.getItem(USER_LOCAL_STORAGE_KEY)
+            const token = localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)
             if (token) {
                 headers.set('Authorization', token)
             }
@@ -14,6 +14,6 @@ export const rtkApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Dialogs', 'User'],
+    tagTypes: ['Dialogs', 'User', 'Session'],
     endpoints: () => ({}),
 })

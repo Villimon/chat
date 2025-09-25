@@ -1,6 +1,9 @@
 import { User, userActions } from '@/entities/User'
 import { rtkApi } from '@/shared/api/rtkApi'
-import { USER_LOCAL_STORAGE_KEY } from '@/shared/constants/localstorage'
+import {
+    TOKEN_LOCAL_STORAGE_KEY,
+    USER_LOCAL_STORAGE_KEY,
+} from '@/shared/constants/localstorage'
 
 export interface LoginByUsernameProps {
     username: string
@@ -23,6 +26,10 @@ const authApi = rtkApi.injectEndpoints({
                     dispatch(userActions.setAuthData(result.data))
 
                     localStorage.setItem(USER_LOCAL_STORAGE_KEY, result.data.id)
+                    localStorage.setItem(
+                        TOKEN_LOCAL_STORAGE_KEY,
+                        result.data.token,
+                    )
                 } catch (error) {
                     // Обработка ошибок, если необходимо
                     console.error('Ошибка при выполнении запроса:', error)

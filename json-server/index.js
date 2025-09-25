@@ -3,6 +3,7 @@
 const jsonServer = require('json-server')
 const path = require('path')
 const fs = require('fs')
+const uuidv4 = require('uuidv4')
 
 const server = jsonServer.create()
 const router = jsonServer.router(path.resolve(__dirname, 'db.json'))
@@ -18,542 +19,197 @@ server.use(async (res, req, next) => {
     next()
 })
 
+function getBrowserFromUserAgent(userAgent) {
+    if (userAgent.includes('Chrome')) return 'Chrome'
+    if (userAgent.includes('Firefox')) return 'Firefox'
+    if (userAgent.includes('Safari')) return 'Safari'
+    return 'Unknown'
+}
+
+function getOSFromUserAgent(userAgent) {
+    if (userAgent.includes('Windows')) return 'Windows'
+    if (userAgent.includes('Mac OS')) return 'macOS'
+    if (userAgent.includes('Linux')) return 'Linux'
+    if (userAgent.includes('Android')) return 'Android'
+    if (userAgent.includes('iOS')) return 'iOS'
+    return 'Unknown'
+}
+
+function getPlatformFromUserAgent(userAgent) {
+    if (!userAgent) return 'unknown'
+
+    const ua = userAgent.toLowerCase()
+
+    // Мобильные устройства
+    if (/mobile|android|iphone|ipod|ipad|blackberry|windows phone/.test(ua)) {
+        // Проверяем, является ли это мобильным приложением или мобильным браузером
+        if (/myapp|custom-app-name/.test(ua)) {
+            return 'mobile-app' // кастомное мобильное приложение
+        }
+        return 'mobile' // мобильный браузер
+    }
+
+    // Планшеты
+    if (/tablet|ipad|android(?!.*mobile)|kindle|silk/.test(ua)) {
+        return 'tablet'
+    }
+
+    // Десктопные платформы
+    if (/windows/.test(ua)) return 'desktop-windows'
+    if (/macintosh|mac os/.test(ua)) return 'desktop-mac'
+    if (/linux/.test(ua)) return 'desktop-linux'
+
+    // Веб-браузеры (десктоп по умолчанию)
+    if (/chrome|firefox|safari|edge|opera/.test(ua)) {
+        return 'desktop-web'
+    }
+
+    // Боты и специальные клиенты
+    if (/bot|crawler|spider|facebookexternalhit|telegrambot/.test(ua)) {
+        return 'bot'
+    }
+
+    // Если ничего не определили - считаем веб-браузером
+    return 'web'
+}
+
+function cleanupExpiredSessions() {
+    try {
+        const { db } = router
+
+        const now = new Date()
+        const expiredSessions = db
+            .get('user_sessions')
+            .filter((session) => new Date(session.expires_at) < now)
+            .value()
+
+        if (expiredSessions.length > 0) {
+            // Логируем информацию об удаляемых сессиях
+            expiredSessions.forEach((session) => {
+                console.log(
+                    `🗑️ Removing session for user ${session.user_id}, expired at ${session.expires_at}`,
+                )
+            })
+
+            // Удаляем
+            db.get('user_sessions')
+                .remove((session) => new Date(session.expires_at) < now)
+                .write()
+
+            console.log(
+                `✅ Cleaned up ${expiredSessions.length} expired sessions`,
+            )
+        } else {
+            console.log(
+                `✅ No expired sessions to clean up (${now.toISOString()})`,
+            )
+        }
+    } catch (error) {
+        console.error('❌ Error cleaning up sessions:', error)
+    }
+}
+
 server.post('/login', (req, res) => {
     try {
         const { username, password } = req.body
-        const db = JSON.parse(
-            fs.readFileSync(path.resolve(__dirname, 'db.json'), 'utf-8'),
-        )
-        const { users = [] } = db
+        const { db } = router
+        // eslint-disable-next-line camelcase
+        const userFromBd = db.get('users').find({ username, password }).value()
 
-        const userFromBd = users.find(
-            (user) => user.username === username && user.password === password,
-        )
-
-        if (userFromBd) {
-            return res.json(userFromBd)
+        if (!userFromBd) {
+            return res.status(403).json({ message: 'Not found user' })
         }
 
-        return res.status(403).json({ message: 'Not found user' })
+        const newSession = {
+            id: uuidv4.uuid(), // уникальный ID сессии
+            user_id: userFromBd.id, // тот же ID, что идет на фронтенд
+            user_agent: req.headers['user-agent'],
+            session_token: uuidv4.uuid(),
+            ip_address: req.ip || req.connection.remoteAddress,
+            platform: getPlatformFromUserAgent(req.headers['user-agent']),
+            browser: getBrowserFromUserAgent(req.headers['user-agent']),
+            os: getOSFromUserAgent(req.headers['user-agent']),
+            created_at: new Date().toISOString(),
+            last_activity_at: new Date().toISOString(),
+            expires_at: new Date(
+                Date.now() + 30 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
+        }
+
+        db.get('user_sessions').push(newSession).write()
+
+        return res.json({
+            ...userFromBd,
+            password: '_',
+            token: newSession.session_token,
+        })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ message: error.message })
     }
 })
 
-server.post('/users/:userId', (req, res) => {
-    const { userId } = req.params
-    const { folderName } = req.body
-
-    const { db } = router
-    const user = db.get('users').find({ id: userId }).value()
-
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' })
-    }
-
-    const valueNewFolder = user.folders.length + 1
-
-    const updateFolders = [
-        ...user.folders,
-        { value: String(valueNewFolder), title: folderName },
-    ]
-
-    db.get('users')
-        .find({ id: userId })
-        .assign({ folders: updateFolders })
-        .write()
-
-    res.json(user)
-})
-
-server.patch('/users/:userId/folder-edit', (req, res) => {
-    const { userId } = req.params
-    const { folderValue, newTitle } = req.body
-
-    const { db } = router
-    const user = db.get('users').find({ id: userId }).value()
-
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' })
-    }
-
-    if (!newTitle.trim().length) {
-        return res
-            .status(404)
-            .json({ error: 'Название папки не может быть пустым' })
-    }
-
-    const updateFolders = user.folders.map((item) => {
-        if (item.value === folderValue) {
-            return {
-                value: item.value,
-                title: newTitle,
-            }
+server.use(async (req, res, next) => {
+    try {
+        // Пропускаем публичные роуты (логин, регистрация)
+        if (req.path === '/login' || req.path === '/register') {
+            return next()
         }
-        return item
-    })
 
-    db.get('users')
-        .find({ id: userId })
-        .assign({ folders: updateFolders })
-        .write()
+        const token = req.headers.authorization
 
-    res.json(user)
-})
-
-server.patch('/users/:userId/user-settings', (req, res) => {
-    const { userId } = req.params
-    const { userSettings } = req.body
-
-    const { db } = router
-    const user = db.get('users').find({ id: userId }).value()
-
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' })
-    }
-
-    const updateUserSettings = {
-        ...user.settings,
-        ...userSettings,
-        appearance: {
-            ...user.settings.appearance,
-            ...userSettings.appearance,
-        },
-    }
-
-    db.get('users')
-        .find({ id: userId })
-        .assign({ settings: updateUserSettings })
-        .write()
-
-    res.json(user)
-})
-
-server.delete('/users/:userId/folder-delete', (req, res) => {
-    const { userId } = req.params
-    const { folderValue } = req.body
-
-    const { db } = router
-    const user = db.get('users').find({ id: userId }).value()
-
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' })
-    }
-
-    const updateFolders = user.folders.filter(
-        (folder) => folder.value !== folderValue,
-    )
-
-    db.get('users')
-        .find({ id: userId })
-        .assign({ folders: updateFolders })
-        .write()
-
-    res.json(user)
-})
-
-server.get('/dialogs', (req, res) => {
-    const db = JSON.parse(
-        fs.readFileSync(path.resolve(__dirname, 'db.json'), 'UTF-8'),
-    )
-
-    const { userId, _limit, _page, _sort, folder, _query } = req.query
-
-    if (!userId) {
-        return res.status(400).json({ error: 'Missing userId parameter' })
-    }
-
-    const user = db.users.find((item) => item.id === userId)
-
-    let dialogs = db.dialogs
-        .filter((item) => item.participants.includes(userId))
-        .map((dialog) => {
-            if (dialog.type === 'private') {
-                const interlocutorId = dialog.participants.find(
-                    (item) => item !== userId,
-                )
-
-                const interlocutor = db.users.find(
-                    (item) => item.id === interlocutorId,
-                )
-
-                return {
-                    ...dialog,
-                    interlocutor:
-                        {
-                            id: interlocutor.id,
-                            firstName: interlocutor.firstName,
-                            lastName: interlocutor.lastName,
-                            username: interlocutor.username,
-                            avatar: interlocutor.avatar,
-                            dialogSettings: interlocutor.dialogSettings,
-                            folders: interlocutor.folders,
-                        } || null,
-                }
-            }
-
-            return dialog
-        })
-
-    dialogs = dialogs.map((dialog) => {
-        return {
-            ...dialog,
-            userSettings: dialog.userSettings[userId],
+        if (!token) {
+            return res.status(403).json({ message: 'AUTH ERROR' })
         }
-    })
 
-    if (_query) {
-        dialogs = dialogs.filter((dialog) => {
-            const query = _query.toLowerCase()
-            const title = dialog.title?.toLowerCase() || ''
-            let userFullName = ''
-            let userName = ''
+        const { db } = router
 
-            if (dialog.interlocutor) {
-                userFullName =
-                    `${dialog.interlocutor.firstName} ${dialog.interlocutor.lastName}`.toLowerCase()
-                userName = dialog.interlocutor.username.toLowerCase()
-            }
-
-            return (
-                title.includes(query) ||
-                userFullName.includes(query) ||
-                userName.includes(query)
+        const activeSession = db
+            .get('user_sessions')
+            .find(
+                (session) =>
+                    session.session_token === token &&
+                    new Date(session.expires_at) > new Date(),
             )
-        })
-    }
+            .value()
 
-    if (folder) {
-        dialogs = dialogs.filter((dialog) => {
-            const userFolders = dialog.userSettings.folders || []
-
-            return userFolders.includes(folder)
-        })
-    }
-
-    if (_sort) {
-        dialogs.sort((a, b) => {
-            const valA = _sort.split('.').reduce((o, i) => o[i], a)
-            const valB = _sort.split('.').reduce((o, i) => o[i], b)
-
-            // Получаем настройки пользователя (предполагаем, что userId известен)
-            const userSettingsA = a.userSettings
-            const userSettingsB = b.userSettings
-
-            const currentFolder = folder || 'all'
-
-            // Проверяем, закреплены ли диалоги
-            const isPinnedA =
-                userSettingsA?.pinned?.[currentFolder]?.isPinned || false
-            const isPinnedB =
-                userSettingsB?.pinned?.[currentFolder]?.isPinned || false
-
-            // Получаем порядок закрепления
-            const orderA =
-                userSettingsA?.pinned?.[currentFolder]?.order || Infinity
-            const orderB =
-                userSettingsB?.pinned?.[currentFolder]?.order || Infinity
-
-            // Сначала сортируем по pinned: закрепленные выше
-            if (isPinnedA && !isPinnedB) return -1
-            if (!isPinnedA && isPinnedB) return 1
-
-            // Если оба закреплены, сортируем по order
-            if (isPinnedA && isPinnedB) {
-                if (orderA !== orderB) {
-                    return orderB - orderA
-                }
-            }
-
-            return new Date(valB) - new Date(valA)
-        })
-    }
-
-    const start = (_page - 1) * _limit
-    const end = start + +_limit
-    const paginatedDialogs = dialogs.slice(start, end)
-
-    res.json({
-        data: paginatedDialogs,
-        currentPage: _page,
-        totalPages: Math.ceil(dialogs.length / _limit),
-        totalItems: dialogs.length,
-    })
-})
-
-server.patch('/dialogs/:dialogId/toggle-mute', (req, res) => {
-    const { dialogId } = req.params
-    const { userId } = req.body
-
-    const { db } = router
-    const dialog = db.get('dialogs').find({ id: dialogId }).value()
-
-    if (!dialog) {
-        return res.status(404).json({ error: 'Dialog not found' })
-    }
-
-    if (!dialog.userSettings[userId]) {
-        return res.status(400).json({ error: 'User settings not found' })
-    }
-
-    const updatedSettings = {
-        ...dialog.userSettings,
-        [userId]: {
-            ...dialog.userSettings[userId],
-            isMuted: !dialog.userSettings[userId].isMuted,
-        },
-    }
-
-    db.get('dialogs')
-        .find({ id: dialogId })
-        .assign({ userSettings: updatedSettings })
-        .write()
-
-    let resultDialog = db.get('dialogs').value()
-    resultDialog = resultDialog.map((dialog) => {
-        return {
-            ...dialog,
-            userSettings: dialog.userSettings[userId],
+        if (!activeSession) {
+            return res
+                .status(401)
+                .json({ message: 'Session expired or not found' })
         }
-    })
 
-    res.json({
-        data: resultDialog,
-        currentPage: 1,
-        totalPages: 1,
-        totalItems: 1,
-    })
+        db.get('user_sessions')
+            .find({ id: activeSession.id })
+            .assign({
+                last_activity_at: new Date().toISOString(),
+                expires_at: new Date(
+                    Date.now() + 30 * 24 * 60 * 60 * 1000,
+                ).toISOString(), // продлеваем сессию
+            })
+            .write()
+
+        // Сохраняем данные в запросе
+        req.user = { id: activeSession.user_id }
+        req.session = activeSession
+
+        next()
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: 'Internal server error' })
+    }
 })
 
-server.patch('/dialogs/:dialogId/pinning-dialog', (req, res) => {
-    const { dialogId } = req.params
-    const { userId, nextOrder, pinned, valueFolder } = req.body
-
-    const { db } = router
-    const dialog = db.get('dialogs').find({ id: dialogId }).value()
-
-    if (!dialog) {
-        return res.status(404).json({ error: 'Dialog not found' })
-    }
-
-    if (!dialog.userSettings[userId]) {
-        return res.status(400).json({ error: 'User settings not found' })
-    }
-
-    let updatedSettings
-
-    if (pinned) {
-        updatedSettings = {
-            ...dialog.userSettings,
-            [userId]: {
-                ...dialog.userSettings[userId],
-                pinned: {
-                    ...dialog.userSettings[userId].pinned,
-                    [valueFolder]: {
-                        isPinned: pinned,
-                        order: nextOrder,
-                    },
-                },
-            },
-        }
-    } else {
-        updatedSettings = {
-            ...dialog.userSettings,
-            [userId]: {
-                ...dialog.userSettings[userId],
-                pinned: {
-                    ...dialog.userSettings[userId].pinned,
-                    [valueFolder]: {
-                        isPinned: pinned,
-                        order: dialog.userSettings[userId].pinned[valueFolder]
-                            .order,
-                    },
-                },
-            },
-        }
-    }
-
-    db.get('dialogs')
-        .find({ id: dialogId })
-        .assign({ userSettings: updatedSettings })
-        .write()
-
-    let resultDialog = db.get('dialogs').value()
-    resultDialog = resultDialog.map((dialog) => {
-        return {
-            ...dialog,
-            userSettings: dialog.userSettings[userId],
-        }
-    })
-
-    res.json(resultDialog)
-})
-
-server.patch('/dialogs/:dialogId/leave-dialog', (req, res) => {
-    const { dialogId } = req.params
-    const { userId } = req.body
-
-    const { db } = router
-    const dialog = db.get('dialogs').find({ id: dialogId }).value()
-
-    if (!dialog) {
-        return res.status(404).json({ error: 'Dialog not found' })
-    }
-
-    if (!dialog.userSettings[userId]) {
-        return res.status(400).json({ error: 'User settings not found' })
-    }
-
-    const updatedParticipants = dialog.participants.filter(
-        (item) => item !== userId,
-    )
-
-    db.get('dialogs')
-        .find({ id: dialogId })
-        .assign({ participants: updatedParticipants })
-        .write()
-
-    res.json(dialog)
-})
-
-server.patch('/dialogs/:dialogId/add-to-folder', (req, res) => {
-    const { dialogId } = req.params
-    const { userId, valueFolder } = req.body
-
-    const { db } = router
-    const dialog = db.get('dialogs').find({ id: dialogId }).value()
-
-    if (!dialog) {
-        return res.status(404).json({ error: 'Dialog not found' })
-    }
-
-    if (!dialog.userSettings[userId]) {
-        return res.status(400).json({ error: 'User settings not found' })
-    }
-
-    if (dialog.userSettings[userId].folders.includes(valueFolder)) {
-        return res.status(400).json({ error: 'Такая папка уже есть' })
-    }
-
-    const updatedFolders = {
-        ...dialog.userSettings,
-        [userId]: {
-            ...dialog.userSettings[userId],
-            folders: [...dialog.userSettings[userId].folders, valueFolder],
-        },
-    }
-
-    db.get('dialogs')
-        .find({ id: dialogId })
-        .assign({ userSettings: updatedFolders })
-        .write()
-
-    let resultDialog = db.get('dialogs').value()
-    resultDialog = resultDialog.map((dialog) => {
-        return {
-            ...dialog,
-            userSettings: dialog.userSettings[userId],
-        }
-    })
-
-    res.json(resultDialog)
-})
-
-server.patch('/dialogs/:dialogId/remove-to-folder', (req, res) => {
-    const { dialogId } = req.params
-    const { userId, valueFolder } = req.body
-
-    const { db } = router
-    const dialog = db.get('dialogs').find({ id: dialogId }).value()
-
-    if (!dialog) {
-        return res.status(404).json({ error: 'Dialog not found' })
-    }
-
-    if (!dialog.userSettings[userId]) {
-        return res.status(400).json({ error: 'User settings not found' })
-    }
-
-    if (!dialog.userSettings[userId].folders.includes(valueFolder)) {
-        return res.status(400).json({ error: 'Такая папки нет' })
-    }
-
-    const updatedFolders = {
-        ...dialog.userSettings,
-        [userId]: {
-            ...dialog.userSettings[userId],
-            folders: dialog.userSettings[userId].folders.filter(
-                (item) => item !== valueFolder,
-            ),
-        },
-    }
-
-    db.get('dialogs')
-        .find({ id: dialogId })
-        .assign({ userSettings: updatedFolders })
-        .write()
-
-    let resultDialog = db.get('dialogs').value()
-    resultDialog = resultDialog.map((dialog) => {
-        return {
-            ...dialog,
-            userSettings: dialog.userSettings[userId],
-        }
-    })
-
-    res.json(resultDialog)
-})
-
-server.patch('/dialogs/:dialogId/update-read-status', (req, res) => {
-    const { dialogId } = req.params
-    const { userId } = req.body
-
-    const { db } = router
-    const dialog = db.get('dialogs').find({ id: dialogId }).value()
-
-    if (!dialog) {
-        return res.status(404).json({ error: 'Dialog not found' })
-    }
-
-    if (!dialog.userSettings[userId]) {
-        return res.status(400).json({ error: 'User settings not found' })
-    }
-
-    const updatedUnreadCount = {
-        ...dialog.userSettings,
-        [userId]: {
-            ...dialog.userSettings[userId],
-            unreadCount: dialog.userSettings[userId].unreadCount > 0 ? 0 : 1,
-        },
-    }
-
-    db.get('dialogs')
-        .find({ id: dialogId })
-        .assign({ userSettings: updatedUnreadCount })
-        .write()
-
-    let resultDialog = db.get('dialogs').value()
-    resultDialog = resultDialog.map((dialog) => {
-        return {
-            ...dialog,
-            userSettings: dialog.userSettings[userId],
-        }
-    })
-
-    res.json(dialog)
-})
-
-server.use((req, res, next) => {
-    if (!req.headers.authorization) {
-        return res.status(403).json({ message: 'AUTH ERROR' })
-    }
-
-    next()
-})
+require('./routes/dialog/index')(server, router)
+require('./routes/user/index')(server, router)
+require('./routes/session/index')(server, router)
 
 server.use(router)
 
 server.listen(8000, () => {
     console.log('JSON Server is running')
+    // Запускаем очистку сразу при старте
+    cleanupExpiredSessions()
+
+    setInterval(cleanupExpiredSessions, 1 * 60 * 60 * 1000)
 })
