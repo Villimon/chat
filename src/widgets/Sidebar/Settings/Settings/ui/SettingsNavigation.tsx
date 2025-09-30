@@ -45,9 +45,9 @@ export const SettingsNavigation = () => {
             <nav className={cls.nav}>
                 <VStack gap="8" max>
                     {navigationItems.map((item) => (
-                        <HStack gap="8" className={cls.menu} max>
-                            <Icon Svg={item.Icon} width={25} height={25} />
+                        <HStack className={cls.menu} max>
                             <AppLink key={item.path} to={item.path}>
+                                <Icon Svg={item.Icon} width={25} height={25} />
                                 {item.label}
                             </AppLink>
                         </HStack>
