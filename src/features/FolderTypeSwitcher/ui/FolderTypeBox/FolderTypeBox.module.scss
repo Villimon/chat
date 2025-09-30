@@ -1,0 +1,28 @@
+.displayBox {
+    width: 150px;
+    height: 100px;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    background: var(--dark-bg);
+    box-sizing: border-box;
+    border: 2px solid transparent;
+}
+
+.selected {
+    border: 2px dashed var(--hint-primary);
+
+    // TODO: сделать потом этот как иконку
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -5%;
+        right: -5%;
+        background-color: var(--text-secondary);
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        z-index: 1000;
+    }
+}

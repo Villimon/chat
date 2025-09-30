@@ -1,4 +1,12 @@
 .tabs {
     margin-top: 10px;
     padding: 0 16px;
+
+    &.panelLeft {
+        width: 90px;
+        padding: 0;
+        border-right: 1px solid var(--hint-primary);
+        padding-right: 5px;
+        height: 100vh;
+    }
 }

@@ -31,6 +31,7 @@ interface TabsProps {
     openedMenuId?: string | null
     isContextmenu?: boolean
     contextmenu?: (tab: TabItem) => JSX.Element
+    isDefaultFolderType?: boolean
 }
 
 export const Tabs: FC<TabsProps> = memo(
@@ -44,6 +45,7 @@ export const Tabs: FC<TabsProps> = memo(
         openedMenuId,
         isContextmenu = false,
         contextmenu,
+        isDefaultFolderType,
     }) => {
         const tabsRef = useRef<HTMLDivElement | null>(null)
         const [showLeftArrow, setShowLeftArrow] = useState(false)
@@ -96,7 +98,13 @@ export const Tabs: FC<TabsProps> = memo(
         }, [])
 
         return (
-            <div className={cn(cls.tabsContainer, {}, [className])}>
+            <div
+                className={cn(
+                    cls.tabsContainer,
+                    { [cls.tabsContainerPanelLeft]: !isDefaultFolderType },
+                    [className],
+                )}
+            >
                 {showLeftArrow && (
                     <Icon
                         Svg={ArrowLeftIcon}
@@ -109,20 +117,31 @@ export const Tabs: FC<TabsProps> = memo(
                 <div
                     ref={tabsRef}
                     onScroll={checkScroll}
-                    className={cn(cls.Tabs, {}, [])}
+                    className={cn(
+                        cls.Tabs,
+                        { [cls.TabsPanelLeft]: !isDefaultFolderType },
+                        [],
+                    )}
                 >
                     <Flex
                         direction={direction}
-                        gap="8"
+                        gap={isDefaultFolderType ? '8' : '16'}
                         className={cls.tabsInner}
                     >
                         {items.map((tab) => (
                             <>
                                 <Card
-                                    border="round"
+                                    border="partial"
                                     key={tab.value}
                                     onClick={() => clickHandler(tab)}
-                                    className={cls.tab}
+                                    className={cn(
+                                        cls.tab,
+                                        {
+                                            [cls.tabPanelLeft]:
+                                                !isDefaultFolderType,
+                                        },
+                                        [],
+                                    )}
                                     variant={
                                         tab.value === value ? 'light' : 'normal'
                                     }
@@ -138,6 +157,8 @@ export const Tabs: FC<TabsProps> = memo(
                                     {Boolean(tab.unreadCount) && (
                                         <div
                                             className={cn(cls.unreadCount, {
+                                                [cls.unreadCountPanelLeft]:
+                                                    !isDefaultFolderType,
                                                 [cls.activeTab]:
                                                     tab.value === value,
                                             })}

@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = (server, router) => {
-    const db = router.db
+    const { db } = router
 
     server.post('/users/:userId/create-folder', (req, res) => {
         const { userId } = req.params
@@ -14,10 +14,18 @@ module.exports = (server, router) => {
         }
 
         const valueNewFolder = user.folders.length + 1
+        const nextFolederValue =
+            user.folders.reduce((max, item) => {
+                return item.order > max.order ? item : max
+            }).order + 1
 
         const updateFolders = [
             ...user.folders,
-            { value: String(valueNewFolder), title: folderName },
+            {
+                value: String(valueNewFolder),
+                title: folderName,
+                order: nextFolederValue,
+            },
         ]
 
         db.get('users')
@@ -130,5 +138,31 @@ module.exports = (server, router) => {
             .write()
 
         res.json(user)
+    })
+
+    server.patch('/users/:userId/reorder-folders', (req, res) => {
+        const { userId } = req.params
+        const { folders } = req.body
+
+        if (!folders || !Array.isArray(folders)) {
+            return res.status(400).json({ error: 'Folders array is required' })
+        }
+
+        const user = db.get('users').find({ id: userId }).value()
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' })
+        }
+
+        try {
+            db.get('users').find({ id: userId }).assign({ folders }).write()
+
+            const updatedUser = db.get('users').find({ id: userId }).value()
+
+            res.json(updatedUser)
+        } catch (error) {
+            console.error('Error reordering folders:', error)
+            res.status(500).json({ error: 'Internal server error' })
+        }
     })
 }

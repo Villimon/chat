@@ -60,6 +60,7 @@ export const Flex = ({
     gap,
     max,
     className,
+    ...props
 }: FlexType) => {
     const classes = [
         className,
@@ -71,7 +72,7 @@ export const Flex = ({
     ]
 
     return (
-        <div className={cn(cls.Flex, { [cls.max]: max }, classes)}>
+        <div className={cn(cls.Flex, { [cls.max]: max }, classes)} {...props}>
             {children}
         </div>
     )

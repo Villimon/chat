@@ -3,6 +3,7 @@ export {
     useCreateNewFolder,
     useEditFolder,
     useDeleteFolder,
+    useReorderFolders,
 } from './api/userApi'
 export { userReducer, userActions } from './model/slice/UserSlice'
 export { getUserInited } from './model/selectors/getUserInited/getUserInited'

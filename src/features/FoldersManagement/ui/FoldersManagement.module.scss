@@ -1,0 +1,11 @@
+.folderName {
+    flex: 1;
+}
+
+.block {
+    padding: 10px;
+    border: 3px dashed var(--hint-primary);
+    border-radius: 8px;
+    cursor: grab;
+    transition: all 0.2s ease;
+}

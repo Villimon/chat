@@ -5,13 +5,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 16px;
 
     &:hover {
         color: var(--text-secondary);
 
         .addonLeft svg,
         .addonRight svg {
-            color: var(--accent-primary);
+            color: var(--text-secondary);
         }
     }
 

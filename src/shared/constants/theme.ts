@@ -22,3 +22,8 @@ export enum DialogLayout {
     EXPANDED = 'expanded',
     COMPACT = 'compact',
 }
+
+export enum FolderType {
+    PANEL_TOP = 'panel_top',
+    PANEL_LEFT = 'panel_left',
+}

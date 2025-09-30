@@ -1,8 +1,14 @@
 import { useContext, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { DialogLayout, Palette, Theme } from '@/shared/constants/theme'
+import {
+    DialogLayout,
+    FolderType,
+    Palette,
+    Theme,
+} from '@/shared/constants/theme'
 import {
     LOCAL_STORAGE_DIALOG_LAYOUT_KEY,
+    LOCAL_STORAGE_FOLDER_TYPE_KEY,
     LOCAL_STORAGE_PALETTE_KEY,
     LOCAL_STORAGE_THEME_KEY,
 } from '@/shared/constants/localstorage'
@@ -19,6 +25,8 @@ interface useAppearanceResult {
     togglePalette: (palette: Palette) => void
     dialogLayout: DialogLayout
     toggleDialogLayout: (dialogLayout: DialogLayout) => void
+    folderType: FolderType
+    toggleFolderType: (folderType: FolderType) => void
 }
 
 export const useAppearance = (): useAppearanceResult => {
@@ -29,6 +37,8 @@ export const useAppearance = (): useAppearanceResult => {
         setPalette,
         dialogLayout,
         setDialogLayout,
+        folderType,
+        setFolderType,
     } = useContext(AppearanceContext)
 
     const [setUserSettings] = useSetUserSettings()
@@ -81,6 +91,20 @@ export const useAppearance = (): useAppearanceResult => {
         dispatch(initAuthData())
     }
 
+    const toggleFolderType = (folderType: FolderType) => {
+        const newFolderType = folderType
+        setFolderType?.(newFolderType)
+        localStorage.setItem(
+            LOCAL_STORAGE_FOLDER_TYPE_KEY,
+            newFolderType as FolderType,
+        )
+        setUserSettings({
+            userId: userData?.id ?? '',
+            userSettings: { appearance: { folderType: newFolderType } },
+        })
+        dispatch(initAuthData())
+    }
+
     return {
         theme: theme || Theme.LIGHT,
         toggleTheme,
@@ -88,5 +112,7 @@ export const useAppearance = (): useAppearanceResult => {
         togglePalette,
         dialogLayout: dialogLayout || DialogLayout.EXPANDED,
         toggleDialogLayout,
+        folderType: folderType || FolderType.PANEL_TOP,
+        toggleFolderType,
     }
 }

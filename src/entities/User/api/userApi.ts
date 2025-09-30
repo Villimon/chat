@@ -1,4 +1,4 @@
-import { SettingsType, User } from '../model/types/userSchema'
+import { FolderType, SettingsType, User } from '../model/types/userSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 
 interface EditFolderParams {
@@ -15,6 +15,11 @@ interface DeleteFolderParams {
 interface SetUserSettings {
     userId: string
     userSettings: SettingsType
+}
+
+interface ReorderFoldersParams {
+    userId: string
+    folders: FolderType[]
 }
 
 const userApi = rtkApi.injectEndpoints({
@@ -71,6 +76,16 @@ const userApi = rtkApi.injectEndpoints({
                 { type: 'User', id: userId },
             ],
         }),
+        reorderFolders: build.mutation<User, ReorderFoldersParams>({
+            query: ({ folders, userId }) => ({
+                url: `/users/${userId}/reorder-folders`,
+                method: 'PATCH',
+                body: { folders },
+            }),
+            invalidatesTags: (result, error, { userId }) => [
+                { type: 'User', id: userId },
+            ],
+        }),
     }),
 })
 
@@ -79,3 +94,4 @@ export const useCreateNewFolder = userApi.useCreateNewFolderMutation
 export const useSetUserSettings = userApi.useSetUserSettingsMutation
 export const useEditFolder = userApi.useEditFolderMutation
 export const useDeleteFolder = userApi.useDeleteFolderMutation
+export const useReorderFolders = userApi.useReorderFoldersMutation

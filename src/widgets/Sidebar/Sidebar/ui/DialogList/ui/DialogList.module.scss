@@ -7,6 +7,11 @@
     height: calc(100vh - 76px);
     overflow-y: auto;
     overflow-x: hidden;
+    width: 100%;
+
+    &.containerPanelLeft {
+        padding: 0;
+    }
 }
 
 .skeletonContainer {

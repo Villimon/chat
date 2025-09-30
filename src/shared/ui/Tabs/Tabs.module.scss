@@ -3,6 +3,10 @@
     display: flex;
     align-items: center;
     width: 100%;
+
+    &.tabsContainerPanelLeft {
+        align-items: start;
+    }
 }
 
 .Tabs {
@@ -19,6 +23,10 @@
         width: 0;
         height: 0;
     }
+
+    &.TabsPanelLeft {
+        font-size: 12px;
+    }
 }
 
 .tabsInner {
@@ -27,7 +35,7 @@
 }
 
 .tab {
-    padding: 8px 16px;
+    padding: 8px 12px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -35,9 +43,15 @@
     flex-shrink: 0;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: relative;
 
     &:hover {
         transform: translateY(-1px);
+    }
+
+    &.tabPanelLeft {
+        width: 100%;
+        justify-content: center;
     }
 }
 
@@ -53,11 +67,26 @@
     font-size: 14px;
     padding: 0 0.3125rem;
     transition: all 0.2s ease;
-}
 
-.activeTab {
-    background-color: var(--bg-color);
-    color: var(--text-secondary);
+    &.unreadCountPanelLeft {
+        border-radius: 100px;
+        background-color: var(--text-secondary);
+        position: absolute;
+        bottom: -15%;
+        right: 0;
+        color: var(--bg-color);
+        min-width: 1.125rem;
+        height: 1.125rem;
+        font-size: 14px;
+        padding: 0 0.3125rem;
+        transition: all 0.2s ease;
+
+    }
+
+    &.activeTab {
+        background-color: var(--bg-color);
+        color: var(--text-secondary);
+    }
 }
 
 .scrollButton {

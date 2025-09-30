@@ -1,6 +1,7 @@
 export type FolderType = {
     value: string
     title: string
+    order?: number
 }
 
 export type AppearanceType = {
@@ -15,6 +16,7 @@ export type AppearanceType = {
         | 'app_palette_orange'
         | 'app_palette_test'
     dialogLayout?: 'expanded' | 'compact'
+    folderType?: 'panel_top' | 'panel_left'
 }
 
 export type SettingsType = {

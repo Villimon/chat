@@ -6,9 +6,14 @@ import { Text } from '@/shared/ui/Text/Text'
 import { useDialogList } from '../../../lib/hooks/useDialogList'
 import { useDialogListRenderer } from '../../../lib/hooks/useDialogListRenderer'
 import { useDialogListData } from '../../../lib/hooks/useDialogListData'
+import { useAppearance } from '@/shared/hooks/useAppearance/useAppearance'
+import { FolderType } from '@/shared/constants/theme'
 
 export const DialogList = memo(({ className }: { className?: string }) => {
     const { dialogs, isError, isFetching, isSuccess, loadMore } = useDialogListData()
+
+    const { folderType } = useAppearance()
+    const isDefaultFolderType = folderType === FolderType.PANEL_TOP
 
     const { getNextOrder } = useDialogList({ dialogs })
 
@@ -30,7 +35,13 @@ export const DialogList = memo(({ className }: { className?: string }) => {
     }
 
     return (
-        <div className={cn(cls.container, {}, [className])}>
+        <div
+            className={cn(
+                cls.container,
+                { [cls.containerPanelLeft]: !isDefaultFolderType },
+                [className],
+            )}
+        >
             <Virtuoso
                 data={dialogs?.data}
                 style={{ height: 'calc(100vh - 76px)' }}

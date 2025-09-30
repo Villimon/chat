@@ -4,6 +4,9 @@ import cls from './FoldersTabs.module.scss'
 import { useFoldersTabs } from '../lib/hooks/useFoldersTabs'
 import { useContextMenu } from '../../ContextMenu/lib/hooks/useContextMenu'
 import { FolderMenu } from '../../ContextMenu/ui/FolderMenu/FolderMenu'
+import { FolderType } from '@/shared/constants/theme'
+import { useAppearance } from '@/shared/hooks/useAppearance/useAppearance'
+import { cn } from '@/shared/lib/classNames/classNames'
 
 interface FoldersTabsProps {
     value: TabItem
@@ -14,6 +17,9 @@ interface FoldersTabsProps {
 
 export const FoldersTabs: FC<FoldersTabsProps> = memo(
     ({ value, onChangeFolder, tabs, allUnreadMessages }) => {
+        const { folderType } = useAppearance()
+        const isDefaultFolderType = folderType === FolderType.PANEL_TOP
+
         const { initialFirstTab, onTabClick } = useFoldersTabs({
             onChangeFolder,
             allUnreadMessages,
@@ -43,11 +49,17 @@ export const FoldersTabs: FC<FoldersTabsProps> = memo(
                 items={[initialFirstTab, ...(tabs as TabItem[])]}
                 onClickTab={onTabClick}
                 value={value.value}
-                className={cls.tabs}
+                className={cn(
+                    cls.tabs,
+                    { [cls.panelLeft]: !isDefaultFolderType },
+                    [],
+                )}
                 onContextMenu={handleContextMenu}
                 openedMenuId={openedMenuId}
                 isContextmenu
                 contextmenu={contextmenu}
+                direction={isDefaultFolderType ? 'row' : 'column'}
+                isDefaultFolderType={isDefaultFolderType}
             />
         )
     },

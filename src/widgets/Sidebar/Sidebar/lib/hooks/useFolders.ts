@@ -23,7 +23,10 @@ export const useFolders = () => {
         }
     }, [allCachedData])
 
-    const folders = userData?.folders
+    const rawFolders = userData?.folders
+    const folders = rawFolders
+        ? [...rawFolders].sort((a, b) => a.order! - b.order!)
+        : undefined
 
     const foldersWithUnreadCount = useMemo(() => {
         const dataToUse = allCachedData || lastValidData.current
