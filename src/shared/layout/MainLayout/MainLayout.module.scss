@@ -8,11 +8,11 @@
     flex-basis: 450px;
     min-width: 450px;
     padding: 15px 0 0;
+    border-right: 2px solid var(--dark-bg);
 }
 
 .content {
     flex: 1 1 430px;
-    padding: 32px;
     background: var(--dark-bg);
 }
 

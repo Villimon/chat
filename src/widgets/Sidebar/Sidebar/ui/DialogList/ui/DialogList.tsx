@@ -10,7 +10,8 @@ import { useAppearance } from '@/shared/hooks/useAppearance/useAppearance'
 import { FolderType } from '@/shared/constants/theme'
 
 export const DialogList = memo(({ className }: { className?: string }) => {
-    const { dialogs, isError, isFetching, isSuccess, loadMore } = useDialogListData()
+    const { dialogs, isError, isFetching, isSuccess, loadMore } =
+        useDialogListData()
 
     const { folderType } = useAppearance()
     const isDefaultFolderType = folderType === FolderType.PANEL_TOP
@@ -44,7 +45,7 @@ export const DialogList = memo(({ className }: { className?: string }) => {
         >
             <Virtuoso
                 data={dialogs?.data}
-                style={{ height: 'calc(100vh - 76px)' }}
+                style={{ height: 'calc(100vh - 122px)' }}
                 itemContent={itemContent}
                 endReached={loadMore}
                 components={{
