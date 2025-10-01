@@ -13,14 +13,14 @@ export const Profile = () => {
         return null
     }
 
-    const initials = `${userData.firstName[0]} ${userData.lastName[0]}`.toUpperCase()
+    const initials = `${userData.firstName[0]}${userData.lastName[0]}`.toUpperCase()
 
     return (
         <HStack gap="16" max className={cls.profile}>
             {userData?.avatar ? (
                 <Avatar src={userData.avatar} />
             ) : (
-                <Text className={cls.avatar} text={initials} />
+                <Avatar initials={initials} />
             )}
             <VStack max>
                 <Text text={`${userData.firstName} ${userData.lastName}`} />

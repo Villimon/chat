@@ -1,11 +1,24 @@
 import { memo, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import cls from './ChatPage.module.scss'
 import { cn } from '@/shared/lib/classNames/classNames'
+import { HeaderChat } from './HeaderChat/HeaderChat'
+import { getUserData } from '@/entities/User'
+import { Loader } from '@/shared/ui/Loader/Loader'
+import { useGetDialogById } from '@/entities/Dialog/api/DialogApi'
 
 const ChatPage = memo(() => {
+    const userData = useSelector(getUserData)
     const location = useLocation()
     const navigate = useNavigate()
+
+    const dialogId = useParams()
+
+    const { data, isError, isFetching } = useGetDialogById({
+        dialogId: dialogId.id ?? '',
+        userId: userData?.id ?? '',
+    })
 
     useEffect(() => {
         const handleEscapeKey = (event: KeyboardEvent) => {
@@ -22,9 +35,13 @@ const ChatPage = memo(() => {
         }
     }, [location.hash, navigate])
 
+    if (isFetching) {
+        return <Loader />
+    }
+
     return (
         <main className={cn(cls.ChatPage, {}, [])}>
-            <div className={cn(cls.header, {}, [])}>asdsad</div>
+            <HeaderChat className={cls.header} dialogInfo={data} />
             <div className={cn(cls.chat, {}, [])}>asdsad</div>
             <div className={cn(cls.footer, {}, [])}>asdsad</div>
         </main>

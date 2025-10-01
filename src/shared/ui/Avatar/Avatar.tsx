@@ -1,20 +1,20 @@
 import { CSSProperties, FC, memo, useMemo } from 'react'
 import cls from './Avatar.module.scss'
-import UserIcon from '@/shared/assets/icons/user-icon.svg'
 import { Skeleton } from '../Skeleton'
 import { cn } from '@/shared/lib/classNames/classNames'
 import { AppImage } from '@/shared/ui/AppImage/AppImage'
-import { Icon } from '@/shared/ui/Icon/Icon'
+import { Text } from '@/shared/ui/Text/Text'
 
 interface AvatarProps {
     className?: string
     src?: string
     size?: number
     alt?: string
+    initials?: string
 }
 
 export const Avatar: FC<AvatarProps> = memo(
-    ({ src, className, size = 100, alt }) => {
+    ({ src, className, size = 100, alt, initials }) => {
         const styles = useMemo<CSSProperties>(
             () => ({
                 width: size,
@@ -23,7 +23,8 @@ export const Avatar: FC<AvatarProps> = memo(
             [size],
         )
 
-        const errorFallback = <Icon width={size} height={size} Svg={UserIcon} />
+        const errorFallback = <Text className={cls.avatar} text={initials} />
+        // const errorFallback = <Icon width={size} height={size} Svg={UserIcon} />
         const fallback = <Skeleton width={size} height={size} border="50%" />
 
         return (

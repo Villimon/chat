@@ -10,8 +10,7 @@ import { useAppearance } from '@/shared/hooks/useAppearance/useAppearance'
 import { FolderType } from '@/shared/constants/theme'
 
 export const DialogList = memo(({ className }: { className?: string }) => {
-    const { dialogs, isError, isFetching, isSuccess, loadMore } =
-        useDialogListData()
+    const { dialogs, isError, isFetching, isSuccess, loadMore } = useDialogListData()
 
     const { folderType } = useAppearance()
     const isDefaultFolderType = folderType === FolderType.PANEL_TOP

@@ -1,11 +1,9 @@
 const path = require('path')
 
 module.exports = (server, router) => {
-    const db = router.db
+    const { db } = router
 
     server.get('/dialogs', (req, res) => {
-        console.log(path.resolve(__dirname, 'db.json'))
-
         const { userId, _limit, _page, _sort, folder, _query } = req.query
 
         if (!userId) {
@@ -128,6 +126,66 @@ module.exports = (server, router) => {
             currentPage: _page,
             totalPages: Math.ceil(dialogs.length / _limit),
             totalItems: dialogs.length,
+        })
+    })
+
+    server.get('/dialogs/:dialogId', (req, res) => {
+        const { userId } = req.query
+        const { dialogId } = req.params
+
+        if (!userId) {
+            return res.status(400).json({ error: 'Missing userId parameter' })
+        }
+
+        if (!dialogId) {
+            return res.status(400).json({ error: 'Missing dialogId parameter' })
+        }
+
+        const dialog = db
+            .get('dialogs')
+            .find(
+                (dialog) =>
+                    dialog.id === dialogId &&
+                    dialog.participants.includes(userId),
+            )
+            .value()
+
+        if (!dialog) {
+            return res.status(404).json({ error: 'Dialog not found' })
+        }
+
+        let resultDialog = { ...dialog }
+
+        if (dialog.type === 'private') {
+            const interlocutorId = dialog.participants.find(
+                (item) => item !== userId,
+            )
+
+            const interlocutor = db
+                .get('users')
+                .find((item) => item.id === interlocutorId)
+                .value()
+
+            resultDialog = {
+                ...dialog,
+                interlocutor:
+                    {
+                        id: interlocutor.id,
+                        firstName: interlocutor.firstName,
+                        lastName: interlocutor.lastName,
+                        username: interlocutor.username,
+                        avatar: interlocutor.avatar,
+                    } || null,
+            }
+        }
+
+        res.json({
+            id: resultDialog.id,
+            type: resultDialog.type,
+            participants: resultDialog.participants,
+            title: resultDialog.title,
+            avatar: resultDialog.avatar,
+            interlocutor: resultDialog.interlocutor || null,
         })
     })
 

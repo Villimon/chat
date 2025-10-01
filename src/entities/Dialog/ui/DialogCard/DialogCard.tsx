@@ -67,6 +67,13 @@ export const DialogCard: FC<DialogCardProps> = memo(
             return dialog.userSettings.pinned?.[activeFolder.value]?.isPinned
         }, [activeFolder.value, dialog.userSettings.pinned])
 
+        const [firstWordGroup, secondWordGroup] = dialog.title?.split(' ') || []
+
+        const initials = `${dialog.interlocutor?.firstName[0]}${dialog.interlocutor?.lastName[0]}`.toUpperCase()
+        const initialsGroup = `${firstWordGroup ? firstWordGroup[0] : ''}${
+            secondWordGroup ? secondWordGroup[0] : ''
+        }`.toUpperCase()
+
         return (
             <div
                 onContextMenu={onContextMenu}
@@ -81,6 +88,9 @@ export const DialogCard: FC<DialogCardProps> = memo(
                     <Avatar
                         size={isDeafaultDialogLayout ? 50 : 30}
                         src={dialog.avatar}
+                        initials={
+                            dialog.interlocutor ? initials : initialsGroup
+                        }
                     />
                     <VStack className={cls.info}>
                         <Text text={fullName || dialog.title} />

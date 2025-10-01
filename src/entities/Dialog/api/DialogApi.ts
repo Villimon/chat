@@ -1,4 +1,4 @@
-import { DialogDto } from '@/entities/Dialog/model/types/dialogSchema'
+import { Dialog, DialogDto } from '@/entities/Dialog/model/types/dialogSchema'
 import { rtkApi } from '@/shared/api/rtkApi'
 
 export interface GetDialogProps {
@@ -77,6 +77,16 @@ export const dialogApi = rtkApi.injectEndpoints({
                 'Dialogs',
             ],
         }),
+        getDialogById: build.query<
+            Dialog,
+            { userId: string; dialogId: string }
+        >({
+            query: ({ userId, dialogId }) => ({
+                url: `/dialogs/${dialogId}`,
+                method: 'GET',
+                params: { userId },
+            }),
+        }),
         toggleDialogMute: build.mutation<
             DialogDto,
             MutateDialogParams & { folder: string }
@@ -107,7 +117,8 @@ export const dialogApi = rtkApi.injectEndpoints({
                                 (d) => d.id === dialogId,
                             )
                             if (dialog) {
-                                dialog.userSettings.isMuted = !dialog.userSettings.isMuted
+                                dialog.userSettings.isMuted =
+                                    !dialog.userSettings.isMuted
                             }
                         },
                     ),
@@ -167,7 +178,8 @@ export const dialogApi = rtkApi.injectEndpoints({
                                 (d) => d.id === dialogId,
                             )
                             if (dialog) {
-                                dialog.userSettings.unreadCount = dialog.userSettings.unreadCount > 0 ? 0 : 1
+                                dialog.userSettings.unreadCount =
+                                    dialog.userSettings.unreadCount > 0 ? 0 : 1
                             }
                         },
                     ),
@@ -216,6 +228,7 @@ export const useUpdateReadStatus = dialogApi.useUpdateReadStatusMutation
 export const useAddToFolder = dialogApi.useAddToFolderMutation
 export const useRemoveToFolder = dialogApi.useRemoveToFolderMutation
 export const useToggleDialogPin = dialogApi.useToggleDialogPinMutation
+export const useGetDialogById = dialogApi.useGetDialogByIdQuery
 export const getDialog = dialogApi.endpoints.getDialog.initiate
 
 /*
