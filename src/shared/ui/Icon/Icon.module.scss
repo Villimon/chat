@@ -9,8 +9,18 @@
     outline: none;
     background: none;
     cursor: pointer;
-}
 
-.button:hover .Icon {
-    color: var(--text-secondary);
+    &:not(.disabled):hover .Icon {
+        color: var(--text-secondary);
+    }
+
+    &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+
+        &:hover .Icon {
+            color: var(--hint-primary);
+        }
+    }
 }

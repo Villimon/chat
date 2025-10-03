@@ -117,8 +117,7 @@ export const dialogApi = rtkApi.injectEndpoints({
                                 (d) => d.id === dialogId,
                             )
                             if (dialog) {
-                                dialog.userSettings.isMuted =
-                                    !dialog.userSettings.isMuted
+                                dialog.userSettings.isMuted = !dialog.userSettings.isMuted
                             }
                         },
                     ),
@@ -178,8 +177,7 @@ export const dialogApi = rtkApi.injectEndpoints({
                                 (d) => d.id === dialogId,
                             )
                             if (dialog) {
-                                dialog.userSettings.unreadCount =
-                                    dialog.userSettings.unreadCount > 0 ? 0 : 1
+                                dialog.userSettings.unreadCount = dialog.userSettings.unreadCount > 0 ? 0 : 1
                             }
                         },
                     ),

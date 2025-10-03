@@ -7,6 +7,7 @@ import { HeaderChat } from './HeaderChat/HeaderChat'
 import { getUserData } from '@/entities/User'
 import { Loader } from '@/shared/ui/Loader/Loader'
 import { useGetDialogById } from '@/entities/Dialog/api/DialogApi'
+import { FooterChat } from './FooterChat/FooterChat'
 
 const ChatPage = memo(() => {
     const userData = useSelector(getUserData)
@@ -43,7 +44,7 @@ const ChatPage = memo(() => {
         <main className={cn(cls.ChatPage, {}, [])}>
             <HeaderChat className={cls.header} dialogInfo={data} />
             <div className={cn(cls.chat, {}, [])}>asdsad</div>
-            <div className={cn(cls.footer, {}, [])}>asdsad</div>
+            <FooterChat className={cls.footer} />
         </main>
     )
 })

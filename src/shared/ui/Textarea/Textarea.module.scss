@@ -1,0 +1,25 @@
+.textarea {
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    width: 100%;
+    color: var(--text-primary);
+    background: var(--dark-bg);
+    resize: none;
+    box-sizing: border-box;
+    vertical-align: top;
+    overflow: hidden;
+    min-height: 24px;
+    max-height: 284px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+// TODO: сделать как пвесдокалсс фокусед
+.focused {
+    border: 2px solid var(--text-secondary);
+}
